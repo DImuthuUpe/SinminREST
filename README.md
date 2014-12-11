@@ -69,7 +69,7 @@ Method : trigramFrequency
 
 Method : frequent words
 
-        Request
+        Req :
         {
             amount : 10,
             category: ["cat1"],
@@ -77,7 +77,7 @@ Method : frequent words
 
         }
 
-        Response
+        Resp :
         [
             {
                 value1: "value1",
@@ -94,6 +94,7 @@ Method : frequent words
         ]
 
 Method : latestArticlesForWord
+
         Req:
         {
             "value":"value1",
@@ -101,6 +102,7 @@ Method : latestArticlesForWord
             "category":["cat1"],
             "amount" : 20
         }
+        
         Resp :
         [
             {
@@ -121,7 +123,8 @@ Method : latestArticlesForWord
         ]
 
 Method : latestArticlesForBigram
-        Req
+        
+        Req :
         {
             "value1":"value1",
             "value2":"value2",
@@ -129,6 +132,7 @@ Method : latestArticlesForBigram
             "category":["cat1"],
             "amount" : 20
         }
+        
         Resp :
         [
             {
@@ -149,7 +153,8 @@ Method : latestArticlesForBigram
         ]
 
 Method : latestArticlesForTrigram
-        Req
+        
+        Req:
         {
             "value1":"value1",
             "value2":"value2",
@@ -158,6 +163,7 @@ Method : latestArticlesForTrigram
             "category":["cat1"],
             "amount" : 20
         }
+        
         Resp :
         [
             {
@@ -178,6 +184,7 @@ Method : latestArticlesForTrigram
         ]
 
 Method : frequentWordsAroundWord
+        
         Req :
         {
             "value" : "value1",
@@ -188,7 +195,6 @@ Method : frequentWordsAroundWord
         }
 
         Resp :
-
         [
             {
                 "time" : 2012,
@@ -208,7 +214,8 @@ Method : frequentWordsAroundWord
         ]
 
 Method : frequentWordsInPosition
-        Req
+        
+        Req:
         {
             "position" : 10,
             "time" : [2010],
@@ -216,7 +223,7 @@ Method : frequentWordsInPosition
             "amount" : 10
         }
 
-        Resp
+        Resp:
         [
             {
                 time : 2010,
