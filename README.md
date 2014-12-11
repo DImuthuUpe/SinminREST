@@ -1,12 +1,13 @@
 Method : wordFrequency
-        Req
+
+        Req :
         {
             "value":"Value1",
             "time":["2011"],
             "category":["Cat1"]
         }
 
-        Resp
+        Resp :
         [
             {
             "frequency":20,
@@ -20,7 +21,8 @@ Method : wordFrequency
         ]
 
 Method : bigramFrequency
-        Req
+
+        Req :
         {
             "value1":"Value1",
             "value2":"Value2",
@@ -28,7 +30,7 @@ Method : bigramFrequency
             "category":["Cat1"]
         }
 
-        Resp
+        Resp :
         [
             {
             "frequency":20,
@@ -42,7 +44,8 @@ Method : bigramFrequency
         ]
 
 Method : trigramFrequency
-        Req
+
+        Req :
         {
             "value1":"Value1",
             "value2":"Value2",
@@ -51,7 +54,7 @@ Method : trigramFrequency
             "category":["Cat1"]
         }
 
-        Resp
+        Resp :
         [
             {
             "frequency":20,
