@@ -1,0 +1,252 @@
+Method : wordFrequency
+        Req
+        {
+            "value":"Value1",
+            "time":["2011"],
+            "category":["Cat1"]
+        }
+
+        Resp
+        [
+            {
+            "frequency":20,
+            "date":2011,
+            "category":"News"
+            },
+            {"frequency":20,
+            "date":2011,
+            "category":"News"
+            }
+        ]
+
+Method : bigramFrequency
+        Req
+        {
+            "value1":"Value1",
+            "value2":"Value2",
+            "time":["84"],
+            "category":["Cat1"]
+        }
+
+        Resp
+        [
+            {
+            "frequency":20,
+            "date":2011,
+            "category":"News"
+            },
+            {"frequency":20,
+            "date":2011,
+            "category":"News"
+            }
+        ]
+
+Method : trigramFrequency
+        Req
+        {
+            "value1":"Value1",
+            "value2":"Value2",
+            "value3":"Value3",
+            "time":["84"],
+            "category":["Cat1"]
+        }
+
+        Resp
+        [
+            {
+            "frequency":20,
+            "date":2011,
+            "category":"News"
+            },
+            {"frequency":20,
+            "date":2011,
+            "category":"News"
+            }
+        ]
+
+Method : frequent words
+
+        Request
+        {
+            amount : 10,
+            category: ["cat1"],
+            time : [2011]
+
+        }
+
+        Response
+        [
+            {
+                value1: "value1",
+                frequency: 20,
+                category : "Category1"
+                time : 2011
+            },
+            {
+                value1: "value2",
+                frequency: 20,
+                category : "Category1"
+                time : 2011
+            }
+        ]
+
+Method : latestArticlesForWord
+        Req:
+        {
+            "value":"value1",
+            "time" : [2012],
+            "category":["cat1"],
+            "amount" : 20
+        }
+        Resp :
+        [
+            {
+                time : 2012,
+                category : "cat1",
+                articles :[
+                    {
+                        title: "title"
+                        author: "author1"
+                        link: "link1"
+                        year : 2012
+                        month : 09
+                        day :12
+                    }
+                ]
+
+            }
+        ]
+
+Method : latestArticlesForBigram
+        Req
+        {
+            "value1":"value1",
+            "value2":"value2",
+            "time" : [2012],
+            "category":["cat1"],
+            "amount" : 20
+        }
+        Resp :
+        [
+            {
+                time : 2012,
+                category : "cat1",
+                articles :[
+                    {
+                        title: "title"
+                        author: "author1"
+                        link: "link1"
+                        year : 2012
+                        month : 09
+                        day :12
+                    }
+                ]
+
+            }
+        ]
+
+Method : latestArticlesForTrigram
+        Req
+        {
+            "value1":"value1",
+            "value2":"value2",
+            "value3":"value3",
+            "time" : [2012],
+            "category":["cat1"],
+            "amount" : 20
+        }
+        Resp :
+        [
+            {
+                time : 2012,
+                category : "cat1",
+                articles :[
+                    {
+                        title: "title"
+                        author: "author1"
+                        link: "link1"
+                        year : 2012
+                        month : 09
+                        day :12
+                    }
+                ]
+
+            }
+        ]
+
+Method : frequentWordsAroundWord
+        Req :
+        {
+            "value" : "value1",
+            "range" : 12,
+            "time" : [2012],
+            "category" : ["cat1"],
+            "amount" : 12
+        }
+
+        Resp :
+
+        [
+            {
+                "time" : 2012,
+                "category" : "Cat1",
+                "words" :[
+                    {
+                        "value" : "value2",
+                        "frequency" : 10
+                    },
+                    {
+                        "value" : "value3",
+                        "frequency" : 12
+                    }
+                ]
+
+            }
+        ]
+
+Method : frequentWordsInPosition
+        Req
+        {
+            "position" : 10,
+            "time" : [2010],
+            "category" : ["cat1"],
+            "amount" : 10
+        }
+
+        Resp
+        [
+            {
+                time : 2010,
+                category : cat1,
+                word : [
+                    {
+                        value : val1,
+                        frequency : 10
+                    },
+                    {
+                        value : val2,
+                        frequency : 10
+                    }
+
+                ]
+
+
+            },
+            {
+                time : 2011,
+                category : cat2,
+                words : [
+                    {
+                        value : val1,
+                        frequency : 10
+                    },
+                    {
+                        value : val2,
+                        frequency : 10
+                    }
+
+                ]
+
+
+            }
+        ]
