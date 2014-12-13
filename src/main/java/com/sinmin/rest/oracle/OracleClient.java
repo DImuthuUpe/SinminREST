@@ -1,7 +1,11 @@
 package com.sinmin.rest.oracle;
 
+import com.sinmin.rest.beans.response.WordFrequencyR;
+import oracle.jdbc.OracleCallableStatement;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -35,6 +39,58 @@ public class OracleClient {
             }
         }
         return dbConnection;
+    }
+
+    public WordFrequencyR getWordFrequency(String word_value) throws SQLException{
+        getDBConnection();
+        String sql ="select count(sw.sentence_id) from word w, sentence_word sw where w.VAL='"+word_value+"' and sw.word_id=w.id";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while(rst.next()){
+            String frequency = rst.getString(1);
+            System.out.println("Count of word "+frequency);
+            resp.setDate(0);
+            resp.setCategory("all");
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+
+        return resp;
+    }
+
+    public WordFrequencyR getWordFrequency(String word_value,int time) throws SQLException{
+        getDBConnection();
+        String sql ="select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='"+word_value+"' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.year=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,time);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while(rst.next()){
+            String frequency = rst.getString(1);
+            System.out.println("Count of word "+frequency);
+            resp.setCategory("all");
+            resp.setDate(time);
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
+
+    public WordFrequencyR getWordFrequency(String word_value,String category) throws SQLException{
+        getDBConnection();
+        String sql ="select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='"+word_value+"' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.category=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1,category);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while(rst.next()){
+            String frequency = rst.getString(1);
+            System.out.println("Count of word "+frequency);
+            resp.setDate(0);
+            resp.setCategory(category);
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+
     }
 
 

@@ -3,10 +3,19 @@ package com.sinmin.rest;
 import com.sinmin.rest.beans.request.*;
 import com.sinmin.rest.beans.response.*;
 import com.sinmin.rest.oracle.OracleClient;
+import oracle.jdbc.OracleCallableStatement;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.nio.charset.Charset;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Created by dimuthuupeksha on 12/9/14.
  */
@@ -282,27 +291,58 @@ public class API {
     @POST
     @Path("/wordFrequency")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response wordFrequency(WordFrequency wordF){
+    public Response wordFrequency(WordFrequency wordF) {
+
+        try {
+            String value = wordF.getValue();
+            int time[] = wordF.getTime();
+            String category[] = wordF.getCategory();
 
 
-        String value = wordF.getValue();
 
-        WordFrequencyR resp1 = new WordFrequencyR();
-        resp1.setCategory("News");
-        resp1.setDate(2011);
-        resp1.setFrequency(20);
-        WordFrequencyR resp2 = new WordFrequencyR();
-        resp2.setCategory("Article");
-        resp2.setDate(2011);
-        resp2.setFrequency(20);
-        WordFrequencyR freqArr[] ={resp1,resp2};
-        return Response.status(200).entity(freqArr).build();
+            if(time==null && category==null && value!=null){
+
+                OracleClient client = new OracleClient();
+                WordFrequencyR resp = client.getWordFrequency(value);
+                WordFrequencyR freqArr[] ={resp};
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(time==null && category!=null && value!=null){
+
+                WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
+                OracleClient client = new OracleClient();
+                for (int i=0; i<category.length;i++){
+                    WordFrequencyR resp = client.getWordFrequency(value,category[i]);
+                    freqArr[i] = resp;
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(category==null && time!=null && value!=null){
+
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
+                OracleClient client = new OracleClient();
+                for (int i=0; i<time.length;i++){
+                    WordFrequencyR resp = client.getWordFrequency(value, time[i]);
+                    freqArr[i] = resp;
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        }
+
+
     }
 
     @POST
     @Path("/bigramFrequency")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response bigramFrequency(BigramFrequency bigF){
+    public Response bigramFrequency(BigramFrequency bigF) {
         String value = bigF.getValue1();
         WordFrequencyR resp1 = new WordFrequencyR();
         resp1.setCategory("News");
@@ -312,7 +352,7 @@ public class API {
         resp2.setCategory("Article");
         resp2.setDate(2011);
         resp2.setFrequency(20);
-        WordFrequencyR freqArr[] ={resp1,resp2};
+        WordFrequencyR freqArr[] = {resp1, resp2};
         return Response.status(200).entity(freqArr).build();
 
     }
@@ -321,7 +361,7 @@ public class API {
     @POST
     @Path("/trigramFrequency")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response trigramFrequency(TrigramFrequency triF){
+    public Response trigramFrequency(TrigramFrequency triF) {
         String value = triF.getValue1();
         WordFrequencyR resp1 = new WordFrequencyR();
         resp1.setCategory("News");
@@ -331,7 +371,7 @@ public class API {
         resp2.setCategory("Article");
         resp2.setDate(2011);
         resp2.setFrequency(20);
-        WordFrequencyR freqArr[] ={resp1,resp2};
+        WordFrequencyR freqArr[] = {resp1, resp2};
         return Response.status(200).entity(freqArr).build();
 
     }
@@ -339,7 +379,7 @@ public class API {
     @POST
     @Path("/frequentWords")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response frequentWords(FrequentWord frqWord){
+    public Response frequentWords(FrequentWord frqWord) {
 
         FrequentWordR freqWordR1 = new FrequentWordR();
         freqWordR1.setValue1("value 1");
@@ -353,14 +393,14 @@ public class API {
         freqWordR2.setCategory("Cat 2");
         freqWordR2.setTime(2012);
 
-        FrequentWordR frequentWordArr[] = {freqWordR1,freqWordR2};
+        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
         return Response.status(200).entity(frequentWordArr).build();
     }
 
     @POST
     @Path("/frequentBigrams")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response frequentBigrams(FrequentWord frqWord){
+    public Response frequentBigrams(FrequentWord frqWord) {
 
         FrequentWordR freqWordR1 = new FrequentWordR();
         freqWordR1.setValue1("value 1");
@@ -376,14 +416,14 @@ public class API {
         freqWordR2.setCategory("Cat 2");
         freqWordR2.setTime(2012);
 
-        FrequentWordR frequentWordArr[] = {freqWordR1,freqWordR2};
+        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
         return Response.status(200).entity(frequentWordArr).build();
     }
 
     @POST
     @Path("/frequentTrigrams")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response frequentTrigrams(FrequentWord frqWord){
+    public Response frequentTrigrams(FrequentWord frqWord) {
 
         FrequentWordR freqWordR1 = new FrequentWordR();
         freqWordR1.setValue1("value 1");
@@ -401,7 +441,7 @@ public class API {
         freqWordR2.setCategory("Cat 2");
         freqWordR2.setTime(2012);
 
-        FrequentWordR frequentWordArr[] = {freqWordR1,freqWordR2};
+        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
         return Response.status(200).entity(frequentWordArr).build();
     }
 
@@ -409,7 +449,7 @@ public class API {
     @POST
     @Path("/latestArticlesForWord")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response latestArticlesForWord(ArticlesForWord articlesForWord){
+    public Response latestArticlesForWord(ArticlesForWord articlesForWord) {
 
         ArticleR articleR1 = new ArticleR();
         articleR1.setAuthor("Author 1");
@@ -429,7 +469,7 @@ public class API {
         articleR2.setTitle("Title 2");
         articleR2.setCategory("Cat 2");
 
-        ArticleR[] articles = {articleR1,articleR2};
+        ArticleR[] articles = {articleR1, articleR2};
 
         ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
         articlesForWordR1.setTime(2012);
@@ -441,7 +481,7 @@ public class API {
         articlesForWordR2.setCategory("Cat 3");
         articlesForWordR2.setArticles(articles);
 
-        ArticlesForWordR[] arr = {articlesForWordR1,articlesForWordR2};
+        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
 
         return Response.status(200).entity(arr).build();
     }
@@ -449,7 +489,7 @@ public class API {
     @POST
     @Path("/latestArticlesForBigram")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response latestArticlesForBigram(ArticlesForBigram articlesForBigram){
+    public Response latestArticlesForBigram(ArticlesForBigram articlesForBigram) {
 
         ArticleR articleR1 = new ArticleR();
         articleR1.setAuthor("Author 1");
@@ -469,7 +509,7 @@ public class API {
         articleR2.setTitle("Title 2");
         articleR2.setCategory("Cat 2");
 
-        ArticleR[] articles = {articleR1,articleR2};
+        ArticleR[] articles = {articleR1, articleR2};
 
         ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
         articlesForWordR1.setTime(2012);
@@ -481,7 +521,7 @@ public class API {
         articlesForWordR2.setCategory("Cat 3");
         articlesForWordR2.setArticles(articles);
 
-        ArticlesForWordR[] arr = {articlesForWordR1,articlesForWordR2};
+        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
 
         return Response.status(200).entity(arr).build();
     }
@@ -489,7 +529,7 @@ public class API {
     @POST
     @Path("/latestArticlesForTrigram")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response latestArticlesForTrigram(ArticlesForTrigram articlesForTrigram){
+    public Response latestArticlesForTrigram(ArticlesForTrigram articlesForTrigram) {
 
         ArticleR articleR1 = new ArticleR();
         articleR1.setAuthor("Author 1");
@@ -509,7 +549,7 @@ public class API {
         articleR2.setTitle("Title 2");
         articleR2.setCategory("Cat 2");
 
-        ArticleR[] articles = {articleR1,articleR2};
+        ArticleR[] articles = {articleR1, articleR2};
 
         ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
         articlesForWordR1.setTime(2012);
@@ -521,7 +561,7 @@ public class API {
         articlesForWordR2.setCategory("Cat 3");
         articlesForWordR2.setArticles(articles);
 
-        ArticlesForWordR[] arr = {articlesForWordR1,articlesForWordR2};
+        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
 
         return Response.status(200).entity(arr).build();
     }
@@ -530,7 +570,7 @@ public class API {
     @POST
     @Path("/frequentWordsAroundWord")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response frequentWordsAroundWord(FrequentWordsAroundWord frqWords){
+    public Response frequentWordsAroundWord(FrequentWordsAroundWord frqWords) {
 
         WordR wordR1 = new WordR();
         wordR1.setFrequency(10);
@@ -540,7 +580,7 @@ public class API {
         wordR2.setFrequency(14);
         wordR2.setValue("val 2");
 
-        WordR words[] ={wordR1,wordR2};
+        WordR words[] = {wordR1, wordR2};
 
         FrequentWordsAroundWordR frequentWordsAroundWordR1 = new FrequentWordsAroundWordR();
         frequentWordsAroundWordR1.setCategory("cat 1");
@@ -552,17 +592,16 @@ public class API {
         frequentWordsAroundWordR2.setTime(2013);
         frequentWordsAroundWordR2.setWords(words);
 
-        FrequentWordsAroundWordR[] arr = {frequentWordsAroundWordR1,frequentWordsAroundWordR2};
+        FrequentWordsAroundWordR[] arr = {frequentWordsAroundWordR1, frequentWordsAroundWordR2};
 
         return Response.status(200).entity(arr).build();
     }
 
 
-
     @POST
     @Path("/frequentWordsInPosition")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response frequentWordsInPosition(WordPosition position){
+    public Response frequentWordsInPosition(WordPosition position) {
 
         WordR wordR1 = new WordR();
         wordR1.setFrequency(10);
@@ -572,7 +611,7 @@ public class API {
         wordR2.setFrequency(14);
         wordR2.setValue("val 2");
 
-        WordR words[] ={wordR1,wordR2};
+        WordR words[] = {wordR1, wordR2};
 
         WordPositionR wordPositionR1 = new WordPositionR();
         wordPositionR1.setCategory("cat 1");
@@ -584,7 +623,7 @@ public class API {
         wordPositionR2.setTime(2011);
         wordPositionR2.setWords(words);
 
-        WordPositionR[] arr = {wordPositionR1,wordPositionR2};
+        WordPositionR[] arr = {wordPositionR1, wordPositionR2};
         OracleClient.getDBConnection();
         System.out.println("Got db Connection");
         return Response.status(200).entity(arr).build();
