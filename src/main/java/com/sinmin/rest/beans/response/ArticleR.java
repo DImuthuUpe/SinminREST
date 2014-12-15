@@ -11,8 +11,17 @@ public class ArticleR {
     private int month;
     private int day;
     private String category;
+    private String sentence;
 
-    public String getTitle() {
+    public String getSentence() {
+		return sentence;
+	}
+
+	public void setSentence(String sentence) {
+		this.sentence = sentence;
+	}
+
+	public String getTitle() {
         return title;
     }
 
