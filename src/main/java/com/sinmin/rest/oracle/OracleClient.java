@@ -99,7 +99,7 @@ public class OracleClient {
         while (rst.next()) {
             String frequency = rst.getString(1);
             System.out.println("Count of word " + frequency);
-            resp.setDate(0);
+            resp.setDate(time);
             resp.setCategory(category);
             resp.setFrequency(Integer.parseInt(frequency));
         }
