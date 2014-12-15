@@ -25,31 +25,26 @@ public class OracleClient {
     private static Connection dbConnection = null;
 
 
-    public static Connection getDBConnection() {
+    public static Connection getDBConnection() throws SQLException, ClassNotFoundException {
 
-        if (dbConnection == null) {
-            try {
-                Class.forName("oracle.jdbc.driver.OracleDriver");
-                dbConnection = DriverManager.getConnection(
-                        DB_CONNECTION, DB_USER, DB_PASSWORD);
-                return dbConnection;
-            } catch (Exception e) {
-                //logger.error(e.getMessage());
-                e.printStackTrace();
-            }
+        if (dbConnection == null || dbConnection.isClosed()) {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
+            return dbConnection;
         }
+
         return dbConnection;
     }
 
-    public WordFrequencyR getWordFrequency(String word_value) throws SQLException{
+    public WordFrequencyR getWordFrequency(String word_value) throws SQLException, ClassNotFoundException {
         getDBConnection();
-        String sql ="select count(sw.sentence_id) from word w, sentence_word sw where w.VAL='"+word_value+"' and sw.word_id=w.id";
+        String sql = "select count(sw.sentence_id) from word w, sentence_word sw where w.VAL='" + word_value + "' and sw.word_id=w.id";
         OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
-        while(rst.next()){
+        while (rst.next()) {
             String frequency = rst.getString(1);
-            System.out.println("Count of word "+frequency);
+            System.out.println("Count of word " + frequency);
             resp.setDate(0);
             resp.setCategory("all");
             resp.setFrequency(Integer.parseInt(frequency));
@@ -58,16 +53,16 @@ public class OracleClient {
         return resp;
     }
 
-    public WordFrequencyR getWordFrequency(String word_value,int time) throws SQLException{
+    public WordFrequencyR getWordFrequency(String word_value, int time) throws SQLException, ClassNotFoundException {
         getDBConnection();
-        String sql ="select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='"+word_value+"' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.year=?";
+        String sql = "select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='" + word_value + "' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.year=?";
         OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
-        stmt.setInt(1,time);
+        stmt.setInt(1, time);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
-        while(rst.next()){
+        while (rst.next()) {
             String frequency = rst.getString(1);
-            System.out.println("Count of word "+frequency);
+            System.out.println("Count of word " + frequency);
             resp.setCategory("all");
             resp.setDate(time);
             resp.setFrequency(Integer.parseInt(frequency));
@@ -75,16 +70,16 @@ public class OracleClient {
         return resp;
     }
 
-    public WordFrequencyR getWordFrequency(String word_value,String category) throws SQLException{
+    public WordFrequencyR getWordFrequency(String word_value, String category) throws SQLException, ClassNotFoundException {
         getDBConnection();
-        String sql ="select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='"+word_value+"' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.category=?";
+        String sql = "select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='" + word_value + "' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.category=?";
         OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
-        stmt.setString(1,category);
+        stmt.setString(1, category);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
-        while(rst.next()){
+        while (rst.next()) {
             String frequency = rst.getString(1);
-            System.out.println("Count of word "+frequency);
+            System.out.println("Count of word " + frequency);
             resp.setDate(0);
             resp.setCategory(category);
             resp.setFrequency(Integer.parseInt(frequency));
@@ -93,10 +88,24 @@ public class OracleClient {
 
     }
 
+    public WordFrequencyR getWordFrequency(String word_value, int time, String category) throws SQLException, ClassNotFoundException {
+        getDBConnection();
+        String sql = "select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='" + word_value + "' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.category=? and a.year=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1, category);
+        stmt.setInt(2, time);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(0);
+            resp.setCategory(category);
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
 
-
-
-
+    }
 
 
 }

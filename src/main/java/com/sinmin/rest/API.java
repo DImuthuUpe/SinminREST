@@ -327,6 +327,16 @@ public class API {
                 }
                 return Response.status(200).entity(freqArr).build();
 
+            }else if(category!=null&& time!=null && value!=null){
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<category.length;i++){
+                    for(int j=0;j<time.length;j++){
+                        WordFrequencyR resp = client.getWordFrequency(value, time[j],category[i]);
+                        freqArr[i*time.length+j] = resp;
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
             }else{
                 return Response.status(500).entity("Invalid input parameters").build();
             }
@@ -334,6 +344,9 @@ public class API {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
         }
 
 
@@ -624,7 +637,7 @@ public class API {
         wordPositionR2.setWords(words);
 
         WordPositionR[] arr = {wordPositionR1, wordPositionR2};
-        OracleClient.getDBConnection();
+        //OracleClient.getDBConnection();
         System.out.println("Got db Connection");
         return Response.status(200).entity(arr).build();
     }
