@@ -292,13 +292,10 @@ public class API {
     @Path("/wordFrequency")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response wordFrequency(WordFrequency wordF) {
-
+        String value = wordF.getValue();
+        int time[] = wordF.getTime();
+        String category[] = wordF.getCategory();
         try {
-            String value = wordF.getValue();
-            int time[] = wordF.getTime();
-            String category[] = wordF.getCategory();
-
-
 
             if(time==null && category==null && value!=null){
 
@@ -356,17 +353,63 @@ public class API {
     @Path("/bigramFrequency")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response bigramFrequency(BigramFrequency bigF) {
-        String value = bigF.getValue1();
-        WordFrequencyR resp1 = new WordFrequencyR();
-        resp1.setCategory("News");
-        resp1.setDate(2011);
-        resp1.setFrequency(20);
-        WordFrequencyR resp2 = new WordFrequencyR();
-        resp2.setCategory("Article");
-        resp2.setDate(2011);
-        resp2.setFrequency(20);
-        WordFrequencyR freqArr[] = {resp1, resp2};
-        return Response.status(200).entity(freqArr).build();
+        String value1 = bigF.getValue1();
+        String value2 = bigF.getValue2();
+        String category[] = bigF.getCategory();
+        int time[] = bigF.getTime();
+
+        //String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.year=2008";
+
+        try {
+
+            if(time==null && category==null && value1!=null && value2!=null){
+
+                OracleClient client = new OracleClient();
+                WordFrequencyR resp = client.getBigramFrequency(value1,value2);
+                WordFrequencyR freqArr[] ={resp};
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(time==null && category!=null && value1!=null && value2!=null){
+
+                WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
+                OracleClient client = new OracleClient();
+                for (int i=0; i<category.length;i++){
+                    WordFrequencyR resp = client.getBigramFrequency(value1,value2,category[i]);
+                    freqArr[i] = resp;
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(category==null && time!=null && value1!=null && value2!=null){
+
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
+                OracleClient client = new OracleClient();
+                for (int i=0; i<time.length;i++){
+                    WordFrequencyR resp = client.getBigramFrequency(value1,value2, time[i]);
+                    freqArr[i] = resp;
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(category!=null&& time!=null && value1!=null && value2!=null){
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<category.length;i++){
+                    for(int j=0;j<time.length;j++){
+                        WordFrequencyR resp = client.getBigramFrequency(value1,value2, time[j],category[i]);
+                        freqArr[i*time.length+j] = resp;
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
 
     }
 

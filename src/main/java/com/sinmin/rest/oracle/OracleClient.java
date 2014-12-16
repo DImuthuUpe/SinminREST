@@ -107,5 +107,75 @@ public class OracleClient {
 
     }
 
+    public WordFrequencyR getBigramFrequency(String word1, String word2,int year, String category) throws SQLException, ClassNotFoundException{
+        getDBConnection();
+        String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.year=? and a.category=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2, category);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(year);
+            resp.setCategory(category);
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
+
+    public WordFrequencyR getBigramFrequency(String word1, String word2,int year) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.year=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1, year);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(year);
+            resp.setCategory("all");
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
+
+    public WordFrequencyR getBigramFrequency(String word1, String word2,String category) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.category=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1, category);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(0);
+            resp.setCategory(category);
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
+
+    public WordFrequencyR getBigramFrequency(String word1, String word2) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb where w1.val='"+word1+"' and w2.val='"+word2+"' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(0);
+            resp.setCategory("all");
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
+
+
+    
 
 }
