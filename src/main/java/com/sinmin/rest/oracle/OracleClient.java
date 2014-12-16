@@ -175,7 +175,72 @@ public class OracleClient {
         return resp;
     }
 
+    public WordFrequencyR getTrigramFrequency(String word1, String word2,String word3,int year, String category)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id = s.article_id and a.year=? and a.category=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2, category);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(year);
+            resp.setCategory(category);
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
 
-    
+    public WordFrequencyR getTrigramFrequency(String word1, String word2,String word3,int year)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id = s.article_id and a.year=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(year);
+            resp.setCategory("all");
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
+
+    public WordFrequencyR getTrigramFrequency(String word1, String word2,String word3,String category)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id = s.article_id and a.category=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1, category);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(0);
+            resp.setCategory(category);
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
+
+    public WordFrequencyR getTrigramFrequency(String word1, String word2,String word3)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        ResultSet rst = stmt.executeQuery();
+        WordFrequencyR resp = new WordFrequencyR();
+        while (rst.next()) {
+            String frequency = rst.getString(1);
+            System.out.println("Count of word " + frequency);
+            resp.setDate(0);
+            resp.setCategory("all");
+            resp.setFrequency(Integer.parseInt(frequency));
+        }
+        return resp;
+    }
 
 }

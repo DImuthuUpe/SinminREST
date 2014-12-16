@@ -365,7 +365,7 @@ public class API {
             if(time==null && category==null && value1!=null && value2!=null){
 
                 OracleClient client = new OracleClient();
-                WordFrequencyR resp = client.getBigramFrequency(value1,value2);
+                WordFrequencyR resp = client.getBigramFrequency(value1, value2);
                 WordFrequencyR freqArr[] ={resp};
                 return Response.status(200).entity(freqArr).build();
 
@@ -374,7 +374,7 @@ public class API {
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
                 OracleClient client = new OracleClient();
                 for (int i=0; i<category.length;i++){
-                    WordFrequencyR resp = client.getBigramFrequency(value1,value2,category[i]);
+                    WordFrequencyR resp = client.getBigramFrequency(value1, value2, category[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
@@ -384,7 +384,7 @@ public class API {
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
                 OracleClient client = new OracleClient();
                 for (int i=0; i<time.length;i++){
-                    WordFrequencyR resp = client.getBigramFrequency(value1,value2, time[i]);
+                    WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
@@ -394,7 +394,7 @@ public class API {
                 OracleClient client = new OracleClient();
                 for(int i=0;i<category.length;i++){
                     for(int j=0;j<time.length;j++){
-                        WordFrequencyR resp = client.getBigramFrequency(value1,value2, time[j],category[i]);
+                        WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[j], category[i]);
                         freqArr[i*time.length+j] = resp;
                     }
                 }
@@ -418,17 +418,63 @@ public class API {
     @Path("/trigramFrequency")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response trigramFrequency(TrigramFrequency triF) {
-        String value = triF.getValue1();
-        WordFrequencyR resp1 = new WordFrequencyR();
-        resp1.setCategory("News");
-        resp1.setDate(2011);
-        resp1.setFrequency(20);
-        WordFrequencyR resp2 = new WordFrequencyR();
-        resp2.setCategory("Article");
-        resp2.setDate(2011);
-        resp2.setFrequency(20);
-        WordFrequencyR freqArr[] = {resp1, resp2};
-        return Response.status(200).entity(freqArr).build();
+        String value1 = triF.getValue1();
+        String value2 = triF.getValue2();
+        String value3 = triF.getValue3();
+        String category[] = triF.getCategory();
+        int time[] = triF.getTime();
+
+
+        try {
+
+            if(time==null && category==null && value1!=null && value2!=null && value3!=null){
+
+                OracleClient client = new OracleClient();
+                WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3);
+                WordFrequencyR freqArr[] ={resp};
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(time==null && category!=null && value1!=null && value2!=null && value3!=null){
+
+                WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
+                OracleClient client = new OracleClient();
+                for (int i=0; i<category.length;i++){
+                    WordFrequencyR resp = client.getTrigramFrequency(value1,value2,value3,category[i]);
+                    freqArr[i] = resp;
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(category==null && time!=null && value1!=null && value2!=null && value3!=null){
+
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
+                OracleClient client = new OracleClient();
+                for (int i=0; i<time.length;i++){
+                    WordFrequencyR resp = client.getTrigramFrequency(value1,value2, value3,time[i]);
+                    freqArr[i] = resp;
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(category!=null&& time!=null && value1!=null && value2!=null && value3!=null){
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<category.length;i++){
+                    for(int j=0;j<time.length;j++){
+                        WordFrequencyR resp = client.getTrigramFrequency(value1,value2,value3, time[j],category[i]);
+                        freqArr[i*time.length+j] = resp;
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
 
     }
 
