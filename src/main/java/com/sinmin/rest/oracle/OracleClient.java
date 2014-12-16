@@ -1,5 +1,6 @@
 package com.sinmin.rest.oracle;
 
+import com.sinmin.rest.beans.response.FrequentWordR;
 import com.sinmin.rest.beans.response.WordFrequencyR;
 import oracle.jdbc.OracleCallableStatement;
 
@@ -49,7 +50,8 @@ public class OracleClient {
             resp.setCategory("all");
             resp.setFrequency(Integer.parseInt(frequency));
         }
-
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -67,6 +69,8 @@ public class OracleClient {
             resp.setDate(time);
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -84,6 +88,8 @@ public class OracleClient {
             resp.setCategory(category);
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
 
     }
@@ -103,6 +109,8 @@ public class OracleClient {
             resp.setCategory(category);
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
 
     }
@@ -122,6 +130,8 @@ public class OracleClient {
             resp.setCategory(category);
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -139,6 +149,8 @@ public class OracleClient {
             resp.setCategory("all");
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -156,6 +168,8 @@ public class OracleClient {
             resp.setCategory(category);
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -172,6 +186,8 @@ public class OracleClient {
             resp.setCategory("all");
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -190,6 +206,8 @@ public class OracleClient {
             resp.setCategory(category);
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -197,7 +215,7 @@ public class OracleClient {
         getDBConnection();
         String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id = s.article_id and a.year=?";
         OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
-        stmt.setInt(1,year);
+        stmt.setInt(1, year);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
         while (rst.next()) {
@@ -207,6 +225,8 @@ public class OracleClient {
             resp.setCategory("all");
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -224,6 +244,8 @@ public class OracleClient {
             resp.setCategory(category);
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -240,7 +262,25 @@ public class OracleClient {
             resp.setCategory("all");
             resp.setFrequency(Integer.parseInt(frequency));
         }
+        rst.close();
+        stmt.close();
         return resp;
+    } 
+    /////////////////////Frequent Words///////////////
+    public FrequentWordR[] getFrequentWords(int year, String category,int amount){
+
+        return null;
     }
 
+    public FrequentWordR[] getFrequentWords(int year,int amount){
+        return null;
+    }
+
+    public FrequentWordR[] getFrequentWords(String category,int amount){
+        return null;
+    }
+
+    public FrequentWordR[] getFrequentWords(int amount){
+        return null;
+    }
 }
