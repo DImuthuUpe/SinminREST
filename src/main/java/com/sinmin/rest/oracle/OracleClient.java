@@ -2,12 +2,14 @@ package com.sinmin.rest.oracle;
 
 import com.sinmin.rest.beans.response.FrequentWordR;
 import com.sinmin.rest.beans.response.WordFrequencyR;
+import com.sinmin.rest.beans.response.WordR;
 import oracle.jdbc.OracleCallableStatement;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Created by dimuthuupeksha on 12/11/14.
@@ -267,20 +269,119 @@ public class OracleClient {
         return resp;
     } 
     /////////////////////Frequent Words///////////////
-    public FrequentWordR[] getFrequentWords(int year, String category,int amount){
+    public FrequentWordR getFrequentWords(int year, String category,int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w2.val,tot from(select sw.word_id,count(*) as tot from sentence_word sw, sentence s, article a where s.id=sw.sentence_id and a.id = s.article_id and a.year=? and a.category=? group by sw.word_id order by count(*) desc) res, word w2 where w2.id = res.word_id and rownum <=?";
 
-        return null;
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2, category);
+        stmt.setInt(3,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            String value = rst.getString(1);
+            int frequency = rst.getInt(2);
+            System.out.println("Count of word " + value +" is "+frequency);
+
+            val1[i].setValue(value);
+            val1[i].setFrequency(frequency);
+        }
+        resp.setCategory(category);
+        resp.setTime(year);
+        resp.setValue1(val1);
+        rst.close();
+        stmt.close();
+        return resp;
     }
 
-    public FrequentWordR[] getFrequentWords(int year,int amount){
-        return null;
+    public FrequentWordR getFrequentWords(int year,int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w2.val,tot from(select sw.word_id,count(*) as tot from sentence_word sw, sentence s, article a where s.id=sw.sentence_id and a.id = s.article_id and a.year=? group by sw.word_id order by count(*) desc) res, word w2 where w2.id = res.word_id and rownum <=?";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1, year);
+        stmt.setInt(2,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            String value = rst.getString(1);
+            int frequency = rst.getInt(2);
+            System.out.println("Count of word " + value +" is "+frequency);
+
+            val1[i].setValue(value);
+            val1[i].setFrequency(frequency);
+        }
+        resp.setCategory("all");
+        resp.setTime(year);
+        resp.setValue1(val1);
+        rst.close();
+        stmt.close();
+        return resp;
     }
 
-    public FrequentWordR[] getFrequentWords(String category,int amount){
-        return null;
+    public FrequentWordR getFrequentWords(String category,int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w2.val,tot from(select sw.word_id,count(*) as tot from sentence_word sw, sentence s, article a where s.id=sw.sentence_id and a.id = s.article_id and a.category=? group by sw.word_id order by count(*) desc) res, word w2 where w2.id = res.word_id and rownum <=?";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1, category);
+        stmt.setInt(2,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            String value = rst.getString(1);
+            int frequency = rst.getInt(2);
+            System.out.println("Count of word " + value +" is "+frequency);
+
+            val1[i].setValue(value);
+            val1[i].setFrequency(frequency);
+        }
+        resp.setCategory(category);
+        resp.setTime(0);
+        resp.setValue1(val1);
+        rst.close();
+        stmt.close();
+        return resp;
     }
 
-    public FrequentWordR[] getFrequentWords(int amount){
-        return null;
+    public FrequentWordR getFrequentWords(int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w2.val,tot from(select sw.word_id,count(*) as tot from sentence_word sw group by sw.word_id order by count(*) desc) res, word w2 where w2.id = res.word_id and rownum <=?";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            String value = rst.getString(1);
+            int frequency = rst.getInt(2);
+            System.out.println("Count of word " + value +" is "+frequency);
+
+            val1[i].setValue(value);
+            val1[i].setFrequency(frequency);
+        }
+        resp.setCategory("all");
+        resp.setTime(0);
+        resp.setValue1(val1);
+        rst.close();
+        stmt.close();
+        return resp;
     }
 }

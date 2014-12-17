@@ -1,46 +1,39 @@
 package com.sinmin.rest.beans.response;
 
+import java.util.HashMap;
+
 /**
  * Created by dimuthuupeksha on 12/10/14.
  */
 public class FrequentWordR {
-    private String value1;
-    private String value2;
-    private String value3;
-    private int frequency;
+    private WordR[] value1;
+    private WordR[] value2;
+    private WordR[] value3;
     private String category;
     private int time;
 
-    public String getValue1() {
+    public WordR[] getValue1() {
         return value1;
     }
 
-    public void setValue1(String value1) {
+    public void setValue1(WordR[] value1) {
         this.value1 = value1;
     }
 
-    public String getValue2() {
+    public WordR[] getValue2() {
         return value2;
     }
 
-    public void setValue2(String value2) {
+    public void setValue2(WordR[] value2) {
         this.value2 = value2;
     }
 
-    public String getValue3() {
+    public WordR[] getValue3() {
         return value3;
     }
 
-    public void setValue3(String value3) {
+    public void setValue3(WordR[] value3) {
         this.value3 = value3;
-    }
-
-    public int getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(int frequency) {
-        this.frequency = frequency;
     }
 
     public String getCategory() {

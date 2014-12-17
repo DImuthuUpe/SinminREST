@@ -483,20 +483,40 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentWords(FrequentWord frqWord) {
 
-        FrequentWordR freqWordR1 = new FrequentWordR();
-        freqWordR1.setValue1("value 1");
-        freqWordR1.setFrequency(10);
-        freqWordR1.setCategory("Cat 1");
-        freqWordR1.setTime(2011);
+        String[] category=frqWord.getCategory();
+        int year[] = frqWord.getTime();
+        int amount = frqWord.getAmount();
 
-        FrequentWordR freqWordR2 = new FrequentWordR();
-        freqWordR2.setValue1("value 2");
-        freqWordR2.setFrequency(11);
-        freqWordR2.setCategory("Cat 2");
-        freqWordR2.setTime(2012);
 
-        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(frequentWordArr).build();
+        if(category==null && year==null){
+
+
+        }else if(category==null && year!=null){
+
+        }else if(category!=null && year==null){
+
+        }else if(category!=null && year!=null){
+
+        }else{
+            return Response.status(500).entity("Invalid input parameters").build();
+        }
+
+
+//
+//        FrequentWordR freqWordR1 = new FrequentWordR();
+//        freqWordR1.setValue1("value 1");
+//        freqWordR1.setFrequency(10);
+//        freqWordR1.setCategory("Cat 1");
+//        freqWordR1.setTime(2011);
+//
+//        FrequentWordR freqWordR2 = new FrequentWordR();
+//        freqWordR2.setValue1("value 2");
+//        freqWordR2.setFrequency(11);
+//        freqWordR2.setCategory("Cat 2");
+//        freqWordR2.setTime(2012);
+//
+//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
+        return Response.status(200).entity(null).build();
     }
 
     @POST
@@ -504,22 +524,22 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentBigrams(FrequentWord frqWord) {
 
-        FrequentWordR freqWordR1 = new FrequentWordR();
-        freqWordR1.setValue1("value 1");
-        freqWordR1.setValue1("value 11");
-        freqWordR1.setFrequency(10);
-        freqWordR1.setCategory("Cat 1");
-        freqWordR1.setTime(2011);
+//        FrequentWordR freqWordR1 = new FrequentWordR();
+//        freqWordR1.setValue1("value 1");
+//        freqWordR1.setValue1("value 11");
+//        freqWordR1.setFrequency(10);
+//        freqWordR1.setCategory("Cat 1");
+//        freqWordR1.setTime(2011);
+//
+//        FrequentWordR freqWordR2 = new FrequentWordR();
+//        freqWordR2.setValue1("value 2");
+//        freqWordR1.setValue1("value 22");
+//        freqWordR2.setFrequency(11);
+//        freqWordR2.setCategory("Cat 2");
+//        freqWordR2.setTime(2012);
 
-        FrequentWordR freqWordR2 = new FrequentWordR();
-        freqWordR2.setValue1("value 2");
-        freqWordR1.setValue1("value 22");
-        freqWordR2.setFrequency(11);
-        freqWordR2.setCategory("Cat 2");
-        freqWordR2.setTime(2012);
-
-        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(frequentWordArr).build();
+//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
+        return Response.status(200).entity(null).build();
     }
 
     @POST
@@ -527,24 +547,24 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentTrigrams(FrequentWord frqWord) {
 
-        FrequentWordR freqWordR1 = new FrequentWordR();
-        freqWordR1.setValue1("value 1");
-        freqWordR1.setValue1("value 11");
-        freqWordR1.setValue1("value 111");
-        freqWordR1.setFrequency(10);
-        freqWordR1.setCategory("Cat 1");
-        freqWordR1.setTime(2011);
+//        FrequentWordR freqWordR1 = new FrequentWordR();
+//        freqWordR1.setValue1("value 1");
+//        freqWordR1.setValue1("value 11");
+//        freqWordR1.setValue1("value 111");
+//        freqWordR1.setFrequency(10);
+//        freqWordR1.setCategory("Cat 1");
+//        freqWordR1.setTime(2011);
+//
+//        FrequentWordR freqWordR2 = new FrequentWordR();
+//        freqWordR2.setValue1("value 2");
+//        freqWordR1.setValue1("value 22");
+//        freqWordR1.setValue1("value 222");
+//        freqWordR2.setFrequency(11);
+//        freqWordR2.setCategory("Cat 2");
+//        freqWordR2.setTime(2012);
 
-        FrequentWordR freqWordR2 = new FrequentWordR();
-        freqWordR2.setValue1("value 2");
-        freqWordR1.setValue1("value 22");
-        freqWordR1.setValue1("value 222");
-        freqWordR2.setFrequency(11);
-        freqWordR2.setCategory("Cat 2");
-        freqWordR2.setTime(2012);
-
-        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(frequentWordArr).build();
+//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
+        return Response.status(200).entity(null).build();
     }
 
 
