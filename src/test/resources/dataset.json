@@ -1,0 +1,218 @@
+{
+    "name":"corpus",
+    "replicationFactor":3,
+    "strategy":"org.apache.cassandra.locator.SimpleStrategy",
+    
+    "columnFamilies":[
+        {
+            "name":"word_time_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_time_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_time_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_time_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_time_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_time_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_time_category_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_time_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_category_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_time_category_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_time_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_category_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_time_category_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_time_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_category_ordered_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_year_category_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_year_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_category_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_year_category_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_year_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_category_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"bigram_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_year_category_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_year_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_category_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"trigram_usage",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_pos_year_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_pos_year_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_pos_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_pos_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_inv_pos_year_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_inv_pos_year_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_inv_pos_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_inv_pos_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        },
+        {
+            "name":"word_time_category_frequency",
+            "type" : "STANDARD",
+        	"keyType" : "UTF8Type"
+        }
+    ]
+}
