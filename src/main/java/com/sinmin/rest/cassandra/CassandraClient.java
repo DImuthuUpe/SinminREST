@@ -12,6 +12,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.sinmin.rest.beans.request.FrequentWord;
 import com.sinmin.rest.beans.response.ArticleR;
 import com.sinmin.rest.beans.response.FrequentWordR;
 import com.sinmin.rest.beans.response.WordFrequencyR;
@@ -254,308 +255,376 @@ public class CassandraClient {
 	
 	//////////////////////////////////////////////////////
 	
-	public FrequentWordR[] getFrequentWords(int year, String category,int amount){
+	public FrequentWordR getFrequentWords(int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_time_category_ordered_frequency WHERE year=? and category=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(year,category,amount));
 		
-		FrequentWordR[] array = new FrequentWordR[amount];
+		WordR[] val1 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
 		int i=0;
 		
 		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word"));
-			array[i].setTime(year);
-			array[i].setCategory(category);
-			array[i].setFrequency(row.getInt("frequency"));
+			val1[i]= new WordR();
+			val1[i].setValue(row.getString("word"));
+			val1[i].setFrequency(row.getInt("frequency"));
 			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
 			i++;
 			if(i==amount){
 				break;
 			}
 		}
-		
-		return array;
+
+        resp.setCategory(category);
+        resp.setTime(year);
+        resp.setValue1(val1);
+
+		return resp;
 	}
 	
-	public FrequentWordR[] getFrequentWords(int year,int amount){
+	public FrequentWordR getFrequentWords(int year,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_time_ordered_frequency WHERE year=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(year,amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word"));
-			array[i].setTime(year);
-			array[i].setCategory("all");
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val1[i].setValue(row.getString("word"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+
+        resp.setCategory("all");
+        resp.setTime(year);
+        resp.setValue1(val1);
+
+        return resp;
 	}
 	
-	public FrequentWordR[] getFrequentWords(String category,int amount){
+	public FrequentWordR getFrequentWords(String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_category_ordered_frequency WHERE category=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(category,amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word"));
-			array[i].setTime(0);
-			array[i].setCategory(category);
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val1[i].setValue(row.getString("word"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+
+        resp.setCategory(category);
+        resp.setTime(0);
+        resp.setValue1(val1);
+
+        return resp;
 	}
 	
-	public FrequentWordR[] getFrequentWords(int amount){
+	public FrequentWordR getFrequentWords(int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_category_ordered_frequency WHERE category IN (?,?,?,?,?) order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind("N","C","A","S","G",amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word"));
-			array[i].setTime(0);
-			array[i].setCategory("all");
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val1[i].setValue(row.getString("word"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+
+        resp.setCategory("all");
+        resp.setTime(0);
+        resp.setValue1(val1);
+
+        return resp;
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////
 	
-	public FrequentWordR[] getFrequentBigrams(int year, String category,int amount){
+	public FrequentWordR getFrequentBigrams(int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_time_category_ordered_frequency WHERE year=? and category=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(year,category,amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
+
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+		FrequentWordR resp = new FrequentWordR();
 		int i=0;
 		
 		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word1"));
-			array[i].setValue2(row.getString("word2"));
-			array[i].setTime(year);
-			array[i].setCategory(category);
-			array[i].setFrequency(row.getInt("frequency"));
+			val1[i]= new WordR();
+            val2[i] = new WordR();
+			val1[i].setValue(row.getString("word1"));
+			val2[i].setValue(row.getString("word2"));
+			val1[i].setFrequency(row.getInt("frequency"));
+            val2[i].setFrequency(row.getInt("frequency"));
 			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
 			i++;
 			if(i==amount){
 				break;
 			}
 		}
-		
-		return array;
+		resp.setCategory(category);
+        resp.setTime(year);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+		return resp;
 	}
 	
-	public FrequentWordR[] getFrequentBigrams(int year,int amount){
+	public FrequentWordR getFrequentBigrams(int year,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_time_ordered_frequency WHERE year=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(year,amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word1"));
-			array[i].setValue2(row.getString("word2"));
-			array[i].setTime(year);
-			array[i].setCategory("all");
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val2[i] = new WordR();
+            val1[i].setValue(row.getString("word1"));
+            val2[i].setValue(row.getString("word2"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            val2[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+        resp.setCategory("all");
+        resp.setTime(year);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        return resp;
 	}
 	
-	public FrequentWordR[] getFrequentBigrams(String category,int amount){
+	public FrequentWordR getFrequentBigrams(String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_category_ordered_frequency WHERE category=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(category,amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word1"));
-			array[i].setValue2(row.getString("word2"));
-			array[i].setTime(0);
-			array[i].setCategory(category);
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val2[i] = new WordR();
+            val1[i].setValue(row.getString("word1"));
+            val2[i].setValue(row.getString("word2"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            val2[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+        resp.setCategory(category);
+        resp.setTime(0);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        return resp;
 	}
 	
-	public FrequentWordR[] getFrequentBigrams(int amount){
+	public FrequentWordR getFrequentBigrams(int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_category_ordered_frequency WHERE category IN (?,?,?,?,?) order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind("N","C","A","S","G",amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word1"));
-			array[i].setValue2(row.getString("word2"));
-			array[i].setTime(0);
-			array[i].setCategory("all");
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val2[i] = new WordR();
+            val1[i].setValue(row.getString("word1"));
+            val2[i].setValue(row.getString("word2"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            val2[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+        resp.setCategory("all");
+        resp.setTime(0);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        return resp;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
 	
-	public FrequentWordR[] getFrequentTrigrams(int year, String category,int amount){
+	public FrequentWordR getFrequentTrigrams(int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_time_category_ordered_frequency WHERE year=? and category=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(year,category,amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word1"));
-			array[i].setValue2(row.getString("word2"));
-			array[i].setValue3(row.getString("word3"));
-			array[i].setTime(year);
-			array[i].setCategory(category);
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        WordR[] val3 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val2[i] = new WordR();
+            val3[i] = new WordR();
+            val1[i].setValue(row.getString("word1"));
+            val2[i].setValue(row.getString("word2"));
+            val3[i].setValue(row.getString("word3"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            val2[i].setFrequency(row.getInt("frequency"));
+            val3[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+        resp.setCategory(category);
+        resp.setTime(year);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        resp.setValue3(val3);
+        return resp;
 	}
 	
-	public FrequentWordR[] getFrequentTrigrams(int year,int amount){
+	public FrequentWordR getFrequentTrigrams(int year,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_time_ordered_frequency WHERE year=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(year,amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word1"));
-			array[i].setValue2(row.getString("word2"));
-			array[i].setValue3(row.getString("word3"));
-			array[i].setTime(year);
-			array[i].setCategory("all");
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        WordR[] val3 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val2[i] = new WordR();
+            val3[i] = new WordR();
+            val1[i].setValue(row.getString("word1"));
+            val2[i].setValue(row.getString("word2"));
+            val3[i].setValue(row.getString("word3"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            val2[i].setFrequency(row.getInt("frequency"));
+            val3[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+        resp.setCategory("all");
+        resp.setTime(year);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        resp.setValue3(val3);
+        return resp;
 	}
 	
-	public FrequentWordR[] getFrequentTrigrams(String category,int amount){
+	public FrequentWordR getFrequentTrigrams(String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_category_ordered_frequency WHERE category=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(category,amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word1"));
-			array[i].setValue2(row.getString("word2"));
-			array[i].setValue3(row.getString("word3"));
-			array[i].setTime(0);
-			array[i].setCategory(category);
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        WordR[] val3 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val2[i] = new WordR();
+            val3[i] = new WordR();
+            val1[i].setValue(row.getString("word1"));
+            val2[i].setValue(row.getString("word2"));
+            val3[i].setValue(row.getString("word3"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            val2[i].setFrequency(row.getInt("frequency"));
+            val3[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+        resp.setCategory(category);
+        resp.setTime(0);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        resp.setValue3(val3);
+        return resp;
 	}
 	
-	public FrequentWordR[] getFrequentTrigrams(int amount){
+	public FrequentWordR getFrequentTrigrams(int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_category_ordered_frequency WHERE category IN (?,?,?,?,?) order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind("N","C","A","S","G",amount));
-		
-		FrequentWordR[] array = new FrequentWordR[amount];
-		int i=0;
-		
-		for (Row row : results) {
-			array[i]= new FrequentWordR();
-			array[i].setValue1(row.getString("word1"));
-			array[i].setValue2(row.getString("word2"));
-			array[i].setValue3(row.getString("word3"));
-			array[i].setTime(0);
-			array[i].setCategory("all");
-			array[i].setFrequency(row.getInt("frequency"));
-			System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
-			i++;
-			if(i==amount){
-				break;
-			}
-		}
-		
-		return array;
+
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        WordR[] val3 = new WordR[amount];
+        FrequentWordR resp = new FrequentWordR();
+        int i=0;
+
+        for (Row row : results) {
+            val1[i]= new WordR();
+            val2[i] = new WordR();
+            val3[i] = new WordR();
+            val1[i].setValue(row.getString("word1"));
+            val2[i].setValue(row.getString("word2"));
+            val3[i].setValue(row.getString("word3"));
+            val1[i].setFrequency(row.getInt("frequency"));
+            val2[i].setFrequency(row.getInt("frequency"));
+            val3[i].setFrequency(row.getInt("frequency"));
+            System.out.format("%s %d\n", row.getString("word"),row.getInt("frequency"));
+            i++;
+            if(i==amount){
+                break;
+            }
+        }
+        resp.setCategory("all");
+        resp.setTime(0);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        resp.setValue3(val3);
+        return resp;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
