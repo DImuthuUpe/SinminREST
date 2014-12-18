@@ -290,6 +290,7 @@ public class OracleClient {
 
             val1[i].setValue(value);
             val1[i].setFrequency(frequency);
+            i++;
         }
         resp.setCategory(category);
         resp.setTime(year);
@@ -319,6 +320,7 @@ public class OracleClient {
 
             val1[i].setValue(value);
             val1[i].setFrequency(frequency);
+            i++;
         }
         resp.setCategory("all");
         resp.setTime(year);
@@ -348,6 +350,7 @@ public class OracleClient {
 
             val1[i].setValue(value);
             val1[i].setFrequency(frequency);
+            i++;
         }
         resp.setCategory(category);
         resp.setTime(0);
@@ -376,6 +379,7 @@ public class OracleClient {
 
             val1[i].setValue(value);
             val1[i].setFrequency(frequency);
+            i++;
         }
         resp.setCategory("all");
         resp.setTime(0);

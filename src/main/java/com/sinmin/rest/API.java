@@ -487,36 +487,50 @@ public class API {
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
 
+        try{
+            if(category==null && year==null){
+                OracleClient client = new OracleClient();
+                FrequentWordR resp = client.getFrequentWords(amount);
+                FrequentWordR[] freqArr = {resp};
+                return Response.status(200).entity(freqArr).build();
+            }else if(category==null && year!=null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[year.length];
+                for (int i=0;i<year.length;i++){
+                    freqArr[i]= client.getFrequentWords(year[i],amount);
+                }
+                return Response.status(200).entity(freqArr).build();
 
-        if(category==null && year==null){
+            }else if(category!=null && year==null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length];
+                for (int i=0;i<category.length;i++){
+                    freqArr[i]= client.getFrequentWords(category[i],amount);
+                }
+                return Response.status(200).entity(freqArr).build();
 
+            }else if(category!=null && year!=null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length*year.length];
+                for (int i=0;i<category.length;i++){
+                    for(int j=0;j<year.length;j++){
+                        freqArr[i*category.length+j]= client.getFrequentWords(year[j],category[i],amount);
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
 
-        }else if(category==null && year!=null){
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
 
-        }else if(category!=null && year==null){
-
-        }else if(category!=null && year!=null){
-
-        }else{
-            return Response.status(500).entity("Invalid input parameters").build();
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
         }
 
-
-//
-//        FrequentWordR freqWordR1 = new FrequentWordR();
-//        freqWordR1.setValue1("value 1");
-//        freqWordR1.setFrequency(10);
-//        freqWordR1.setCategory("Cat 1");
-//        freqWordR1.setTime(2011);
-//
-//        FrequentWordR freqWordR2 = new FrequentWordR();
-//        freqWordR2.setValue1("value 2");
-//        freqWordR2.setFrequency(11);
-//        freqWordR2.setCategory("Cat 2");
-//        freqWordR2.setTime(2012);
-//
-//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(null).build();
     }
 
     @POST
