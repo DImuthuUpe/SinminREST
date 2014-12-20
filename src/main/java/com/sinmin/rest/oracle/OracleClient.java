@@ -563,7 +563,7 @@ public class OracleClient {
             String value1 = rst.getString(1);
             String value2 = rst.getString(2);
             String value3 = rst.getString(3);
-            int frequency = rst.getInt(3);
+            int frequency = rst.getInt(4);
             System.out.println("Count of trigram " + value1 +" "+value2+" "+value3+" is "+frequency);
 
             val1[i].setValue(value1);
@@ -606,7 +606,7 @@ public class OracleClient {
             String value1 = rst.getString(1);
             String value2 = rst.getString(2);
             String value3 = rst.getString(3);
-            int frequency = rst.getInt(3);
+            int frequency = rst.getInt(4);
             System.out.println("Count of trigram " + value1 +" "+value2+" "+value3+" is "+frequency);
 
             val1[i].setValue(value1);
@@ -649,7 +649,7 @@ public class OracleClient {
             String value1 = rst.getString(1);
             String value2 = rst.getString(2);
             String value3 = rst.getString(3);
-            int frequency = rst.getInt(3);
+            int frequency = rst.getInt(4);
             System.out.println("Count of trigram " + value1 +" "+value2+" "+value3+" is "+frequency);
 
             val1[i].setValue(value1);
@@ -691,7 +691,7 @@ public class OracleClient {
             String value1 = rst.getString(1);
             String value2 = rst.getString(2);
             String value3 = rst.getString(3);
-            int frequency = rst.getInt(3);
+            int frequency = rst.getInt(4);
             System.out.println("Count of trigram " + value1 +" "+value2+" "+value3+" is "+frequency);
 
             val1[i].setValue(value1);
