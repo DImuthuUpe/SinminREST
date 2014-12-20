@@ -538,47 +538,106 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentBigrams(FrequentWord frqWord) {
 
-//        FrequentWordR freqWordR1 = new FrequentWordR();
-//        freqWordR1.setValue1("value 1");
-//        freqWordR1.setValue1("value 11");
-//        freqWordR1.setFrequency(10);
-//        freqWordR1.setCategory("Cat 1");
-//        freqWordR1.setTime(2011);
-//
-//        FrequentWordR freqWordR2 = new FrequentWordR();
-//        freqWordR2.setValue1("value 2");
-//        freqWordR1.setValue1("value 22");
-//        freqWordR2.setFrequency(11);
-//        freqWordR2.setCategory("Cat 2");
-//        freqWordR2.setTime(2012);
+        String[] category=frqWord.getCategory();
+        int year[] = frqWord.getTime();
+        int amount = frqWord.getAmount();
 
-//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(null).build();
+        try{
+            if(category==null && year==null){
+                OracleClient client = new OracleClient();
+                FrequentWordR resp = client.getFrequentBigrams(amount);
+                FrequentWordR[] freqArr = {resp};
+                return Response.status(200).entity(freqArr).build();
+            }else if(category==null && year!=null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[year.length];
+                for (int i=0;i<year.length;i++){
+                    freqArr[i]= client.getFrequentBigrams(year[i],amount);
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(category!=null && year==null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length];
+                for (int i=0;i<category.length;i++){
+                    freqArr[i]= client.getFrequentBigrams(category[i],amount);
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(category!=null && year!=null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length*year.length];
+                for (int i=0;i<category.length;i++){
+                    for(int j=0;j<year.length;j++){
+                        freqArr[i*category.length+j]= client.getFrequentBigrams(year[j],category[i],amount);
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
     @POST
     @Path("/frequentTrigrams")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentTrigrams(FrequentWord frqWord) {
+        String[] category=frqWord.getCategory();
+        int year[] = frqWord.getTime();
+        int amount = frqWord.getAmount();
 
-//        FrequentWordR freqWordR1 = new FrequentWordR();
-//        freqWordR1.setValue1("value 1");
-//        freqWordR1.setValue1("value 11");
-//        freqWordR1.setValue1("value 111");
-//        freqWordR1.setFrequency(10);
-//        freqWordR1.setCategory("Cat 1");
-//        freqWordR1.setTime(2011);
-//
-//        FrequentWordR freqWordR2 = new FrequentWordR();
-//        freqWordR2.setValue1("value 2");
-//        freqWordR1.setValue1("value 22");
-//        freqWordR1.setValue1("value 222");
-//        freqWordR2.setFrequency(11);
-//        freqWordR2.setCategory("Cat 2");
-//        freqWordR2.setTime(2012);
+        try{
+            if(category==null && year==null){
+                OracleClient client = new OracleClient();
+                FrequentWordR resp = client.getFrequentTrigrams(amount);
+                FrequentWordR[] freqArr = {resp};
+                return Response.status(200).entity(freqArr).build();
+            }else if(category==null && year!=null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[year.length];
+                for (int i=0;i<year.length;i++){
+                    freqArr[i]= client.getFrequentTrigrams(year[i],amount);
+                }
+                return Response.status(200).entity(freqArr).build();
 
-//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(null).build();
+            }else if(category!=null && year==null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length];
+                for (int i=0;i<category.length;i++){
+                    freqArr[i]= client.getFrequentTrigrams(category[i],amount);
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            }else if(category!=null && year!=null){
+                OracleClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length*year.length];
+                for (int i=0;i<category.length;i++){
+                    for(int j=0;j<year.length;j++){
+                        freqArr[i*category.length+j]= client.getFrequentTrigrams(year[j],category[i],amount);
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
 

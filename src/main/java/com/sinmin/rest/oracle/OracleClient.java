@@ -388,4 +388,329 @@ public class OracleClient {
         stmt.close();
         return resp;
     }
+/////////////////////////////Frequent Bigrams //////////////////////////////
+
+    public FrequentWordR getFrequentBigrams(int year, String category,int amount) throws SQLException, ClassNotFoundException{
+
+        getDBConnection();
+        String sql ="select w1.val,w2.val,res.tot from(select sb.bigram_id,count(*) as tot from sentence_bigram sb, sentence s, article a where s.id=sb.sentence_id and a.id = s.article_id and a.year=? and a.category=? group by sb.bigram_id order by count(*) desc) res, bigram b, word w1, word w2 where b.id=res.bigram_id and w1.id=b.word1 and w2.id=b.word2 and rownum <=?";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2, category);
+        stmt.setInt(3,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            val2[i] = new WordR();
+            String value1 = rst.getString(1);
+            String value2 = rst.getString(2);
+            int frequency = rst.getInt(3);
+            System.out.println("Count of bigram " + value1 +" "+value2+" is "+frequency);
+
+            val1[i].setValue(value1);
+            val1[i].setFrequency(frequency);
+            val2[i].setValue(value2);
+            val2[i].setFrequency(frequency);
+            i++;
+        }
+        resp.setCategory(category);
+        resp.setTime(year);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+    public FrequentWordR getFrequentBigrams(int year,int amount) throws SQLException, ClassNotFoundException{
+
+        getDBConnection();
+        String sql ="select w1.val,w2.val,res.tot from(select sb.bigram_id,count(*) as tot from sentence_bigram sb, sentence s, article a where s.id=sb.sentence_id and a.id = s.article_id and a.year=? group by sb.bigram_id order by count(*) desc) res, bigram b, word w1, word w2 where b.id=res.bigram_id and w1.id=b.word1 and w2.id=b.word2 and rownum <=?";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1, year);
+        stmt.setInt(2,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            val2[i] = new WordR();
+            String value1 = rst.getString(1);
+            String value2 = rst.getString(2);
+            int frequency = rst.getInt(3);
+            System.out.println("Count of bigram " + value1 +" "+value2+" is "+frequency);
+
+            val1[i].setValue(value1);
+            val1[i].setFrequency(frequency);
+            val2[i].setValue(value2);
+            val2[i].setFrequency(frequency);
+            i++;
+        }
+        resp.setCategory("all");
+        resp.setTime(year);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+    public FrequentWordR getFrequentBigrams(String category,int amount) throws SQLException, ClassNotFoundException{
+
+        getDBConnection();
+        String sql ="select w1.val,w2.val,res.tot from(select sb.bigram_id,count(*) as tot from sentence_bigram sb, sentence s, article a where s.id=sb.sentence_id and a.id = s.article_id and a.category=? group by sb.bigram_id order by count(*) desc) res, bigram b, word w1, word w2 where b.id=res.bigram_id and w1.id=b.word1 and w2.id=b.word2 and rownum <=?";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1, category);
+        stmt.setInt(2,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            val2[i] = new WordR();
+            String value1 = rst.getString(1);
+            String value2 = rst.getString(2);
+            int frequency = rst.getInt(3);
+            System.out.println("Count of bigram " + value1 +" "+value2+" is "+frequency);
+
+            val1[i].setValue(value1);
+            val1[i].setFrequency(frequency);
+            val2[i].setValue(value2);
+            val2[i].setFrequency(frequency);
+            i++;
+        }
+        resp.setCategory(category);
+        resp.setTime(0);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+    public FrequentWordR getFrequentBigrams(int amount) throws SQLException, ClassNotFoundException{
+
+        getDBConnection();
+        String sql ="select w1.val,w2.val,res.tot from(select sb.bigram_id,count(*) as tot from sentence_bigram sb  group by sb.bigram_id order by count(*) desc) res, bigram b, word w1, word w2 where b.id=res.bigram_id and w1.id=b.word1 and w2.id=b.word2 and rownum <=?";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            val2[i] = new WordR();
+            String value1 = rst.getString(1);
+            String value2 = rst.getString(2);
+            int frequency = rst.getInt(3);
+            System.out.println("Count of bigram " + value1 +" "+value2+" is "+frequency);
+
+            val1[i].setValue(value1);
+            val1[i].setFrequency(frequency);
+            val2[i].setValue(value2);
+            val2[i].setFrequency(frequency);
+            i++;
+        }
+        resp.setCategory("all");
+        resp.setTime(0);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    public FrequentWordR getFrequentTrigrams(int year, String category,int amount) throws SQLException, ClassNotFoundException{
+
+        getDBConnection();
+        String sql ="select w1.val,w2.val,w3.val,res.tot from(select st.trigram_id,count(*) as tot from sentence_trigram st, sentence s, article a where s.id=st.sentence_id and a.id = s.article_id and a.year=? and a.category=? group by st.trigram_id order by count(*) desc) res, trigram t, word w1, word w2, word w3 where t.id=res.trigram_id and w1.id=t.word1 and w2.id=t.word2 and w3.id=t.word3 and rownum <=?  ";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2, category);
+        stmt.setInt(3,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        WordR[] val3 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            val2[i] = new WordR();
+            val3[i] = new WordR();
+            String value1 = rst.getString(1);
+            String value2 = rst.getString(2);
+            String value3 = rst.getString(3);
+            int frequency = rst.getInt(3);
+            System.out.println("Count of trigram " + value1 +" "+value2+" "+value3+" is "+frequency);
+
+            val1[i].setValue(value1);
+            val1[i].setFrequency(frequency);
+            val2[i].setValue(value2);
+            val2[i].setFrequency(frequency);
+            val3[i].setValue(value3);
+            val3[i].setFrequency(frequency);
+            i++;
+        }
+        resp.setCategory(category);
+        resp.setTime(year);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        resp.setValue3(val3);
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+    public FrequentWordR getFrequentTrigrams(int year,int amount) throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql ="select w1.val,w2.val,w3.val,res.tot from(select st.trigram_id,count(*) as tot from sentence_trigram st, sentence s, article a where s.id=st.sentence_id and a.id = s.article_id and a.year=? group by st.trigram_id order by count(*) desc) res, trigram t, word w1, word w2, word w3 where t.id=res.trigram_id and w1.id=t.word1 and w2.id=t.word2 and w3.id=t.word3 and rownum <=?  ";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setInt(2,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        WordR[] val3 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            val2[i] = new WordR();
+            val3[i] = new WordR();
+            String value1 = rst.getString(1);
+            String value2 = rst.getString(2);
+            String value3 = rst.getString(3);
+            int frequency = rst.getInt(3);
+            System.out.println("Count of trigram " + value1 +" "+value2+" "+value3+" is "+frequency);
+
+            val1[i].setValue(value1);
+            val1[i].setFrequency(frequency);
+            val2[i].setValue(value2);
+            val2[i].setFrequency(frequency);
+            val3[i].setValue(value3);
+            val3[i].setFrequency(frequency);
+            i++;
+        }
+        resp.setCategory("all");
+        resp.setTime(year);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        resp.setValue3(val3);
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+    public FrequentWordR getFrequentTrigrams(String category,int amount) throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql ="select w1.val,w2.val,w3.val,res.tot from(select st.trigram_id,count(*) as tot from sentence_trigram st, sentence s, article a where s.id=st.sentence_id and a.id = s.article_id and a.category=? group by st.trigram_id order by count(*) desc) res, trigram t, word w1, word w2, word w3 where t.id=res.trigram_id and w1.id=t.word1 and w2.id=t.word2 and w3.id=t.word3 and rownum <=?  ";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1, category);
+        stmt.setInt(2,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        WordR[] val3 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            val2[i] = new WordR();
+            val3[i] = new WordR();
+            String value1 = rst.getString(1);
+            String value2 = rst.getString(2);
+            String value3 = rst.getString(3);
+            int frequency = rst.getInt(3);
+            System.out.println("Count of trigram " + value1 +" "+value2+" "+value3+" is "+frequency);
+
+            val1[i].setValue(value1);
+            val1[i].setFrequency(frequency);
+            val2[i].setValue(value2);
+            val2[i].setFrequency(frequency);
+            val3[i].setValue(value3);
+            val3[i].setFrequency(frequency);
+            i++;
+        }
+        resp.setCategory(category);
+        resp.setTime(0);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        resp.setValue3(val3);
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+    public FrequentWordR getFrequentTrigrams(int amount) throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql ="select w1.val,w2.val,w3.val,res.tot from(select st.trigram_id,count(*) as tot from sentence_trigram st group by st.trigram_id order by count(*) desc) res, trigram t, word w1, word w2, word w3 where t.id=res.trigram_id and w1.id=t.word1 and w2.id=t.word2 and w3.id=t.word3 and rownum <=?  ";
+
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,amount);
+
+        ResultSet rst = stmt.executeQuery();
+        FrequentWordR resp = new FrequentWordR();
+        WordR[] val1 = new WordR[amount];
+        WordR[] val2 = new WordR[amount];
+        WordR[] val3 = new WordR[amount];
+        int i=0;
+        while (rst.next()) {
+            val1[i] = new WordR();
+            val2[i] = new WordR();
+            val3[i] = new WordR();
+            String value1 = rst.getString(1);
+            String value2 = rst.getString(2);
+            String value3 = rst.getString(3);
+            int frequency = rst.getInt(3);
+            System.out.println("Count of trigram " + value1 +" "+value2+" "+value3+" is "+frequency);
+
+            val1[i].setValue(value1);
+            val1[i].setFrequency(frequency);
+            val2[i].setValue(value2);
+            val2[i].setFrequency(frequency);
+            val3[i].setValue(value3);
+            val3[i].setFrequency(frequency);
+            i++;
+        }
+        resp.setCategory("all");
+        resp.setTime(0);
+        resp.setValue1(val1);
+        resp.setValue2(val2);
+        resp.setValue3(val3);
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+
 }
