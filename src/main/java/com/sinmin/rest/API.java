@@ -552,7 +552,7 @@ public class API {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
                 for (int i=0;i<year.length;i++){
-                    freqArr[i]= client.getFrequentBigrams(year[i],amount);
+                    freqArr[i]= client.getFrequentBigrams(year[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
@@ -560,7 +560,7 @@ public class API {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
                 for (int i=0;i<category.length;i++){
-                    freqArr[i]= client.getFrequentBigrams(category[i],amount);
+                    freqArr[i]= client.getFrequentBigrams(category[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
@@ -569,7 +569,7 @@ public class API {
                 FrequentWordR[] freqArr = new FrequentWordR[category.length*year.length];
                 for (int i=0;i<category.length;i++){
                     for(int j=0;j<year.length;j++){
-                        freqArr[i*category.length+j]= client.getFrequentBigrams(year[j],category[i],amount);
+                        freqArr[i*category.length+j]= client.getFrequentBigrams(year[j], category[i], amount);
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
@@ -605,7 +605,7 @@ public class API {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
                 for (int i=0;i<year.length;i++){
-                    freqArr[i]= client.getFrequentTrigrams(year[i],amount);
+                    freqArr[i]= client.getFrequentTrigrams(year[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
@@ -613,7 +613,7 @@ public class API {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
                 for (int i=0;i<category.length;i++){
-                    freqArr[i]= client.getFrequentTrigrams(category[i],amount);
+                    freqArr[i]= client.getFrequentTrigrams(category[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
@@ -622,7 +622,7 @@ public class API {
                 FrequentWordR[] freqArr = new FrequentWordR[category.length*year.length];
                 for (int i=0;i<category.length;i++){
                     for(int j=0;j<year.length;j++){
-                        freqArr[i*category.length+j]= client.getFrequentTrigrams(year[j],category[i],amount);
+                        freqArr[i*category.length+j]= client.getFrequentTrigrams(year[j], category[i], amount);
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
@@ -646,39 +646,50 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response latestArticlesForWord(ArticlesForWord articlesForWord) {
 
-        ArticleR articleR1 = new ArticleR();
-        articleR1.setAuthor("Author 1");
-        articleR1.setDay(10);
-        articleR1.setMonth(1);
-        articleR1.setYear(2012);
-        articleR1.setLink("Link 1");
-        articleR1.setTitle("Title 1");
-        articleR1.setCategory("Cat 1");
+        int amount = articlesForWord.getAmount();
+        String category[]= articlesForWord.getCategory();
+        int year[]=articlesForWord.getTime();
+        String value = articlesForWord.getValue();
+        try{
+            if(category!=null && year!=null && value !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length*year.length];
+                OracleClient client = new OracleClient();
+                for (int i=0;i<category.length;i++){
+                    for(int j=0;j<year.length;j++){
+                        articlesForWordRs[i*category.length+j]= client.getLatestArticlesForWord(value,year[j],category[i],amount);
+                    }
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category ==null && year!=null && value !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[year.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<year.length;i++){
+                    articlesForWordRs[i] = client.getLatestArticlesForWord(value,year[i],amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category !=null && year==null && value !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<category.length;i++){
+                    articlesForWordRs[i] = client.getLatestArticlesForWord(value,category[i],amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category ==null && year==null && value !=null){
 
-        ArticleR articleR2 = new ArticleR();
-        articleR2.setAuthor("Author 2");
-        articleR2.setDay(11);
-        articleR2.setMonth(2);
-        articleR2.setYear(2013);
-        articleR2.setLink("Link 2");
-        articleR2.setTitle("Title 2");
-        articleR2.setCategory("Cat 2");
+                OracleClient client = new OracleClient();
+                ArticlesForWordR [] articlesForWordRs = {client.getLatestArticlesForWord(value,amount)};
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
 
-        ArticleR[] articles = {articleR1, articleR2};
-
-        ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
-        articlesForWordR1.setTime(2012);
-        articlesForWordR1.setCategory("Cat 1");
-        articlesForWordR1.setArticles(articles);
-
-        ArticlesForWordR articlesForWordR2 = new ArticlesForWordR();
-        articlesForWordR2.setTime(2013);
-        articlesForWordR2.setCategory("Cat 3");
-        articlesForWordR2.setArticles(articles);
-
-        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
-
-        return Response.status(200).entity(arr).build();
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
     @POST

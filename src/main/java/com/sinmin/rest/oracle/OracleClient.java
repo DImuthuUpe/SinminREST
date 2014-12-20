@@ -1,15 +1,15 @@
 package com.sinmin.rest.oracle;
 
-import com.sinmin.rest.beans.response.FrequentWordR;
-import com.sinmin.rest.beans.response.WordFrequencyR;
-import com.sinmin.rest.beans.response.WordR;
+import com.sinmin.rest.beans.response.*;
 import oracle.jdbc.OracleCallableStatement;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by dimuthuupeksha on 12/11/14.
@@ -710,6 +710,183 @@ public class OracleClient {
         rst.close();
         stmt.close();
         return resp;
+    }
+
+
+    /////////////////////Latest Articles for word ////////////////////////
+
+    public ArticlesForWordR getLatestArticlesForWord(String word,int year, String category,int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.year=? and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2,category);
+        stmt.setInt(3,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory(category);
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForWord(String word,int year,int amount) throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.year=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setInt(2,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory("all");
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForWord(String word,String category,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1,category);
+        stmt.setInt(2,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory(category);
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForWord(String word,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory("all");
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
     }
 
 
