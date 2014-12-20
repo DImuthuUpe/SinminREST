@@ -697,39 +697,51 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response latestArticlesForBigram(ArticlesForBigram articlesForBigram) {
 
-        ArticleR articleR1 = new ArticleR();
-        articleR1.setAuthor("Author 1");
-        articleR1.setDay(10);
-        articleR1.setMonth(1);
-        articleR1.setYear(2012);
-        articleR1.setLink("Link 1");
-        articleR1.setTitle("Title 1");
-        articleR1.setCategory("Cat 1");
+        int amount = articlesForBigram.getAmount();
+        String category[]= articlesForBigram.getCategory();
+        int year[]=articlesForBigram.getTime();
+        String value1 = articlesForBigram.getValue1();
+        String value2 = articlesForBigram.getValue2();
+        try{
+            if(category!=null && year!=null && value1 !=null && value2 !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length*year.length];
+                OracleClient client = new OracleClient();
+                for (int i=0;i<category.length;i++){
+                    for(int j=0;j<year.length;j++){
+                        articlesForWordRs[i*category.length+j]= client.getLatestArticlesForBigram(value1,value2,year[j],category[i],amount);
+                    }
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category ==null && year!=null && value1 !=null && value2 !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[year.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<year.length;i++){
+                    articlesForWordRs[i] = client.getLatestArticlesForBigram(value1,value2,year[i],amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category !=null && year==null && value1 !=null && value2 !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<category.length;i++){
+                    articlesForWordRs[i] = client.getLatestArticlesForBigram(value1,value2,category[i],amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category ==null && year==null && value1 !=null && value2 !=null){
 
-        ArticleR articleR2 = new ArticleR();
-        articleR2.setAuthor("Author 2");
-        articleR2.setDay(11);
-        articleR2.setMonth(2);
-        articleR2.setYear(2013);
-        articleR2.setLink("Link 2");
-        articleR2.setTitle("Title 2");
-        articleR2.setCategory("Cat 2");
+                OracleClient client = new OracleClient();
+                ArticlesForWordR [] articlesForWordRs = {client.getLatestArticlesForBigram(value1,value2,amount)};
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
 
-        ArticleR[] articles = {articleR1, articleR2};
-
-        ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
-        articlesForWordR1.setTime(2012);
-        articlesForWordR1.setCategory("Cat 1");
-        articlesForWordR1.setArticles(articles);
-
-        ArticlesForWordR articlesForWordR2 = new ArticlesForWordR();
-        articlesForWordR2.setTime(2013);
-        articlesForWordR2.setCategory("Cat 3");
-        articlesForWordR2.setArticles(articles);
-
-        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
-
-        return Response.status(200).entity(arr).build();
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
     @POST
@@ -737,39 +749,52 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response latestArticlesForTrigram(ArticlesForTrigram articlesForTrigram) {
 
-        ArticleR articleR1 = new ArticleR();
-        articleR1.setAuthor("Author 1");
-        articleR1.setDay(10);
-        articleR1.setMonth(1);
-        articleR1.setYear(2012);
-        articleR1.setLink("Link 1");
-        articleR1.setTitle("Title 1");
-        articleR1.setCategory("Cat 1");
+        int amount = articlesForTrigram.getAmount();
+        String category[]= articlesForTrigram.getCategory();
+        int year[]=articlesForTrigram.getTime();
+        String value1 = articlesForTrigram.getValue1();
+        String value2 = articlesForTrigram.getValue2();
+        String value3 = articlesForTrigram.getValue3();
+        try{
+            if(category!=null && year!=null && value1 !=null && value2 !=null && value3 !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length*year.length];
+                OracleClient client = new OracleClient();
+                for (int i=0;i<category.length;i++){
+                    for(int j=0;j<year.length;j++){
+                        articlesForWordRs[i*category.length+j]= client.getLatestArticlesForTrigram(value1,value2,value3,year[j],category[i],amount);
+                    }
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category ==null && year!=null && value1 !=null && value2 !=null && value3 !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[year.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<year.length;i++){
+                    articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1,value2,value3,year[i],amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category !=null && year==null && value1 !=null && value2 !=null && value3 !=null){
+                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length];
+                OracleClient client = new OracleClient();
+                for(int i=0;i<category.length;i++){
+                    articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1,value2,value3,category[i],amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else if(category ==null && year==null && value1 !=null && value2 !=null && value3 !=null){
 
-        ArticleR articleR2 = new ArticleR();
-        articleR2.setAuthor("Author 2");
-        articleR2.setDay(11);
-        articleR2.setMonth(2);
-        articleR2.setYear(2013);
-        articleR2.setLink("Link 2");
-        articleR2.setTitle("Title 2");
-        articleR2.setCategory("Cat 2");
+                OracleClient client = new OracleClient();
+                ArticlesForWordR [] articlesForWordRs = {client.getLatestArticlesForTrigram(value1,value2, value3,amount)};
+                return Response.status(200).entity(articlesForWordRs).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
 
-        ArticleR[] articles = {articleR1, articleR2};
-
-        ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
-        articlesForWordR1.setTime(2012);
-        articlesForWordR1.setCategory("Cat 1");
-        articlesForWordR1.setArticles(articles);
-
-        ArticlesForWordR articlesForWordR2 = new ArticlesForWordR();
-        articlesForWordR2.setTime(2013);
-        articlesForWordR2.setCategory("Cat 3");
-        articlesForWordR2.setArticles(articles);
-
-        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
-
-        return Response.status(200).entity(arr).build();
+        } catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
     //FrequentWordsAroundWord

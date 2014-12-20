@@ -890,4 +890,368 @@ public class OracleClient {
     }
 
 
+    //////////////// latest articles for bigrams
+
+    public ArticlesForWordR getLatestArticlesForBigram(String word1, String word2,int year, String category,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id and a.year=? and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2,category);
+        stmt.setInt(3,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory(category);
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForBigram(String word1, String word2,int year,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id and a.year=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1, year);
+        stmt.setInt(2,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory("all");
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForBigram(String word1,String word2,String category,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+
+        stmt.setString(1,category);
+        stmt.setInt(2,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory(category);
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForBigram(String word1,String word2,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+
+        stmt.setInt(1,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory("all");
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+
+    ///////////// Latest articles in trigrams /////////////
+
+    public ArticlesForWordR getLatestArticlesForTrigram(String word1, String word2,String word3, int year, String category,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id and a.year=? and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2,category);
+        stmt.setInt(3,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory(category);
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForTrigram(String word1, String word2,String word3,int year,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id and a.year=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1, year);
+        stmt.setInt(2,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory("all");
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForTrigram(String word1,String word2,String word3,String category,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1,category);
+        stmt.setInt(2,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory(category);
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    public ArticlesForWordR getLatestArticlesForTrigram(String word1,String word2, String word3,int amount)throws SQLException,ClassNotFoundException{
+
+        getDBConnection();
+        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,amount);
+        ResultSet rst = stmt.executeQuery();
+        int sentenceId = 0;
+        int articleId =0;
+        ArticleR article = new ArticleR();
+        List<ArticleR> articleList = new ArrayList<>();
+        String sentence = "";
+        while(rst.next()){
+            int newSentenceId = rst.getInt(2);
+            String newWord = rst.getString(5);
+
+            if(newSentenceId!=sentenceId){
+                if(sentenceId!=0){
+                    article.setSentence(sentence);
+                    articleList.add(article);
+                    sentence ="";
+                }
+
+                article = new ArticleR();
+                article.setCategory(rst.getString(6));
+                article.setTitle(rst.getString(7));
+                article.setAuthor(rst.getString(8));
+                article.setYear(rst.getInt(9));
+                article.setMonth(rst.getInt(10));
+                article.setDay(rst.getInt(11));
+                sentenceId=newSentenceId;
+            }
+            sentence += newWord+" ";
+        }
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory("all");
+        ArticleR[] a = new ArticleR[articleList.size()];
+        articlesForWord.setArticles(articleList.toArray(a));
+        return articlesForWord;
+    }
+
+    //////////////////////////////////////////////////////////////////
+//select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
+//select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w1.val,w2.val,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
+//select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
+//select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ' and w3.val='මහතා' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
 }
