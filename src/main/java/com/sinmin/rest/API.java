@@ -273,6 +273,16 @@ Method : frequentWordsInPosition
 
             }
         ]
+
+Method : frequentWordsAfterWordTimeRange
+        Req
+        {
+            "value": "ලංකා",
+            "time" :[2011,2014],
+            "category":["NEWS"],
+            "amount": 10
+        }
+
 */
 
 @Path("/api")
@@ -963,6 +973,46 @@ public class API {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
+    }
+
+
+    @POST
+    @Path("/frequentWordsAfterWordTimeRange")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response frequentWordsAfterWordTimeRange(FrequentWordsAfterWord freqWord) {
+        int time[] = freqWord.getTime();
+        String category[] = freqWord.getCategory();
+        int amount = freqWord.getAmount();
+        String word = freqWord.getValue();
+
+        try{
+            if(time!=null && time.length==2 && category!=null){
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAfterWordR[] resp = new FrequentWordsAfterWordR[category.length];
+                for(int i=0;i<category.length;i++){
+                    resp[i]= client.getFrequentWordsAfterWordTimeRange(word,category[i],time[0],time[1],amount);
+                }
+                return Response.status(200).entity(resp).build();
+            }else if(time!=null && time.length==2 && category==null){
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterWordTimeRange(word,time[0],time[1],amount)};
+                return Response.status(200).entity(resp).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+
     }
 
 

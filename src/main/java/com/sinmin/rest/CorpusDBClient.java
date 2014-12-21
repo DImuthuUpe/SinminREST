@@ -121,4 +121,12 @@ public interface CorpusDBClient {
     public WordPositionR getFrequentWordsInPositionReverse(int position,int year,int amount)throws Exception;
 
     public WordPositionR getFrequentWordsInPositionReverse(int position,int amount)throws Exception;
+
+    /////////////////////get frequent words in time period around word //////////////
+
+    public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word,String category, int year1,int year2, int amount) throws Exception;
+
+    public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word, int year1,int year2, int amount) throws Exception;
+
+
 }

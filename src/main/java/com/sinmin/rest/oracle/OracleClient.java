@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dimuthuupeksha on 12/11/14.
@@ -1586,6 +1587,66 @@ public class OracleClient implements CorpusDBClient{
         return resp;
     }
 
+    @Override
+    public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word, String category, int year1, int year2, int amount) throws Exception {
+        getDBConnection();
+        String sql = "select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select b.id, count(*) as frequency from word w, bigram b, sentence_bigram sb , sentence s, article a where w.val='"+word+"' and b.word1 = w.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id= s.article_id and a.category=? and a.year>=? and a.year<=? group by b.id order by count(*) desc ) resp where rownum<=?) resp2, sentence_bigram sb, sentence s, article a where sb.bigram_id=resp2.id and s.id = sb.sentence_id and a.id = s.article_id and a.year>=? and a.year<=? group by resp2.id , a.year order by resp2.id , a.year) resp3, bigram b, word w where b.id = resp3.id and w.id=b.word2";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1,category);
+        stmt.setInt(2,year1);
+        stmt.setInt(3,year2);
+        stmt.setInt(4,amount);
+        stmt.setInt(5,year1);
+        stmt.setInt(6,year2);
+        ResultSet rst = stmt.executeQuery();
+        List<WordWithTimeR> words = new ArrayList<>();
+        while(rst.next()){
+            String value = rst.getString(1);
+            int year = rst.getInt(2);
+            int frequency =rst.getInt(3);
+            WordWithTimeR w = new WordWithTimeR();
+            w.setFrequency(frequency);
+            w.setWord(value);
+            w.setYear(year);
+            words.add(w);
+        }
+        FrequentWordsAfterWordR resp = new FrequentWordsAfterWordR();
+        resp.setCategory(category);
+        WordWithTimeR[] wordArr = new WordWithTimeR[words.size()];
+        resp.setWords(words.toArray(wordArr));
+
+        return resp;
+    }
+
+    @Override
+    public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word, int year1, int year2, int amount) throws Exception {
+        getDBConnection();
+        String sql = "select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select b.id, count(*) as frequency from word w, bigram b, sentence_bigram sb , sentence s, article a where w.val='"+word+"' and b.word1 = w.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id= s.article_id and a.year>=? and a.year<=? group by b.id order by count(*) desc ) resp where rownum<=?) resp2, sentence_bigram sb, sentence s, article a where sb.bigram_id=resp2.id and s.id = sb.sentence_id and a.id = s.article_id and a.year>=? and a.year<=? group by resp2.id , a.year order by resp2.id , a.year) resp3, bigram b, word w where b.id = resp3.id and w.id=b.word2";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year1);
+        stmt.setInt(2,year2);
+        stmt.setInt(3,amount);
+        stmt.setInt(4,year1);
+        stmt.setInt(5,year2);
+        ResultSet rst = stmt.executeQuery();
+        List<WordWithTimeR> words = new ArrayList<>();
+        while(rst.next()){
+            String value = rst.getString(1);
+            int year = rst.getInt(2);
+            int frequency =rst.getInt(3);
+            WordWithTimeR w = new WordWithTimeR();
+            w.setFrequency(frequency);
+            w.setWord(value);
+            w.setYear(year);
+            words.add(w);
+        }
+        FrequentWordsAfterWordR resp = new FrequentWordsAfterWordR();
+        resp.setCategory("all");
+        WordWithTimeR[] wordArr = new WordWithTimeR[words.size()];
+        resp.setWords(words.toArray(wordArr));
+
+        return resp;
+    }
 
 
     /////////////////////////

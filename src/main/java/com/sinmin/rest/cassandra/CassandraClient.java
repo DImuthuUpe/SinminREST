@@ -1251,6 +1251,16 @@ public class CassandraClient implements CorpusDBClient{
 	}
 
     @Override
+    public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word, String category, int year1, int year2, int amount) throws Exception {
+        return null;
+    }
+
+    @Override
+    public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word, int year1, int year2, int amount) throws Exception {
+        return null;
+    }
+
+    @Override
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int year, int range, int amount) throws Exception {
         return null;
     }
