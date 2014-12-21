@@ -283,6 +283,16 @@ Method : frequentWordsAfterWordTimeRange
             "amount": 10
         }
 
+Method : frequentWordsAfterBigramTimeRange
+        Req
+        {
+            "value1": "නිදහස්‌",
+            "value2": "වෙළෙඳ",
+            "time" :[2011,2014],
+            "category":["NEWS"],
+            "amount": 10
+        }
+
 */
 
 @Path("/api")
@@ -996,6 +1006,46 @@ public class API {
             }else if(time!=null && time.length==2 && category==null){
                 CorpusDBClient client = new OracleClient();
                 FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterWordTimeRange(word,time[0],time[1],amount)};
+                return Response.status(200).entity(resp).build();
+            }else{
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+
+    }
+
+    @POST
+    @Path("/frequentWordsAfterBigramTimeRange")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response frequentWordsAfterBigramTimeRange(FrequentWordsAfterBigram freqWord) {
+        int time[] = freqWord.getTime();
+        String category[] = freqWord.getCategory();
+        int amount = freqWord.getAmount();
+        String word1 = freqWord.getValue1();
+        String word2 = freqWord.getValue2();
+
+        try{
+            if(time!=null && time.length==2 && category!=null){
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAfterWordR[] resp = new FrequentWordsAfterWordR[category.length];
+                for(int i=0;i<category.length;i++){
+                    resp[i]= client.getFrequentWordsAfterBigramTimeRange(word1, word2, category[i], time[0], time[1], amount);
+                }
+                return Response.status(200).entity(resp).build();
+            }else if(time!=null && time.length==2 && category==null){
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterBigramTimeRange(word1, word2, time[0], time[1], amount)};
                 return Response.status(200).entity(resp).build();
             }else{
                 return Response.status(500).entity("Invalid input parameters").build();

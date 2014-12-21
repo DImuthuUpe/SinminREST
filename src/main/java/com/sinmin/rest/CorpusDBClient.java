@@ -128,5 +128,9 @@ public interface CorpusDBClient {
 
     public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word, int year1,int year2, int amount) throws Exception;
 
+    public FrequentWordsAfterWordR getFrequentWordsAfterBigramTimeRange(String word1,String word2,String category, int year1,int year2, int amount) throws Exception;
+
+    public FrequentWordsAfterWordR getFrequentWordsAfterBigramTimeRange(String word1,String word2, int year1,int year2, int amount) throws Exception;
+
 
 }

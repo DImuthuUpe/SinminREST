@@ -1694,6 +1694,69 @@ public class OracleClient implements CorpusDBClient{
         return resp;
     }
 
+    @Override
+    public FrequentWordsAfterWordR getFrequentWordsAfterBigramTimeRange(String word1, String word2, String category, int year1, int year2, int amount) throws Exception {
+        getDBConnection();
+        String sql = "select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select t.id, count(*) as frequency from word w1, word w2, trigram t, sentence_trigram st , sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and t.word1 = w1.id and t.word2 = w2.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id= s.article_id and a.category=? and a.year>=? and a.year<=? group by t.id order by count(*) desc ) resp where rownum<=?) resp2, sentence_trigram st, sentence s, article a where st.trigram_id=resp2.id and s.id = st.sentence_id and a.id = s.article_id and a.year>=? and a.year<=? group by resp2.id , a.year order by resp2.id , a.year) resp3, trigram t, word w where t.id = resp3.id and w.id=t.word3";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1,category);
+        stmt.setInt(2,year1);
+        stmt.setInt(3,year2);
+        stmt.setInt(4,amount);
+        stmt.setInt(5,year1);
+        stmt.setInt(6,year2);
+        ResultSet rst = stmt.executeQuery();
+        List<WordWithTimeR> words = new ArrayList<>();
+        while(rst.next()){
+            String value = rst.getString(1);
+            int year = rst.getInt(2);
+            int frequency =rst.getInt(3);
+            WordWithTimeR w = new WordWithTimeR();
+            w.setFrequency(frequency);
+            w.setWord(value);
+            w.setYear(year);
+            words.add(w);
+        }
+        FrequentWordsAfterWordR resp = new FrequentWordsAfterWordR();
+        resp.setCategory(category);
+        WordWithTimeR[] wordArr = new WordWithTimeR[words.size()];
+        resp.setWords(words.toArray(wordArr));
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
+    @Override
+    public FrequentWordsAfterWordR getFrequentWordsAfterBigramTimeRange(String word1, String word2, int year1, int year2, int amount) throws Exception {
+        getDBConnection();
+        String sql = "select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select t.id, count(*) as frequency from word w1, word w2, trigram t, sentence_trigram st , sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and t.word1 = w1.id and t.word2 = w2.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id= s.article_id and a.year>=? and a.year<=? group by t.id order by count(*) desc ) resp where rownum<=?) resp2, sentence_trigram st, sentence s, article a where st.trigram_id=resp2.id and s.id = st.sentence_id and a.id = s.article_id and a.year>=? and a.year<=? group by resp2.id , a.year order by resp2.id , a.year) resp3, trigram t, word w where t.id = resp3.id and w.id=t.word3";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year1);
+        stmt.setInt(2,year2);
+        stmt.setInt(3,amount);
+        stmt.setInt(4,year1);
+        stmt.setInt(5,year2);
+        ResultSet rst = stmt.executeQuery();
+        List<WordWithTimeR> words = new ArrayList<>();
+        while(rst.next()){
+            String value = rst.getString(1);
+            int year = rst.getInt(2);
+            int frequency =rst.getInt(3);
+            WordWithTimeR w = new WordWithTimeR();
+            w.setFrequency(frequency);
+            w.setWord(value);
+            w.setYear(year);
+            words.add(w);
+        }
+        FrequentWordsAfterWordR resp = new FrequentWordsAfterWordR();
+        resp.setCategory("all");
+        WordWithTimeR[] wordArr = new WordWithTimeR[words.size()];
+        resp.setWords(words.toArray(wordArr));
+        rst.close();
+        stmt.close();
+        return resp;
+    }
+
 
     /////////////////////////
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
@@ -1702,4 +1765,5 @@ public class OracleClient implements CorpusDBClient{
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ' and w3.val='මහතා' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
 //select w2.id, count(*) from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position<sw1.position+3 and s.id = sw1.sentence_id and a.id= s.article_id and a.year=2014 group by w2.id order by count(*) desc
 //select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+3 or sw2.position>sw1.position-3 )and s.id = sw1.sentence_id and a.id= s.article_id and a.year=2014 group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=10
+//select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select t.id, count(*) as frequency from word w1, word w2, trigram t, sentence_trigram st , sentence s, article a where w1.val='ලංකා' and w2.val='රජය' and t.word1 = w1.id and t.word2 = w2.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id= s.article_id and a.year>=2011 and a.year<=2014 group by t.id order by count(*) desc ) resp where rownum<=10) resp2, sentence_trigram st, sentence s, article a where st.trigram_id=resp2.id and s.id = st.sentence_id and a.id = s.article_id and a.year>=2011 and a.year<=2014 group by resp2.id , a.year order by resp2.id , a.year) resp3, trigram t, word w where t.id = resp3.id and w.id=t.word3;
 }
