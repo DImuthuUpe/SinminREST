@@ -12,14 +12,11 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.sinmin.rest.CorpusDBClient;
 import com.sinmin.rest.beans.request.FrequentWord;
-import com.sinmin.rest.beans.response.ArticleR;
-import com.sinmin.rest.beans.response.FrequentWordR;
-import com.sinmin.rest.beans.response.WordFrequencyR;
-import com.sinmin.rest.beans.response.WordPositionR;
-import com.sinmin.rest.beans.response.WordR;
+import com.sinmin.rest.beans.response.*;
 
-public class CassandraClient {
+public class CassandraClient implements CorpusDBClient{
 
 	private Cluster cluster;
 	private Session session;
@@ -630,7 +627,7 @@ public class CassandraClient {
 	///////////////////////////////////////////////////////////////////////////////////////
 	
 	@SuppressWarnings("deprecation")
-	public ArticleR[] getLatestArticlesForWord(String word,int year, String category,int amount){
+	public ArticlesForWordR getLatestArticlesForWord(String word,int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_year_category_usage WHERE word=? AND year=? AND category =? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word,year,category,amount));
@@ -658,11 +655,14 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory(category);
+        articlesForWord.setArticles(array);
+		return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForWord(String word,int year,int amount){
+	public ArticlesForWordR getLatestArticlesForWord(String word,int year,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_year_usage WHERE word=? AND year=? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word,year,amount));
@@ -690,11 +690,14 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory("all");
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForWord(String word,String category,int amount){
+	public ArticlesForWordR getLatestArticlesForWord(String word,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_category_usage WHERE word=? AND category =? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word,category,amount));
@@ -722,11 +725,15 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory(category);
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForWord(String word,int amount){
+	public ArticlesForWordR getLatestArticlesForWord(String word,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_usage WHERE word=? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word,amount));
@@ -754,13 +761,17 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory("all");
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public ArticleR[] getLatestArticlesForBigram(String word1, String word2,int year, String category,int amount){
+	public ArticlesForWordR getLatestArticlesForBigram(String word1, String word2,int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_year_category_usage WHERE word1=? AND word2=? AND year=? AND category =? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word1,word2,year,category,amount));
@@ -788,11 +799,15 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory(category);
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForBigram(String word1, String word2,int year,int amount){
+	public ArticlesForWordR getLatestArticlesForBigram(String word1, String word2,int year,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_year_usage WHERE word1=? AND word2=? AND year=? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word1,word2,year,amount));
@@ -820,11 +835,15 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory("all");
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForBigram(String word1,String word2,String category,int amount){
+	public ArticlesForWordR getLatestArticlesForBigram(String word1,String word2,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_category_usage WHERE word1=? AND word2=? AND category =? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word1,word2,category,amount));
@@ -852,11 +871,15 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory(category);
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForBigram(String word1,String word2,int amount){
+	public ArticlesForWordR getLatestArticlesForBigram(String word1,String word2,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_usage WHERE word1=? AND word2=? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word1,word2,amount));
@@ -884,13 +907,17 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory("all");
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////
 	
-	public ArticleR[] getLatestArticlesForTrigram(String word1, String word2,String word3, int year, String category,int amount){
+	public ArticlesForWordR getLatestArticlesForTrigram(String word1, String word2,String word3, int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_year_category_usage WHERE word1=? AND word2=? AND word3=? AND year=? AND category =? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word1,word2,word3,year,category,amount));
@@ -918,11 +945,15 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory(category);
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForTrigram(String word1, String word2,String word3,int year,int amount){
+	public ArticlesForWordR getLatestArticlesForTrigram(String word1, String word2,String word3,int year,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_year_usage WHERE word1=? AND word2=? AND word3=? AND year=? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word1,word2,word3,year,amount));
@@ -950,11 +981,15 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(year);
+        articlesForWord.setCategory("all");
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForTrigram(String word1,String word2,String word3,String category,int amount){
+	public ArticlesForWordR getLatestArticlesForTrigram(String word1,String word2,String word3,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_category_usage WHERE word1=? AND word2=? AND word3=? AND category =? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word1,word2,word3,category,amount));
@@ -982,11 +1017,15 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory(category);
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
 	
-	public ArticleR[] getLatestArticlesForTrigram(String word1,String word2, String word3,int amount){
+	public ArticlesForWordR getLatestArticlesForTrigram(String word1,String word2, String word3,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_usage WHERE word1=? AND word2=? AND word3=? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word1,word2,word3,amount));
@@ -1014,11 +1053,15 @@ public class CassandraClient {
 				break;
 			}
 		}
-		
-		return array;
+
+        ArticlesForWordR articlesForWord = new ArticlesForWordR();
+        articlesForWord.setTime(0);
+        articlesForWord.setCategory("all");
+        articlesForWord.setArticles(array);
+        return articlesForWord;
 	}
-	
-	//////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////
 	
 	public WordPositionR getFrequentWordsInPosition(int position,int year,String category,int amount){
 		PreparedStatement query = session.prepare(
@@ -1183,8 +1226,8 @@ public class CassandraClient {
 		out.setWords(words);
 		return out;
 	}
-	
-	public WordPositionR getFrequentWordsInPositionReverse(int position,int amount){
+
+    public WordPositionR getFrequentWordsInPositionReverse(int position,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_inv_pos_frequency WHERE inv_position=? order by frequency DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(position,amount));
@@ -1206,10 +1249,25 @@ public class CassandraClient {
 		out.setWords(words);
 		return out;
 	}
-	
-	public static void main(String[] args){
-		
-		
-	}
+
+    @Override
+    public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int year, int range, int amount) throws Exception {
+        return null;
+    }
+
+    @Override
+    public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, int year, int range, int amount) throws Exception {
+        return null;
+    }
+
+    @Override
+    public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int range, int amount) throws Exception {
+        return null;
+    }
+
+    @Override
+    public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, int range, int amount) throws Exception {
+        return null;
+    }
 	
 }

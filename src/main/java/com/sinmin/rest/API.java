@@ -299,7 +299,7 @@ public class API {
 
             if (time == null && category == null && value != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 WordFrequencyR resp = client.getWordFrequency(value);
                 WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -307,7 +307,7 @@ public class API {
             } else if (time == null && category != null && value != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     WordFrequencyR resp = client.getWordFrequency(value, category[i]);
                     freqArr[i] = resp;
@@ -317,7 +317,7 @@ public class API {
             } else if (category == null && time != null && value != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getWordFrequency(value, time[i]);
                     freqArr[i] = resp;
@@ -326,7 +326,7 @@ public class API {
 
             } else if (category != null && time != null && value != null) {
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < time.length; j++) {
                         WordFrequencyR resp = client.getWordFrequency(value, time[j], category[i]);
@@ -342,6 +342,9 @@ public class API {
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -364,7 +367,7 @@ public class API {
 
             if (time == null && category == null && value1 != null && value2 != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 WordFrequencyR resp = client.getBigramFrequency(value1, value2);
                 WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -372,7 +375,7 @@ public class API {
             } else if (time == null && category != null && value1 != null && value2 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     WordFrequencyR resp = client.getBigramFrequency(value1, value2, category[i]);
                     freqArr[i] = resp;
@@ -382,7 +385,7 @@ public class API {
             } else if (category == null && time != null && value1 != null && value2 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[i]);
                     freqArr[i] = resp;
@@ -391,7 +394,7 @@ public class API {
 
             } else if (category != null && time != null && value1 != null && value2 != null) {
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < time.length; j++) {
                         WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[j], category[i]);
@@ -407,6 +410,9 @@ public class API {
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -429,7 +435,7 @@ public class API {
 
             if (time == null && category == null && value1 != null && value2 != null && value3 != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3);
                 WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -437,7 +443,7 @@ public class API {
             } else if (time == null && category != null && value1 != null && value2 != null && value3 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, category[i]);
                     freqArr[i] = resp;
@@ -447,7 +453,7 @@ public class API {
             } else if (category == null && time != null && value1 != null && value2 != null && value3 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, time[i]);
                     freqArr[i] = resp;
@@ -456,7 +462,7 @@ public class API {
 
             } else if (category != null && time != null && value1 != null && value2 != null && value3 != null) {
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < time.length; j++) {
                         WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, time[j], category[i]);
@@ -474,6 +480,9 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
         }
 
     }
@@ -489,12 +498,12 @@ public class API {
 
         try {
             if (category == null && year == null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR resp = client.getFrequentWords(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
             } else if (category == null && year != null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
                 for (int i = 0; i < year.length; i++) {
                     freqArr[i] = client.getFrequentWords(year[i], amount);
@@ -502,7 +511,7 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year == null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
                 for (int i = 0; i < category.length; i++) {
                     freqArr[i] = client.getFrequentWords(category[i], amount);
@@ -510,7 +519,7 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year != null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
@@ -529,6 +538,9 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
         }
 
     }
@@ -544,12 +556,12 @@ public class API {
 
         try {
             if (category == null && year == null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR resp = client.getFrequentBigrams(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
             } else if (category == null && year != null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
                 for (int i = 0; i < year.length; i++) {
                     freqArr[i] = client.getFrequentBigrams(year[i], amount);
@@ -557,7 +569,7 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year == null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
                 for (int i = 0; i < category.length; i++) {
                     freqArr[i] = client.getFrequentBigrams(category[i], amount);
@@ -565,7 +577,7 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year != null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
@@ -584,6 +596,9 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
         }
     }
 
@@ -597,12 +612,12 @@ public class API {
 
         try {
             if (category == null && year == null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR resp = client.getFrequentTrigrams(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
             } else if (category == null && year != null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
                 for (int i = 0; i < year.length; i++) {
                     freqArr[i] = client.getFrequentTrigrams(year[i], amount);
@@ -610,7 +625,7 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year == null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
                 for (int i = 0; i < category.length; i++) {
                     freqArr[i] = client.getFrequentTrigrams(category[i], amount);
@@ -618,7 +633,7 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year != null) {
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
@@ -637,6 +652,9 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
         }
     }
 
@@ -653,7 +671,7 @@ public class API {
         try {
             if (category != null && year != null && value != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
                         articlesForWordRs[i * year.length + j] = client.getLatestArticlesForWord(value, year[j], category[i], amount);
@@ -662,21 +680,21 @@ public class API {
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year != null && value != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < year.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForWord(value, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category != null && year == null && value != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForWord(value, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year == null && value != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForWord(value, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
@@ -687,6 +705,9 @@ public class API {
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -705,7 +726,7 @@ public class API {
         try {
             if (category != null && year != null && value1 != null && value2 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
                         articlesForWordRs[i * year.length + j] = client.getLatestArticlesForBigram(value1, value2, year[j], category[i], amount);
@@ -714,21 +735,21 @@ public class API {
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year != null && value1 != null && value2 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < year.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForBigram(value1, value2, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category != null && year == null && value1 != null && value2 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForBigram(value1, value2, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year == null && value1 != null && value2 != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForBigram(value1, value2, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
@@ -739,6 +760,9 @@ public class API {
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -758,7 +782,7 @@ public class API {
         try {
             if (category != null && year != null && value1 != null && value2 != null && value3 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
                         articlesForWordRs[i * year.length + j] = client.getLatestArticlesForTrigram(value1, value2, value3, year[j], category[i], amount);
@@ -767,21 +791,21 @@ public class API {
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year != null && value1 != null && value2 != null && value3 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < year.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1, value2, value3, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category != null && year == null && value1 != null && value2 != null && value3 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1, value2, value3, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year == null && value1 != null && value2 != null && value3 != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForTrigram(value1, value2, value3, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
@@ -792,6 +816,9 @@ public class API {
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -813,19 +840,16 @@ public class API {
         try {
             if (category != null && year != null && value != null) {
                 FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[category.length * year.length];
-                System.out.println("Length "+frequentWordsAroundWords.length);
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
-                        String a = category[i];
-                        int b = year[j];
                         frequentWordsAroundWords[i * year.length + j] = client.getFrequentWordsAroundWord(value, category[i], year[j], range, amount);
                     }
                 }
                 return Response.status(200).entity(frequentWordsAroundWords).build();
             } else if (category == null && year != null && value != null) {
                 FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[year.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int j = 0; j < year.length; j++) {
                     frequentWordsAroundWords[j] = client.getFrequentWordsAroundWord(value, year[j], range, amount);
                 }
@@ -833,14 +857,14 @@ public class API {
 
             } else if (category != null && year == null && value != null) {
                 FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[category.length];
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     frequentWordsAroundWords[i] = client.getFrequentWordsAroundWord(value, category[i], range, amount);
                 }
                 return Response.status(200).entity(frequentWordsAroundWords).build();
             } else if (category == null && year == null && value != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 FrequentWordsAroundWordR[] frequentWordsAroundWords = {client.getFrequentWordsAroundWord(value, range, amount)};
                 return Response.status(200).entity(frequentWordsAroundWords).build();
 
@@ -855,6 +879,9 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
         }
 
     }
@@ -865,30 +892,77 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentWordsInPosition(WordPosition position) {
 
-        WordR wordR1 = new WordR();
-        wordR1.setFrequency(10);
-        wordR1.setValue("val 1");
 
-        WordR wordR2 = new WordR();
-        wordR2.setFrequency(14);
-        wordR2.setValue("val 2");
+        int[] year = position.getTime();
+        String[] category = position.getCategory();
+        int amount = position.getAmount();
+        int pos = position.getPosition();
 
-        WordR words[] = {wordR1, wordR2};
 
-        WordPositionR wordPositionR1 = new WordPositionR();
-        wordPositionR1.setCategory("cat 1");
-        wordPositionR1.setTime(2010);
-        wordPositionR1.setWords(words);
 
-        WordPositionR wordPositionR2 = new WordPositionR();
-        wordPositionR2.setCategory("cat 2");
-        wordPositionR2.setTime(2011);
-        wordPositionR2.setWords(words);
+        try {
+            if (category != null && year != null) {
+                WordPositionR[] wordPositions = new WordPositionR[category.length * year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        if(pos>0){
+                            wordPositions[i * year.length + j] = client.getFrequentWordsInPosition(pos,year[j],category[i],amount);
+                        }else{
+                            wordPositions[i * year.length + j] = client.getFrequentWordsInPositionReverse(-pos,year[j],category[i],amount);
+                        }
+                    }
+                }
+                return Response.status(200).entity(wordPositions).build();
+            } else if (category == null && year != null) {
+                WordPositionR[] wordPositions = new WordPositionR[year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int j = 0; j < year.length; j++) {
+                    if(pos>0){
+                        wordPositions[j] = client.getFrequentWordsInPosition(pos,year[j],amount);
+                    }else{
+                        wordPositions[j] = client.getFrequentWordsInPositionReverse(-pos,year[j],amount);
+                    }
+                }
+                return Response.status(200).entity(wordPositions).build();
 
-        WordPositionR[] arr = {wordPositionR1, wordPositionR2};
-        //OracleClient.getDBConnection();
-        System.out.println("Got db Connection");
-        return Response.status(200).entity(arr).build();
+            } else if (category != null && year == null) {
+                WordPositionR[] wordPositions = new WordPositionR[category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    if(pos>0){
+                        wordPositions[i] = client.getFrequentWordsInPosition(pos,category[i],amount);
+                    }else{
+                        wordPositions[i] = client.getFrequentWordsInPositionReverse(-pos,category[i],amount);
+                    }
+                }
+                return Response.status(200).entity(wordPositions).build();
+            } else if (category == null && year == null) {
+
+                CorpusDBClient client = new OracleClient();
+                if(pos>0){
+                    WordPositionR[] wordPositions = {client.getFrequentWordsInPosition(pos,amount)};
+                    return Response.status(200).entity(wordPositions).build();
+                }else{
+                    WordPositionR[] wordPositions = {client.getFrequentWordsInPositionReverse(-pos,amount)};
+                    return Response.status(200).entity(wordPositions).build();
+                }
+
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
 

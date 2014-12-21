@@ -1,5 +1,7 @@
 package com.sinmin.rest.oracle;
 
+import com.sinmin.rest.CorpusDBClient;
+import com.sinmin.rest.beans.request.WordPosition;
 import com.sinmin.rest.beans.response.*;
 import oracle.jdbc.OracleCallableStatement;
 
@@ -14,7 +16,7 @@ import java.util.List;
 /**
  * Created by dimuthuupeksha on 12/11/14.
  */
-public class OracleClient {
+public class OracleClient implements CorpusDBClient{
 
     private static final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
     //private static final String DB_CONNECTION = "jdbc:oracle:thin:@//localhost:1521/PDB1";
@@ -1362,7 +1364,211 @@ public class OracleClient {
 
         return resp;
     }
+    //////////////////////////Get word in position ////////////////
 
+    public WordPositionR getFrequentWordsInPosition(int position,int year,String category,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ? and s.id = sw.sentence_id and a.id = s.article_id and a.year =? and a.category=? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,position);
+        stmt.setInt(2,year);
+        stmt.setString(3, category);
+        stmt.setInt(4,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+        WordPositionR resp = new WordPositionR();
+        resp.setTime(year);
+        resp.setCategory(category);
+        resp.setWords(wordArr);
+        return resp;
+    }
+
+    public WordPositionR getFrequentWordsInPosition(int position,int year,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ? and s.id = sw.sentence_id and a.id = s.article_id and a.year =? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,position);
+        stmt.setInt(2, year);
+        stmt.setInt(3,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+        WordPositionR resp = new WordPositionR();
+        resp.setTime(year);
+        resp.setCategory("all");
+        resp.setWords(wordArr);
+        return resp;
+    }
+
+
+    public WordPositionR getFrequentWordsInPosition(int position,String category,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ? and s.id = sw.sentence_id and a.id = s.article_id and a.category=? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,position);
+        stmt.setString(2, category);
+        stmt.setInt(3,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+        WordPositionR resp = new WordPositionR();
+        resp.setTime(0);
+        resp.setCategory(category);
+        resp.setWords(wordArr);
+        return resp;
+    }
+
+    public WordPositionR getFrequentWordsInPosition(int position,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw where sw.position = ? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1, position);
+        stmt.setInt(2,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+        WordPositionR resp = new WordPositionR();
+        resp.setTime(0);
+        resp.setCategory("all");
+        resp.setWords(wordArr);
+        return resp;
+    }
+
+
+    ///////////////////////reverse /////////
+
+    public WordPositionR getFrequentWordsInPositionReverse(int position,int year,String category,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ((s.words+1) - ?) and s.id = sw.sentence_id and a.id = s.article_id and a.year =? and a.category=? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,position);
+        stmt.setInt(2,year);
+        stmt.setString(3, category);
+        stmt.setInt(4,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+        WordPositionR resp = new WordPositionR();
+        resp.setTime(year);
+        resp.setCategory(category);
+        resp.setWords(wordArr);
+        return resp;
+    }
+
+    public WordPositionR getFrequentWordsInPositionReverse(int position,String category,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ((s.words+1) - ?) and s.id = sw.sentence_id and a.id = s.article_id and a.category=? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,position);
+        stmt.setString(2, category);
+        stmt.setInt(3,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+        WordPositionR resp = new WordPositionR();
+        resp.setTime(0);
+        resp.setCategory(category);
+        resp.setWords(wordArr);
+        return resp;
+    }
+
+    public WordPositionR getFrequentWordsInPositionReverse(int position,int year,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ((s.words+1) - ?) and s.id = sw.sentence_id and a.id = s.article_id and a.year =? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,position);
+        stmt.setInt(2, year);
+        stmt.setInt(3,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+        WordPositionR resp = new WordPositionR();
+        resp.setTime(year);
+        resp.setCategory("all");
+        resp.setWords(wordArr);
+        return resp;
+    }
+
+    public WordPositionR getFrequentWordsInPositionReverse(int position,int amount)throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s where s.id = sw.sentence_id and sw.position = ((s.words+1) - ?) group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1, position);
+        stmt.setInt(2,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+        WordPositionR resp = new WordPositionR();
+        resp.setTime(0);
+        resp.setCategory("all");
+        resp.setWords(wordArr);
+        return resp;
+    }
 
 
 
