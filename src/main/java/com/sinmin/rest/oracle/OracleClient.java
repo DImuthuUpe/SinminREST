@@ -1255,13 +1255,17 @@ public class OracleClient implements CorpusDBClient{
 
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int year, int range, int amount) throws SQLException,ClassNotFoundException{
         getDBConnection();
-        String sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+? or sw2.position>sw1.position-? )and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        String  sql ="";
+        if(range>0){
+            sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position<=sw1.position+? and sw2.position>sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        }else{
+            sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position>=sw1.position-? and sw2.position<sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        }
         OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
-        stmt.setInt(1,range);
-        stmt.setInt(2,range);
-        stmt.setInt(3,year);
-        stmt.setString(4, category);
-        stmt.setInt(5,amount);
+        stmt.setInt(1,Math.abs(range));
+        stmt.setInt(2,year);
+        stmt.setString(3, category);
+        stmt.setInt(4,amount);
         ResultSet rst = stmt.executeQuery();
 
         List<WordR> words = new ArrayList<>();
@@ -1284,12 +1288,16 @@ public class OracleClient implements CorpusDBClient{
 
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, int year, int range, int amount) throws SQLException,ClassNotFoundException{
         getDBConnection();
-        String sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+? or sw2.position>sw1.position-? )and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        String sql ="";
+        if(range>0){
+            sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position<=sw1.position+? and sw2.position>sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        }else{
+            sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position>=sw1.position-? and sw2.position<sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        }
         OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
-        stmt.setInt(1,range);
-        stmt.setInt(2,range);
-        stmt.setInt(3,year);
-        stmt.setInt(4,amount);
+        stmt.setInt(1,Math.abs(range));
+        stmt.setInt(2,year);
+        stmt.setInt(3,amount);
         ResultSet rst = stmt.executeQuery();
 
         List<WordR> words = new ArrayList<>();
@@ -1312,12 +1320,16 @@ public class OracleClient implements CorpusDBClient{
 
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int range, int amount) throws SQLException,ClassNotFoundException{
         getDBConnection();
-        String sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+? or sw2.position>sw1.position-? )and s.id = sw1.sentence_id and a.id= s.article_id and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        String sql ="";
+        if(range>0){
+            sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position<=sw1.position+? and sw2.position>sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        }else{
+            sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position>=sw1.position-? and sw2.position<sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        }
         OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
-        stmt.setInt(1,range);
-        stmt.setInt(2,range);
-        stmt.setString(3, category);
-        stmt.setInt(4,amount);
+        stmt.setInt(1,Math.abs(range));
+        stmt.setString(2, category);
+        stmt.setInt(3,amount);
         ResultSet rst = stmt.executeQuery();
 
         List<WordR> words = new ArrayList<>();
@@ -1340,11 +1352,15 @@ public class OracleClient implements CorpusDBClient{
 
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, int range, int amount) throws SQLException,ClassNotFoundException{
         getDBConnection();
-        String sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2 where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+? or sw2.position>sw1.position-? ) group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        String sql = "";
+        if(range>0){
+            sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2 where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position<=sw1.position+? and sw2.position>sw1.position group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        }else{
+            sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2 where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position>=sw1.position-? and sw2.position<sw1.position group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        }
         OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
-        stmt.setInt(1,range);
-        stmt.setInt(2,range);
-        stmt.setInt(3,amount);
+        stmt.setInt(1,Math.abs(range));
+        stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
 
         List<WordR> words = new ArrayList<>();

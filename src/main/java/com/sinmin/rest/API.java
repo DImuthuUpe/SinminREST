@@ -201,10 +201,10 @@ Method : frequentWordsAroundWord
         Req :
         {
             "value" : "value1",
-            "range" : 12,
+            "range" : 1,
             "time" : [2012],
             "category" : ["cat1"],
-            "amount" : 12
+            "amount" : 10
         }
 
         Resp :
