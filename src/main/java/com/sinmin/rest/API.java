@@ -297,51 +297,51 @@ public class API {
         String category[] = wordF.getCategory();
         try {
 
-            if(time==null && category==null && value!=null){
+            if (time == null && category == null && value != null) {
 
                 OracleClient client = new OracleClient();
                 WordFrequencyR resp = client.getWordFrequency(value);
-                WordFrequencyR freqArr[] ={resp};
+                WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(time==null && category!=null && value!=null){
+            } else if (time == null && category != null && value != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
                 OracleClient client = new OracleClient();
-                for (int i=0; i<category.length;i++){
-                    WordFrequencyR resp = client.getWordFrequency(value,category[i]);
+                for (int i = 0; i < category.length; i++) {
+                    WordFrequencyR resp = client.getWordFrequency(value, category[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category==null && time!=null && value!=null){
+            } else if (category == null && time != null && value != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
                 OracleClient client = new OracleClient();
-                for (int i=0; i<time.length;i++){
+                for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getWordFrequency(value, time[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null&& time!=null && value!=null){
-                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
+            } else if (category != null && time != null && value != null) {
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    for(int j=0;j<time.length;j++){
-                        WordFrequencyR resp = client.getWordFrequency(value, time[j],category[i]);
-                        freqArr[i*time.length+j] = resp;
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < time.length; j++) {
+                        WordFrequencyR resp = client.getWordFrequency(value, time[j], category[i]);
+                        freqArr[i * time.length + j] = resp;
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -362,51 +362,51 @@ public class API {
 
         try {
 
-            if(time==null && category==null && value1!=null && value2!=null){
+            if (time == null && category == null && value1 != null && value2 != null) {
 
                 OracleClient client = new OracleClient();
                 WordFrequencyR resp = client.getBigramFrequency(value1, value2);
-                WordFrequencyR freqArr[] ={resp};
+                WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(time==null && category!=null && value1!=null && value2!=null){
+            } else if (time == null && category != null && value1 != null && value2 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
                 OracleClient client = new OracleClient();
-                for (int i=0; i<category.length;i++){
+                for (int i = 0; i < category.length; i++) {
                     WordFrequencyR resp = client.getBigramFrequency(value1, value2, category[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category==null && time!=null && value1!=null && value2!=null){
+            } else if (category == null && time != null && value1 != null && value2 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
                 OracleClient client = new OracleClient();
-                for (int i=0; i<time.length;i++){
+                for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null&& time!=null && value1!=null && value2!=null){
-                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
+            } else if (category != null && time != null && value1 != null && value2 != null) {
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    for(int j=0;j<time.length;j++){
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < time.length; j++) {
                         WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[j], category[i]);
-                        freqArr[i*time.length+j] = resp;
+                        freqArr[i * time.length + j] = resp;
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -427,51 +427,51 @@ public class API {
 
         try {
 
-            if(time==null && category==null && value1!=null && value2!=null && value3!=null){
+            if (time == null && category == null && value1 != null && value2 != null && value3 != null) {
 
                 OracleClient client = new OracleClient();
                 WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3);
-                WordFrequencyR freqArr[] ={resp};
+                WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(time==null && category!=null && value1!=null && value2!=null && value3!=null){
+            } else if (time == null && category != null && value1 != null && value2 != null && value3 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
                 OracleClient client = new OracleClient();
-                for (int i=0; i<category.length;i++){
-                    WordFrequencyR resp = client.getTrigramFrequency(value1,value2,value3,category[i]);
+                for (int i = 0; i < category.length; i++) {
+                    WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, category[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category==null && time!=null && value1!=null && value2!=null && value3!=null){
+            } else if (category == null && time != null && value1 != null && value2 != null && value3 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
                 OracleClient client = new OracleClient();
-                for (int i=0; i<time.length;i++){
-                    WordFrequencyR resp = client.getTrigramFrequency(value1,value2, value3,time[i]);
+                for (int i = 0; i < time.length; i++) {
+                    WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, time[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null&& time!=null && value1!=null && value2!=null && value3!=null){
-                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
+            } else if (category != null && time != null && value1 != null && value2 != null && value3 != null) {
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    for(int j=0;j<time.length;j++){
-                        WordFrequencyR resp = client.getTrigramFrequency(value1,value2,value3, time[j],category[i]);
-                        freqArr[i*time.length+j] = resp;
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < time.length; j++) {
+                        WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, time[j], category[i]);
+                        freqArr[i * time.length + j] = resp;
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -483,42 +483,42 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentWords(FrequentWord frqWord) {
 
-        String[] category=frqWord.getCategory();
+        String[] category = frqWord.getCategory();
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
 
-        try{
-            if(category==null && year==null){
+        try {
+            if (category == null && year == null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR resp = client.getFrequentWords(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
-            }else if(category==null && year!=null){
+            } else if (category == null && year != null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
-                for (int i=0;i<year.length;i++){
-                    freqArr[i]= client.getFrequentWords(year[i],amount);
+                for (int i = 0; i < year.length; i++) {
+                    freqArr[i] = client.getFrequentWords(year[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null && year==null){
+            } else if (category != null && year == null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
-                for (int i=0;i<category.length;i++){
-                    freqArr[i]= client.getFrequentWords(category[i],amount);
+                for (int i = 0; i < category.length; i++) {
+                    freqArr[i] = client.getFrequentWords(category[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null && year!=null){
+            } else if (category != null && year != null) {
                 OracleClient client = new OracleClient();
-                FrequentWordR[] freqArr = new FrequentWordR[category.length*year.length];
-                for (int i=0;i<category.length;i++){
-                    for(int j=0;j<year.length;j++){
-                        freqArr[i*category.length+j]= client.getFrequentWords(year[j],category[i],amount);
+                FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        freqArr[i * year.length + j] = client.getFrequentWords(year[j], category[i], amount);
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
@@ -526,7 +526,7 @@ public class API {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -538,42 +538,42 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentBigrams(FrequentWord frqWord) {
 
-        String[] category=frqWord.getCategory();
+        String[] category = frqWord.getCategory();
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
 
-        try{
-            if(category==null && year==null){
+        try {
+            if (category == null && year == null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR resp = client.getFrequentBigrams(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
-            }else if(category==null && year!=null){
+            } else if (category == null && year != null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
-                for (int i=0;i<year.length;i++){
-                    freqArr[i]= client.getFrequentBigrams(year[i], amount);
+                for (int i = 0; i < year.length; i++) {
+                    freqArr[i] = client.getFrequentBigrams(year[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null && year==null){
+            } else if (category != null && year == null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
-                for (int i=0;i<category.length;i++){
-                    freqArr[i]= client.getFrequentBigrams(category[i], amount);
+                for (int i = 0; i < category.length; i++) {
+                    freqArr[i] = client.getFrequentBigrams(category[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null && year!=null){
+            } else if (category != null && year != null) {
                 OracleClient client = new OracleClient();
-                FrequentWordR[] freqArr = new FrequentWordR[category.length*year.length];
-                for (int i=0;i<category.length;i++){
-                    for(int j=0;j<year.length;j++){
-                        freqArr[i*category.length+j]= client.getFrequentBigrams(year[j], category[i], amount);
+                FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        freqArr[i * year.length + j] = client.getFrequentBigrams(year[j], category[i], amount);
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
@@ -581,7 +581,7 @@ public class API {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -591,42 +591,42 @@ public class API {
     @Path("/frequentTrigrams")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentTrigrams(FrequentWord frqWord) {
-        String[] category=frqWord.getCategory();
+        String[] category = frqWord.getCategory();
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
 
-        try{
-            if(category==null && year==null){
+        try {
+            if (category == null && year == null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR resp = client.getFrequentTrigrams(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
-            }else if(category==null && year!=null){
+            } else if (category == null && year != null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
-                for (int i=0;i<year.length;i++){
-                    freqArr[i]= client.getFrequentTrigrams(year[i], amount);
+                for (int i = 0; i < year.length; i++) {
+                    freqArr[i] = client.getFrequentTrigrams(year[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null && year==null){
+            } else if (category != null && year == null) {
                 OracleClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
-                for (int i=0;i<category.length;i++){
-                    freqArr[i]= client.getFrequentTrigrams(category[i], amount);
+                for (int i = 0; i < category.length; i++) {
+                    freqArr[i] = client.getFrequentTrigrams(category[i], amount);
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null && year!=null){
+            } else if (category != null && year != null) {
                 OracleClient client = new OracleClient();
-                FrequentWordR[] freqArr = new FrequentWordR[category.length*year.length];
-                for (int i=0;i<category.length;i++){
-                    for(int j=0;j<year.length;j++){
-                        freqArr[i*category.length+j]= client.getFrequentTrigrams(year[j], category[i], amount);
+                FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        freqArr[i * year.length + j] = client.getFrequentTrigrams(year[j], category[i], amount);
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
@@ -634,7 +634,7 @@ public class API {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -647,46 +647,46 @@ public class API {
     public Response latestArticlesForWord(ArticlesForWord articlesForWord) {
 
         int amount = articlesForWord.getAmount();
-        String category[]= articlesForWord.getCategory();
-        int year[]=articlesForWord.getTime();
+        String category[] = articlesForWord.getCategory();
+        int year[] = articlesForWord.getTime();
         String value = articlesForWord.getValue();
-        try{
-            if(category!=null && year!=null && value !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length*year.length];
+        try {
+            if (category != null && year != null && value != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
                 OracleClient client = new OracleClient();
-                for (int i=0;i<category.length;i++){
-                    for(int j=0;j<year.length;j++){
-                        articlesForWordRs[i*category.length+j]= client.getLatestArticlesForWord(value,year[j],category[i],amount);
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        articlesForWordRs[i * year.length + j] = client.getLatestArticlesForWord(value, year[j], category[i], amount);
                     }
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category ==null && year!=null && value !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[year.length];
+            } else if (category == null && year != null && value != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<year.length;i++){
-                    articlesForWordRs[i] = client.getLatestArticlesForWord(value,year[i],amount);
+                for (int i = 0; i < year.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForWord(value, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category !=null && year==null && value !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length];
+            } else if (category != null && year == null && value != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    articlesForWordRs[i] = client.getLatestArticlesForWord(value,category[i],amount);
+                for (int i = 0; i < category.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForWord(value, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category ==null && year==null && value !=null){
+            } else if (category == null && year == null && value != null) {
 
                 OracleClient client = new OracleClient();
-                ArticlesForWordR [] articlesForWordRs = {client.getLatestArticlesForWord(value,amount)};
+                ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForWord(value, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -698,47 +698,47 @@ public class API {
     public Response latestArticlesForBigram(ArticlesForBigram articlesForBigram) {
 
         int amount = articlesForBigram.getAmount();
-        String category[]= articlesForBigram.getCategory();
-        int year[]=articlesForBigram.getTime();
+        String category[] = articlesForBigram.getCategory();
+        int year[] = articlesForBigram.getTime();
         String value1 = articlesForBigram.getValue1();
         String value2 = articlesForBigram.getValue2();
-        try{
-            if(category!=null && year!=null && value1 !=null && value2 !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length*year.length];
+        try {
+            if (category != null && year != null && value1 != null && value2 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
                 OracleClient client = new OracleClient();
-                for (int i=0;i<category.length;i++){
-                    for(int j=0;j<year.length;j++){
-                        articlesForWordRs[i*category.length+j]= client.getLatestArticlesForBigram(value1,value2,year[j],category[i],amount);
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        articlesForWordRs[i * year.length + j] = client.getLatestArticlesForBigram(value1, value2, year[j], category[i], amount);
                     }
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category ==null && year!=null && value1 !=null && value2 !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[year.length];
+            } else if (category == null && year != null && value1 != null && value2 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<year.length;i++){
-                    articlesForWordRs[i] = client.getLatestArticlesForBigram(value1,value2,year[i],amount);
+                for (int i = 0; i < year.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForBigram(value1, value2, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category !=null && year==null && value1 !=null && value2 !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length];
+            } else if (category != null && year == null && value1 != null && value2 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    articlesForWordRs[i] = client.getLatestArticlesForBigram(value1,value2,category[i],amount);
+                for (int i = 0; i < category.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForBigram(value1, value2, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category ==null && year==null && value1 !=null && value2 !=null){
+            } else if (category == null && year == null && value1 != null && value2 != null) {
 
                 OracleClient client = new OracleClient();
-                ArticlesForWordR [] articlesForWordRs = {client.getLatestArticlesForBigram(value1,value2,amount)};
+                ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForBigram(value1, value2, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -750,48 +750,48 @@ public class API {
     public Response latestArticlesForTrigram(ArticlesForTrigram articlesForTrigram) {
 
         int amount = articlesForTrigram.getAmount();
-        String category[]= articlesForTrigram.getCategory();
-        int year[]=articlesForTrigram.getTime();
+        String category[] = articlesForTrigram.getCategory();
+        int year[] = articlesForTrigram.getTime();
         String value1 = articlesForTrigram.getValue1();
         String value2 = articlesForTrigram.getValue2();
         String value3 = articlesForTrigram.getValue3();
-        try{
-            if(category!=null && year!=null && value1 !=null && value2 !=null && value3 !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length*year.length];
+        try {
+            if (category != null && year != null && value1 != null && value2 != null && value3 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
                 OracleClient client = new OracleClient();
-                for (int i=0;i<category.length;i++){
-                    for(int j=0;j<year.length;j++){
-                        articlesForWordRs[i*category.length+j]= client.getLatestArticlesForTrigram(value1,value2,value3,year[j],category[i],amount);
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        articlesForWordRs[i * year.length + j] = client.getLatestArticlesForTrigram(value1, value2, value3, year[j], category[i], amount);
                     }
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category ==null && year!=null && value1 !=null && value2 !=null && value3 !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[year.length];
+            } else if (category == null && year != null && value1 != null && value2 != null && value3 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<year.length;i++){
-                    articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1,value2,value3,year[i],amount);
+                for (int i = 0; i < year.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1, value2, value3, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category !=null && year==null && value1 !=null && value2 !=null && value3 !=null){
-                ArticlesForWordR [] articlesForWordRs = new ArticlesForWordR[category.length];
+            } else if (category != null && year == null && value1 != null && value2 != null && value3 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
                 OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1,value2,value3,category[i],amount);
+                for (int i = 0; i < category.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1, value2, value3, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else if(category ==null && year==null && value1 !=null && value2 !=null && value3 !=null){
+            } else if (category == null && year == null && value1 != null && value2 != null && value3 != null) {
 
                 OracleClient client = new OracleClient();
-                ArticlesForWordR [] articlesForWordRs = {client.getLatestArticlesForTrigram(value1,value2, value3,amount)};
+                ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForTrigram(value1, value2, value3, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -803,29 +803,60 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentWordsAroundWord(FrequentWordsAroundWord frqWords) {
 
-        WordR wordR1 = new WordR();
-        wordR1.setFrequency(10);
-        wordR1.setValue("val 1");
 
-        WordR wordR2 = new WordR();
-        wordR2.setFrequency(14);
-        wordR2.setValue("val 2");
+        String value = frqWords.getValue();
+        int[] year = frqWords.getTime();
+        String[] category = frqWords.getCategory();
+        int amount = frqWords.getAmount();
+        int range = frqWords.getRange();
 
-        WordR words[] = {wordR1, wordR2};
+        try {
+            if (category != null && year != null && value != null) {
+                FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[category.length * year.length];
+                System.out.println("Length "+frequentWordsAroundWords.length);
+                OracleClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        String a = category[i];
+                        int b = year[j];
+                        frequentWordsAroundWords[i * year.length + j] = client.getFrequentWordsAroundWord(value, category[i], year[j], range, amount);
+                    }
+                }
+                return Response.status(200).entity(frequentWordsAroundWords).build();
+            } else if (category == null && year != null && value != null) {
+                FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[year.length];
+                OracleClient client = new OracleClient();
+                for (int j = 0; j < year.length; j++) {
+                    frequentWordsAroundWords[j] = client.getFrequentWordsAroundWord(value, year[j], range, amount);
+                }
+                return Response.status(200).entity(frequentWordsAroundWords).build();
 
-        FrequentWordsAroundWordR frequentWordsAroundWordR1 = new FrequentWordsAroundWordR();
-        frequentWordsAroundWordR1.setCategory("cat 1");
-        frequentWordsAroundWordR1.setTime(2012);
-        frequentWordsAroundWordR1.setWords(words);
+            } else if (category != null && year == null && value != null) {
+                FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[category.length];
+                OracleClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    frequentWordsAroundWords[i] = client.getFrequentWordsAroundWord(value, category[i], range, amount);
+                }
+                return Response.status(200).entity(frequentWordsAroundWords).build();
+            } else if (category == null && year == null && value != null) {
 
-        FrequentWordsAroundWordR frequentWordsAroundWordR2 = new FrequentWordsAroundWordR();
-        frequentWordsAroundWordR2.setCategory("cat 2");
-        frequentWordsAroundWordR2.setTime(2013);
-        frequentWordsAroundWordR2.setWords(words);
+                OracleClient client = new OracleClient();
+                FrequentWordsAroundWordR[] frequentWordsAroundWords = {client.getFrequentWordsAroundWord(value, range, amount)};
+                return Response.status(200).entity(frequentWordsAroundWords).build();
 
-        FrequentWordsAroundWordR[] arr = {frequentWordsAroundWordR1, frequentWordsAroundWordR2};
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
 
-        return Response.status(200).entity(arr).build();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+
     }
 
 

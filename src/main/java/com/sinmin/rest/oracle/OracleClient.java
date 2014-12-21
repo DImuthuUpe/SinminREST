@@ -1249,9 +1249,128 @@ public class OracleClient {
         return articlesForWord;
     }
 
-    //////////////////////////////////////////////////////////////////
+    ///////////////////Frequencies around a word///////////////////////////////////////////////
+
+    public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int year, int range, int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+? or sw2.position>sw1.position-? )and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,range);
+        stmt.setInt(2,range);
+        stmt.setInt(3,year);
+        stmt.setString(4, category);
+        stmt.setInt(5,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+
+        FrequentWordsAroundWordR resp = new FrequentWordsAroundWordR();
+        resp.setCategory(category);
+        resp.setTime(year);
+        resp.setWords(wordArr);
+
+        return resp;
+    }
+
+    public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, int year, int range, int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+? or sw2.position>sw1.position-? )and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,range);
+        stmt.setInt(2,range);
+        stmt.setInt(3,year);
+        stmt.setInt(4,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+
+        FrequentWordsAroundWordR resp = new FrequentWordsAroundWordR();
+        resp.setCategory("all");
+        resp.setTime(year);
+        resp.setWords(wordArr);
+
+        return resp;
+    }
+
+    public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int range, int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+? or sw2.position>sw1.position-? )and s.id = sw1.sentence_id and a.id= s.article_id and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,range);
+        stmt.setInt(2,range);
+        stmt.setString(3, category);
+        stmt.setInt(4,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+
+        FrequentWordsAroundWordR resp = new FrequentWordsAroundWordR();
+        resp.setCategory(category);
+        resp.setTime(0);
+        resp.setWords(wordArr);
+
+        return resp;
+    }
+
+    public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, int range, int amount) throws SQLException,ClassNotFoundException{
+        getDBConnection();
+        String sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2 where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+? or sw2.position>sw1.position-? ) group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,range);
+        stmt.setInt(2,range);
+        stmt.setInt(3,amount);
+        ResultSet rst = stmt.executeQuery();
+
+        List<WordR> words = new ArrayList<>();
+        while(rst.next()){
+            WordR w = new WordR();
+            w.setValue(rst.getString(1));
+            w.setFrequency(rst.getInt(2));
+            words.add(w);
+        }
+        WordR[] wordArr = new WordR[words.size()];
+        wordArr = words.toArray(wordArr);
+
+        FrequentWordsAroundWordR resp = new FrequentWordsAroundWordR();
+        resp.setCategory("all");
+        resp.setTime(0);
+        resp.setWords(wordArr);
+
+        return resp;
+    }
+
+
+
+
+    /////////////////////////
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w1.val,w2.val,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ' and w3.val='මහතා' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
+//select w2.id, count(*) from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position<sw1.position+3 and s.id = sw1.sentence_id and a.id= s.article_id and a.year=2014 group by w2.id order by count(*) desc
+//select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and (sw2.position<sw1.position+3 or sw2.position>sw1.position-3 )and s.id = sw1.sentence_id and a.id= s.article_id and a.year=2014 group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=10
 }
