@@ -759,6 +759,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory(category);
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -803,6 +805,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory("all");
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -847,6 +851,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory(category);
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -889,6 +895,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory("all");
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -937,6 +945,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory(category);
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -981,6 +991,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory("all");
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -1026,6 +1038,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory(category);
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -1070,6 +1084,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory("all");
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -1118,6 +1134,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory(category);
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -1162,6 +1180,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory("all");
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -1206,6 +1226,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory(category);
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -1249,6 +1271,8 @@ public class OracleClient implements CorpusDBClient{
         articlesForWord.setCategory("all");
         ArticleR[] a = new ArticleR[articleList.size()];
         articlesForWord.setArticles(articleList.toArray(a));
+        rst.close();
+        stmt.close();
         return articlesForWord;
     }
 
@@ -1283,7 +1307,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setCategory(category);
         resp.setTime(year);
         resp.setWords(wordArr);
-
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1315,7 +1340,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setCategory("all");
         resp.setTime(year);
         resp.setWords(wordArr);
-
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1347,7 +1373,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setCategory(category);
         resp.setTime(0);
         resp.setWords(wordArr);
-
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1378,7 +1405,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setCategory("all");
         resp.setTime(0);
         resp.setWords(wordArr);
-
+        rst.close();
+        stmt.close();
         return resp;
     }
     //////////////////////////Get word in position ////////////////
@@ -1406,6 +1434,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setTime(year);
         resp.setCategory(category);
         resp.setWords(wordArr);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1431,6 +1461,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setTime(year);
         resp.setCategory("all");
         resp.setWords(wordArr);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1457,6 +1489,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setTime(0);
         resp.setCategory(category);
         resp.setWords(wordArr);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1481,6 +1515,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setTime(0);
         resp.setCategory("all");
         resp.setWords(wordArr);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1510,6 +1546,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setTime(year);
         resp.setCategory(category);
         resp.setWords(wordArr);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1535,6 +1573,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setTime(0);
         resp.setCategory(category);
         resp.setWords(wordArr);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1560,6 +1600,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setTime(year);
         resp.setCategory("all");
         resp.setWords(wordArr);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1584,6 +1626,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setTime(0);
         resp.setCategory("all");
         resp.setWords(wordArr);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1614,7 +1658,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setCategory(category);
         WordWithTimeR[] wordArr = new WordWithTimeR[words.size()];
         resp.setWords(words.toArray(wordArr));
-
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1644,7 +1689,8 @@ public class OracleClient implements CorpusDBClient{
         resp.setCategory("all");
         WordWithTimeR[] wordArr = new WordWithTimeR[words.size()];
         resp.setWords(words.toArray(wordArr));
-
+        rst.close();
+        stmt.close();
         return resp;
     }
 
