@@ -1757,6 +1757,71 @@ public class OracleClient implements CorpusDBClient{
         return resp;
     }
 
+    @Override
+    public WordCountR getWordCount(String category, int year) throws  Exception{
+        getDBConnection();
+        String sql = "select count(*) from sentence_word sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.year=? and a.category=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1,year);
+        stmt.setString(2,category);
+        ResultSet rst = stmt.executeQuery();
+        WordCountR resp = new WordCountR();
+        while (rst.next()){
+            resp.setCount(rst.getInt(1));
+        }
+        resp.setCategory(category);
+        resp.setYear(year);
+        return resp;
+    }
+
+    @Override
+    public WordCountR getWordCount(String category) throws Exception{
+        getDBConnection();
+        String sql = "select count(*) from sentence_word sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.category=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setString(1,category);
+        ResultSet rst = stmt.executeQuery();
+        WordCountR resp = new WordCountR();
+        while (rst.next()){
+            resp.setCount(rst.getInt(1));
+        }
+        resp.setCategory(category);
+        resp.setYear(0);
+        return resp;
+    }
+
+    @Override
+    public WordCountR getWordCount(int year) throws Exception{
+        getDBConnection();
+        String sql = "select count(*) from sentence_word sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.year=?";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        stmt.setInt(1, year);
+        ResultSet rst = stmt.executeQuery();
+        WordCountR resp = new WordCountR();
+        while (rst.next()){
+            resp.setCount(rst.getInt(1));
+        }
+        resp.setCategory("all");
+        resp.setYear(year);
+        return resp;
+    }
+
+    @Override
+    public WordCountR getWordCount() throws Exception {
+        getDBConnection();
+        String sql = "select count(*) from sentence_word sw";
+        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+
+        ResultSet rst = stmt.executeQuery();
+        WordCountR resp = new WordCountR();
+        while (rst.next()){
+            resp.setCount(rst.getInt(1));
+        }
+        resp.setCategory("all");
+        resp.setYear(0);
+        return resp;
+    }
+
 
     /////////////////////////
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position

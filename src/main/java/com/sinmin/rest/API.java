@@ -293,6 +293,12 @@ Method : frequentWordsAfterBigramTimeRange
             "amount": 10
         }
 
+Method : wordCount
+        {
+            "category" : ['News'],
+            "time" : [2014]
+        }
+
 */
 
 @Path("/api")
@@ -364,7 +370,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -432,7 +438,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -500,7 +506,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -558,7 +564,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -616,7 +622,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -672,7 +678,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -727,7 +733,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -782,7 +788,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -838,7 +844,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -899,7 +905,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -919,17 +925,16 @@ public class API {
         int pos = position.getPosition();
 
 
-
         try {
             if (category != null && year != null) {
                 WordPositionR[] wordPositions = new WordPositionR[category.length * year.length];
                 CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
-                        if(pos>0){
-                            wordPositions[i * year.length + j] = client.getFrequentWordsInPosition(pos,year[j],category[i],amount);
-                        }else{
-                            wordPositions[i * year.length + j] = client.getFrequentWordsInPositionReverse(-pos,year[j],category[i],amount);
+                        if (pos > 0) {
+                            wordPositions[i * year.length + j] = client.getFrequentWordsInPosition(pos, year[j], category[i], amount);
+                        } else {
+                            wordPositions[i * year.length + j] = client.getFrequentWordsInPositionReverse(-pos, year[j], category[i], amount);
                         }
                     }
                 }
@@ -938,10 +943,10 @@ public class API {
                 WordPositionR[] wordPositions = new WordPositionR[year.length];
                 CorpusDBClient client = new OracleClient();
                 for (int j = 0; j < year.length; j++) {
-                    if(pos>0){
-                        wordPositions[j] = client.getFrequentWordsInPosition(pos,year[j],amount);
-                    }else{
-                        wordPositions[j] = client.getFrequentWordsInPositionReverse(-pos,year[j],amount);
+                    if (pos > 0) {
+                        wordPositions[j] = client.getFrequentWordsInPosition(pos, year[j], amount);
+                    } else {
+                        wordPositions[j] = client.getFrequentWordsInPositionReverse(-pos, year[j], amount);
                     }
                 }
                 return Response.status(200).entity(wordPositions).build();
@@ -950,21 +955,21 @@ public class API {
                 WordPositionR[] wordPositions = new WordPositionR[category.length];
                 CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
-                    if(pos>0){
-                        wordPositions[i] = client.getFrequentWordsInPosition(pos,category[i],amount);
-                    }else{
-                        wordPositions[i] = client.getFrequentWordsInPositionReverse(-pos,category[i],amount);
+                    if (pos > 0) {
+                        wordPositions[i] = client.getFrequentWordsInPosition(pos, category[i], amount);
+                    } else {
+                        wordPositions[i] = client.getFrequentWordsInPositionReverse(-pos, category[i], amount);
                     }
                 }
                 return Response.status(200).entity(wordPositions).build();
             } else if (category == null && year == null) {
 
                 CorpusDBClient client = new OracleClient();
-                if(pos>0){
-                    WordPositionR[] wordPositions = {client.getFrequentWordsInPosition(pos,amount)};
+                if (pos > 0) {
+                    WordPositionR[] wordPositions = {client.getFrequentWordsInPosition(pos, amount)};
                     return Response.status(200).entity(wordPositions).build();
-                }else{
-                    WordPositionR[] wordPositions = {client.getFrequentWordsInPositionReverse(-pos,amount)};
+                } else {
+                    WordPositionR[] wordPositions = {client.getFrequentWordsInPositionReverse(-pos, amount)};
                     return Response.status(200).entity(wordPositions).build();
                 }
 
@@ -979,7 +984,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -995,19 +1000,19 @@ public class API {
         int amount = freqWord.getAmount();
         String word = freqWord.getValue();
 
-        try{
-            if(time!=null && time.length==2 && category!=null){
+        try {
+            if (time != null && time.length == 2 && category != null) {
                 CorpusDBClient client = new OracleClient();
                 FrequentWordsAfterWordR[] resp = new FrequentWordsAfterWordR[category.length];
-                for(int i=0;i<category.length;i++){
-                    resp[i]= client.getFrequentWordsAfterWordTimeRange(word,category[i],time[0],time[1],amount);
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getFrequentWordsAfterWordTimeRange(word, category[i], time[0], time[1], amount);
                 }
                 return Response.status(200).entity(resp).build();
-            }else if(time!=null && time.length==2 && category==null){
+            } else if (time != null && time.length == 2 && category == null) {
                 CorpusDBClient client = new OracleClient();
-                FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterWordTimeRange(word,time[0],time[1],amount)};
+                FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterWordTimeRange(word, time[0], time[1], amount)};
                 return Response.status(200).entity(resp).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
@@ -1018,7 +1023,7 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -1035,19 +1040,19 @@ public class API {
         String word1 = freqWord.getValue1();
         String word2 = freqWord.getValue2();
 
-        try{
-            if(time!=null && time.length==2 && category!=null){
+        try {
+            if (time != null && time.length == 2 && category != null) {
                 CorpusDBClient client = new OracleClient();
                 FrequentWordsAfterWordR[] resp = new FrequentWordsAfterWordR[category.length];
-                for(int i=0;i<category.length;i++){
-                    resp[i]= client.getFrequentWordsAfterBigramTimeRange(word1, word2, category[i], time[0], time[1], amount);
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getFrequentWordsAfterBigramTimeRange(word1, word2, category[i], time[0], time[1], amount);
                 }
                 return Response.status(200).entity(resp).build();
-            }else if(time!=null && time.length==2 && category==null){
+            } else if (time != null && time.length == 2 && category == null) {
                 CorpusDBClient client = new OracleClient();
                 FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterBigramTimeRange(word1, word2, time[0], time[1], amount)};
                 return Response.status(200).entity(resp).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
@@ -1058,13 +1063,68 @@ public class API {
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
 
     }
 
+    @POST
+    @Path("/wordCount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response wordCount(WordCount wordCount) {
+        String category[] = wordCount.getCategory();
+        int year[] = wordCount.getTime();
+
+        try {
+            if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length * year.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        resp[i * year.length + j] = client.getWordCount(category[i], year[j]);
+                    }
+                }
+                return Response.status(200).entity(resp).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[year.length];
+                for (int j = 0; j < year.length; j++) {
+                    resp[j] = client.getWordCount(year[j]);
+                }
+
+                return Response.status(200).entity(resp).build();
+
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getWordCount(category[i]);
+                }
+                return Response.status(200).entity(resp).build();
+
+            } else if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = {client.getWordCount()};
+                return Response.status(200).entity(resp).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+    }
 
 }
 
