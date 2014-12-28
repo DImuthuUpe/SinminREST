@@ -299,6 +299,17 @@ Method : wordCount
             "time" : [2014]
         }
 
+Method : bigramCount
+        {
+            "category" : ['News'],
+            "time" : [2014]
+        }
+
+Method : trigramCount
+        {
+            "category" : ['News'],
+            "time" : [2014]
+        }
 */
 
 @Path("/api")
@@ -1109,6 +1120,119 @@ public class API {
             } else if (category == null && year == null) {
                 CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = {client.getWordCount()};
+                return Response.status(200).entity(resp).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+    }
+
+
+    @POST
+    @Path("/bigramCount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response bigramCount(WordCount wordCount) {
+        String category[] = wordCount.getCategory();
+        int year[] = wordCount.getTime();
+
+        try {
+            if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length * year.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        resp[i * year.length + j] = client.getBigramCount(category[i], year[j]);
+                    }
+                }
+                return Response.status(200).entity(resp).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[year.length];
+                for (int j = 0; j < year.length; j++) {
+                    resp[j] = client.getBigramCount(year[j]);
+                }
+
+                return Response.status(200).entity(resp).build();
+
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getBigramCount(category[i]);
+                }
+                return Response.status(200).entity(resp).build();
+
+            } else if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = {client.getBigramCount()};
+                return Response.status(200).entity(resp).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+    }
+
+    @POST
+    @Path("/trigramCount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response trigramCount(WordCount wordCount) {
+        String category[] = wordCount.getCategory();
+        int year[] = wordCount.getTime();
+
+        try {
+            if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length * year.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        resp[i * year.length + j] = client.getTrigramCount(category[i], year[j]);
+                    }
+                }
+                return Response.status(200).entity(resp).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[year.length];
+                for (int j = 0; j < year.length; j++) {
+                    resp[j] = client.getTrigramCount(year[j]);
+                }
+
+                return Response.status(200).entity(resp).build();
+
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getTrigramCount(category[i]);
+                }
+                return Response.status(200).entity(resp).build();
+
+            } else if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = {client.getTrigramCount()};
                 return Response.status(200).entity(resp).build();
             } else {
                 return Response.status(500).entity("Invalid input parameters").build();

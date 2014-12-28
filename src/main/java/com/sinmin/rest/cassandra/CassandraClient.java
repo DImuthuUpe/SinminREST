@@ -1291,6 +1291,46 @@ public class CassandraClient implements CorpusDBClient{
     }
 
     @Override
+    public WordCountR getBigramCount(String category, int year) throws Exception {
+        return null;
+    }
+
+    @Override
+    public WordCountR getBigramCount(String category) throws Exception {
+        return null;
+    }
+
+    @Override
+    public WordCountR getBigramCount(int year) throws Exception {
+        return null;
+    }
+
+    @Override
+    public WordCountR getBigramCount() throws Exception {
+        return null;
+    }
+
+    @Override
+    public WordCountR getTrigramCount(String category, int year) throws Exception {
+        return null;
+    }
+
+    @Override
+    public WordCountR getTrigramCount(String category) throws Exception {
+        return null;
+    }
+
+    @Override
+    public WordCountR getTrigramCount(int year) throws Exception {
+        return null;
+    }
+
+    @Override
+    public WordCountR getTrigramCount() throws Exception {
+        return null;
+    }
+
+    @Override
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int year, int range, int amount) throws Exception {
         return null;
     }

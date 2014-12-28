@@ -140,4 +140,20 @@ public interface CorpusDBClient {
 
     public WordCountR getWordCount() throws Exception;
 
+    public WordCountR getBigramCount(String category,int year) throws Exception;
+
+    public WordCountR getBigramCount(String category) throws Exception;
+
+    public WordCountR getBigramCount(int year) throws Exception;
+
+    public WordCountR getBigramCount() throws Exception;
+
+    public WordCountR getTrigramCount(String category,int year) throws Exception;
+
+    public WordCountR getTrigramCount(String category) throws Exception;
+
+    public WordCountR getTrigramCount(int year) throws Exception;
+
+    public WordCountR getTrigramCount() throws Exception;
+
 }
