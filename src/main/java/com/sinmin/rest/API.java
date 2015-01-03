@@ -201,10 +201,10 @@ Method : frequentWordsAroundWord
         Req :
         {
             "value" : "value1",
-            "range" : 12,
+            "range" : 1,
             "time" : [2012],
             "category" : ["cat1"],
-            "amount" : 12
+            "amount" : 10
         }
 
         Resp :
@@ -273,6 +273,43 @@ Method : frequentWordsInPosition
 
             }
         ]
+
+Method : frequentWordsAfterWordTimeRange
+        Req
+        {
+            "value": "ලංකා",
+            "time" :[2011,2014],
+            "category":["NEWS"],
+            "amount": 10
+        }
+
+Method : frequentWordsAfterBigramTimeRange
+        Req
+        {
+            "value1": "නිදහස්‌",
+            "value2": "වෙළෙඳ",
+            "time" :[2011,2014],
+            "category":["NEWS"],
+            "amount": 10
+        }
+
+Method : wordCount
+        {
+            "category" : ['News'],
+            "time" : [2014]
+        }
+
+Method : bigramCount
+        {
+            "category" : ['News'],
+            "time" : [2014]
+        }
+
+Method : trigramCount
+        {
+            "category" : ['News'],
+            "time" : [2014]
+        }
 */
 
 @Path("/api")
@@ -297,51 +334,54 @@ public class API {
         String category[] = wordF.getCategory();
         try {
 
-            if(time==null && category==null && value!=null){
+            if (time == null && category == null && value != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 WordFrequencyR resp = client.getWordFrequency(value);
-                WordFrequencyR freqArr[] ={resp};
+                WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(time==null && category!=null && value!=null){
+            } else if (time == null && category != null && value != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                OracleClient client = new OracleClient();
-                for (int i=0; i<category.length;i++){
-                    WordFrequencyR resp = client.getWordFrequency(value,category[i]);
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    WordFrequencyR resp = client.getWordFrequency(value, category[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category==null && time!=null && value!=null){
+            } else if (category == null && time != null && value != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                OracleClient client = new OracleClient();
-                for (int i=0; i<time.length;i++){
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getWordFrequency(value, time[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null&& time!=null && value!=null){
-                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
-                OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    for(int j=0;j<time.length;j++){
-                        WordFrequencyR resp = client.getWordFrequency(value, time[j],category[i]);
-                        freqArr[i*time.length+j] = resp;
+            } else if (category != null && time != null && value != null) {
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < time.length; j++) {
+                        WordFrequencyR resp = client.getWordFrequency(value, time[j], category[i]);
+                        freqArr[i * time.length + j] = resp;
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -362,51 +402,54 @@ public class API {
 
         try {
 
-            if(time==null && category==null && value1!=null && value2!=null){
+            if (time == null && category == null && value1 != null && value2 != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 WordFrequencyR resp = client.getBigramFrequency(value1, value2);
-                WordFrequencyR freqArr[] ={resp};
+                WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(time==null && category!=null && value1!=null && value2!=null){
+            } else if (time == null && category != null && value1 != null && value2 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                OracleClient client = new OracleClient();
-                for (int i=0; i<category.length;i++){
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
                     WordFrequencyR resp = client.getBigramFrequency(value1, value2, category[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category==null && time!=null && value1!=null && value2!=null){
+            } else if (category == null && time != null && value1 != null && value2 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                OracleClient client = new OracleClient();
-                for (int i=0; i<time.length;i++){
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null&& time!=null && value1!=null && value2!=null){
-                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
-                OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    for(int j=0;j<time.length;j++){
+            } else if (category != null && time != null && value1 != null && value2 != null) {
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < time.length; j++) {
                         WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[j], category[i]);
-                        freqArr[i*time.length+j] = resp;
+                        freqArr[i * time.length + j] = resp;
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -427,51 +470,54 @@ public class API {
 
         try {
 
-            if(time==null && category==null && value1!=null && value2!=null && value3!=null){
+            if (time == null && category == null && value1 != null && value2 != null && value3 != null) {
 
-                OracleClient client = new OracleClient();
+                CorpusDBClient client = new OracleClient();
                 WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3);
-                WordFrequencyR freqArr[] ={resp};
+                WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(time==null && category!=null && value1!=null && value2!=null && value3!=null){
+            } else if (time == null && category != null && value1 != null && value2 != null && value3 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                OracleClient client = new OracleClient();
-                for (int i=0; i<category.length;i++){
-                    WordFrequencyR resp = client.getTrigramFrequency(value1,value2,value3,category[i]);
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, category[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category==null && time!=null && value1!=null && value2!=null && value3!=null){
+            } else if (category == null && time != null && value1 != null && value2 != null && value3 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                OracleClient client = new OracleClient();
-                for (int i=0; i<time.length;i++){
-                    WordFrequencyR resp = client.getTrigramFrequency(value1,value2, value3,time[i]);
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < time.length; i++) {
+                    WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, time[i]);
                     freqArr[i] = resp;
                 }
                 return Response.status(200).entity(freqArr).build();
 
-            }else if(category!=null&& time!=null && value1!=null && value2!=null && value3!=null){
-                WordFrequencyR freqArr[] = new WordFrequencyR[time.length*category.length];
-                OracleClient client = new OracleClient();
-                for(int i=0;i<category.length;i++){
-                    for(int j=0;j<time.length;j++){
-                        WordFrequencyR resp = client.getTrigramFrequency(value1,value2,value3, time[j],category[i]);
-                        freqArr[i*time.length+j] = resp;
+            } else if (category != null && time != null && value1 != null && value2 != null && value3 != null) {
+                WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < time.length; j++) {
+                        WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, time[j], category[i]);
+                        freqArr[i * time.length + j] = resp;
                     }
                 }
                 return Response.status(200).entity(freqArr).build();
-            }else{
+            } else {
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
 
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
@@ -483,40 +529,57 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentWords(FrequentWord frqWord) {
 
-        String[] category=frqWord.getCategory();
+        String[] category = frqWord.getCategory();
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
 
+        try {
+            if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR resp = client.getFrequentWords(amount);
+                FrequentWordR[] freqArr = {resp};
+                return Response.status(200).entity(freqArr).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[year.length];
+                for (int i = 0; i < year.length; i++) {
+                    freqArr[i] = client.getFrequentWords(year[i], amount);
+                }
+                return Response.status(200).entity(freqArr).build();
 
-        if(category==null && year==null){
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length];
+                for (int i = 0; i < category.length; i++) {
+                    freqArr[i] = client.getFrequentWords(category[i], amount);
+                }
+                return Response.status(200).entity(freqArr).build();
 
+            } else if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        freqArr[i * year.length + j] = client.getFrequentWords(year[j], category[i], amount);
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
 
-        }else if(category==null && year!=null){
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
 
-        }else if(category!=null && year==null){
-
-        }else if(category!=null && year!=null){
-
-        }else{
-            return Response.status(500).entity("Invalid input parameters").build();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
         }
 
-
-//
-//        FrequentWordR freqWordR1 = new FrequentWordR();
-//        freqWordR1.setValue1("value 1");
-//        freqWordR1.setFrequency(10);
-//        freqWordR1.setCategory("Cat 1");
-//        freqWordR1.setTime(2011);
-//
-//        FrequentWordR freqWordR2 = new FrequentWordR();
-//        freqWordR2.setValue1("value 2");
-//        freqWordR2.setFrequency(11);
-//        freqWordR2.setCategory("Cat 2");
-//        freqWordR2.setTime(2012);
-//
-//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(null).build();
     }
 
     @POST
@@ -524,47 +587,112 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentBigrams(FrequentWord frqWord) {
 
-//        FrequentWordR freqWordR1 = new FrequentWordR();
-//        freqWordR1.setValue1("value 1");
-//        freqWordR1.setValue1("value 11");
-//        freqWordR1.setFrequency(10);
-//        freqWordR1.setCategory("Cat 1");
-//        freqWordR1.setTime(2011);
-//
-//        FrequentWordR freqWordR2 = new FrequentWordR();
-//        freqWordR2.setValue1("value 2");
-//        freqWordR1.setValue1("value 22");
-//        freqWordR2.setFrequency(11);
-//        freqWordR2.setCategory("Cat 2");
-//        freqWordR2.setTime(2012);
+        String[] category = frqWord.getCategory();
+        int year[] = frqWord.getTime();
+        int amount = frqWord.getAmount();
 
-//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(null).build();
+        try {
+            if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR resp = client.getFrequentBigrams(amount);
+                FrequentWordR[] freqArr = {resp};
+                return Response.status(200).entity(freqArr).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[year.length];
+                for (int i = 0; i < year.length; i++) {
+                    freqArr[i] = client.getFrequentBigrams(year[i], amount);
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length];
+                for (int i = 0; i < category.length; i++) {
+                    freqArr[i] = client.getFrequentBigrams(category[i], amount);
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            } else if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        freqArr[i * year.length + j] = client.getFrequentBigrams(year[j], category[i], amount);
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
     @POST
     @Path("/frequentTrigrams")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentTrigrams(FrequentWord frqWord) {
+        String[] category = frqWord.getCategory();
+        int year[] = frqWord.getTime();
+        int amount = frqWord.getAmount();
 
-//        FrequentWordR freqWordR1 = new FrequentWordR();
-//        freqWordR1.setValue1("value 1");
-//        freqWordR1.setValue1("value 11");
-//        freqWordR1.setValue1("value 111");
-//        freqWordR1.setFrequency(10);
-//        freqWordR1.setCategory("Cat 1");
-//        freqWordR1.setTime(2011);
-//
-//        FrequentWordR freqWordR2 = new FrequentWordR();
-//        freqWordR2.setValue1("value 2");
-//        freqWordR1.setValue1("value 22");
-//        freqWordR1.setValue1("value 222");
-//        freqWordR2.setFrequency(11);
-//        freqWordR2.setCategory("Cat 2");
-//        freqWordR2.setTime(2012);
+        try {
+            if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR resp = client.getFrequentTrigrams(amount);
+                FrequentWordR[] freqArr = {resp};
+                return Response.status(200).entity(freqArr).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[year.length];
+                for (int i = 0; i < year.length; i++) {
+                    freqArr[i] = client.getFrequentTrigrams(year[i], amount);
+                }
+                return Response.status(200).entity(freqArr).build();
 
-//        FrequentWordR frequentWordArr[] = {freqWordR1, freqWordR2};
-        return Response.status(200).entity(null).build();
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length];
+                for (int i = 0; i < category.length; i++) {
+                    freqArr[i] = client.getFrequentTrigrams(category[i], amount);
+                }
+                return Response.status(200).entity(freqArr).build();
+
+            } else if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        freqArr[i * year.length + j] = client.getFrequentTrigrams(year[j], category[i], amount);
+                    }
+                }
+                return Response.status(200).entity(freqArr).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
 
@@ -573,39 +701,53 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response latestArticlesForWord(ArticlesForWord articlesForWord) {
 
-        ArticleR articleR1 = new ArticleR();
-        articleR1.setAuthor("Author 1");
-        articleR1.setDay(10);
-        articleR1.setMonth(1);
-        articleR1.setYear(2012);
-        articleR1.setLink("Link 1");
-        articleR1.setTitle("Title 1");
-        articleR1.setCategory("Cat 1");
+        int amount = articlesForWord.getAmount();
+        String category[] = articlesForWord.getCategory();
+        int year[] = articlesForWord.getTime();
+        String value = articlesForWord.getValue();
+        try {
+            if (category != null && year != null && value != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        articlesForWordRs[i * year.length + j] = client.getLatestArticlesForWord(value, year[j], category[i], amount);
+                    }
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category == null && year != null && value != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < year.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForWord(value, year[i], amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category != null && year == null && value != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForWord(value, category[i], amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category == null && year == null && value != null) {
 
-        ArticleR articleR2 = new ArticleR();
-        articleR2.setAuthor("Author 2");
-        articleR2.setDay(11);
-        articleR2.setMonth(2);
-        articleR2.setYear(2013);
-        articleR2.setLink("Link 2");
-        articleR2.setTitle("Title 2");
-        articleR2.setCategory("Cat 2");
+                CorpusDBClient client = new OracleClient();
+                ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForWord(value, amount)};
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
 
-        ArticleR[] articles = {articleR1, articleR2};
-
-        ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
-        articlesForWordR1.setTime(2012);
-        articlesForWordR1.setCategory("Cat 1");
-        articlesForWordR1.setArticles(articles);
-
-        ArticlesForWordR articlesForWordR2 = new ArticlesForWordR();
-        articlesForWordR2.setTime(2013);
-        articlesForWordR2.setCategory("Cat 3");
-        articlesForWordR2.setArticles(articles);
-
-        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
-
-        return Response.status(200).entity(arr).build();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
     @POST
@@ -613,39 +755,54 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response latestArticlesForBigram(ArticlesForBigram articlesForBigram) {
 
-        ArticleR articleR1 = new ArticleR();
-        articleR1.setAuthor("Author 1");
-        articleR1.setDay(10);
-        articleR1.setMonth(1);
-        articleR1.setYear(2012);
-        articleR1.setLink("Link 1");
-        articleR1.setTitle("Title 1");
-        articleR1.setCategory("Cat 1");
+        int amount = articlesForBigram.getAmount();
+        String category[] = articlesForBigram.getCategory();
+        int year[] = articlesForBigram.getTime();
+        String value1 = articlesForBigram.getValue1();
+        String value2 = articlesForBigram.getValue2();
+        try {
+            if (category != null && year != null && value1 != null && value2 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        articlesForWordRs[i * year.length + j] = client.getLatestArticlesForBigram(value1, value2, year[j], category[i], amount);
+                    }
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category == null && year != null && value1 != null && value2 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < year.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForBigram(value1, value2, year[i], amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category != null && year == null && value1 != null && value2 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForBigram(value1, value2, category[i], amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category == null && year == null && value1 != null && value2 != null) {
 
-        ArticleR articleR2 = new ArticleR();
-        articleR2.setAuthor("Author 2");
-        articleR2.setDay(11);
-        articleR2.setMonth(2);
-        articleR2.setYear(2013);
-        articleR2.setLink("Link 2");
-        articleR2.setTitle("Title 2");
-        articleR2.setCategory("Cat 2");
+                CorpusDBClient client = new OracleClient();
+                ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForBigram(value1, value2, amount)};
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
 
-        ArticleR[] articles = {articleR1, articleR2};
-
-        ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
-        articlesForWordR1.setTime(2012);
-        articlesForWordR1.setCategory("Cat 1");
-        articlesForWordR1.setArticles(articles);
-
-        ArticlesForWordR articlesForWordR2 = new ArticlesForWordR();
-        articlesForWordR2.setTime(2013);
-        articlesForWordR2.setCategory("Cat 3");
-        articlesForWordR2.setArticles(articles);
-
-        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
-
-        return Response.status(200).entity(arr).build();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
     @POST
@@ -653,39 +810,55 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response latestArticlesForTrigram(ArticlesForTrigram articlesForTrigram) {
 
-        ArticleR articleR1 = new ArticleR();
-        articleR1.setAuthor("Author 1");
-        articleR1.setDay(10);
-        articleR1.setMonth(1);
-        articleR1.setYear(2012);
-        articleR1.setLink("Link 1");
-        articleR1.setTitle("Title 1");
-        articleR1.setCategory("Cat 1");
+        int amount = articlesForTrigram.getAmount();
+        String category[] = articlesForTrigram.getCategory();
+        int year[] = articlesForTrigram.getTime();
+        String value1 = articlesForTrigram.getValue1();
+        String value2 = articlesForTrigram.getValue2();
+        String value3 = articlesForTrigram.getValue3();
+        try {
+            if (category != null && year != null && value1 != null && value2 != null && value3 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        articlesForWordRs[i * year.length + j] = client.getLatestArticlesForTrigram(value1, value2, value3, year[j], category[i], amount);
+                    }
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category == null && year != null && value1 != null && value2 != null && value3 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < year.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1, value2, value3, year[i], amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category != null && year == null && value1 != null && value2 != null && value3 != null) {
+                ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1, value2, value3, category[i], amount);
+                }
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else if (category == null && year == null && value1 != null && value2 != null && value3 != null) {
 
-        ArticleR articleR2 = new ArticleR();
-        articleR2.setAuthor("Author 2");
-        articleR2.setDay(11);
-        articleR2.setMonth(2);
-        articleR2.setYear(2013);
-        articleR2.setLink("Link 2");
-        articleR2.setTitle("Title 2");
-        articleR2.setCategory("Cat 2");
+                CorpusDBClient client = new OracleClient();
+                ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForTrigram(value1, value2, value3, amount)};
+                return Response.status(200).entity(articlesForWordRs).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
 
-        ArticleR[] articles = {articleR1, articleR2};
-
-        ArticlesForWordR articlesForWordR1 = new ArticlesForWordR();
-        articlesForWordR1.setTime(2012);
-        articlesForWordR1.setCategory("Cat 1");
-        articlesForWordR1.setArticles(articles);
-
-        ArticlesForWordR articlesForWordR2 = new ArticlesForWordR();
-        articlesForWordR2.setTime(2013);
-        articlesForWordR2.setCategory("Cat 3");
-        articlesForWordR2.setArticles(articles);
-
-        ArticlesForWordR[] arr = {articlesForWordR1, articlesForWordR2};
-
-        return Response.status(200).entity(arr).build();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
     //FrequentWordsAroundWord
@@ -694,29 +867,60 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentWordsAroundWord(FrequentWordsAroundWord frqWords) {
 
-        WordR wordR1 = new WordR();
-        wordR1.setFrequency(10);
-        wordR1.setValue("val 1");
 
-        WordR wordR2 = new WordR();
-        wordR2.setFrequency(14);
-        wordR2.setValue("val 2");
+        String value = frqWords.getValue();
+        int[] year = frqWords.getTime();
+        String[] category = frqWords.getCategory();
+        int amount = frqWords.getAmount();
+        int range = frqWords.getRange();
 
-        WordR words[] = {wordR1, wordR2};
+        try {
+            if (category != null && year != null && value != null) {
+                FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[category.length * year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        frequentWordsAroundWords[i * year.length + j] = client.getFrequentWordsAroundWord(value, category[i], year[j], range, amount);
+                    }
+                }
+                return Response.status(200).entity(frequentWordsAroundWords).build();
+            } else if (category == null && year != null && value != null) {
+                FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int j = 0; j < year.length; j++) {
+                    frequentWordsAroundWords[j] = client.getFrequentWordsAroundWord(value, year[j], range, amount);
+                }
+                return Response.status(200).entity(frequentWordsAroundWords).build();
 
-        FrequentWordsAroundWordR frequentWordsAroundWordR1 = new FrequentWordsAroundWordR();
-        frequentWordsAroundWordR1.setCategory("cat 1");
-        frequentWordsAroundWordR1.setTime(2012);
-        frequentWordsAroundWordR1.setWords(words);
+            } else if (category != null && year == null && value != null) {
+                FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    frequentWordsAroundWords[i] = client.getFrequentWordsAroundWord(value, category[i], range, amount);
+                }
+                return Response.status(200).entity(frequentWordsAroundWords).build();
+            } else if (category == null && year == null && value != null) {
 
-        FrequentWordsAroundWordR frequentWordsAroundWordR2 = new FrequentWordsAroundWordR();
-        frequentWordsAroundWordR2.setCategory("cat 2");
-        frequentWordsAroundWordR2.setTime(2013);
-        frequentWordsAroundWordR2.setWords(words);
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAroundWordR[] frequentWordsAroundWords = {client.getFrequentWordsAroundWord(value, range, amount)};
+                return Response.status(200).entity(frequentWordsAroundWords).build();
 
-        FrequentWordsAroundWordR[] arr = {frequentWordsAroundWordR1, frequentWordsAroundWordR2};
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
 
-        return Response.status(200).entity(arr).build();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+
     }
 
 
@@ -725,32 +929,326 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response frequentWordsInPosition(WordPosition position) {
 
-        WordR wordR1 = new WordR();
-        wordR1.setFrequency(10);
-        wordR1.setValue("val 1");
 
-        WordR wordR2 = new WordR();
-        wordR2.setFrequency(14);
-        wordR2.setValue("val 2");
+        int[] year = position.getTime();
+        String[] category = position.getCategory();
+        int amount = position.getAmount();
+        int pos = position.getPosition();
 
-        WordR words[] = {wordR1, wordR2};
 
-        WordPositionR wordPositionR1 = new WordPositionR();
-        wordPositionR1.setCategory("cat 1");
-        wordPositionR1.setTime(2010);
-        wordPositionR1.setWords(words);
+        try {
+            if (category != null && year != null) {
+                WordPositionR[] wordPositions = new WordPositionR[category.length * year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        if (pos > 0) {
+                            wordPositions[i * year.length + j] = client.getFrequentWordsInPosition(pos, year[j], category[i], amount);
+                        } else {
+                            wordPositions[i * year.length + j] = client.getFrequentWordsInPositionReverse(-pos, year[j], category[i], amount);
+                        }
+                    }
+                }
+                return Response.status(200).entity(wordPositions).build();
+            } else if (category == null && year != null) {
+                WordPositionR[] wordPositions = new WordPositionR[year.length];
+                CorpusDBClient client = new OracleClient();
+                for (int j = 0; j < year.length; j++) {
+                    if (pos > 0) {
+                        wordPositions[j] = client.getFrequentWordsInPosition(pos, year[j], amount);
+                    } else {
+                        wordPositions[j] = client.getFrequentWordsInPositionReverse(-pos, year[j], amount);
+                    }
+                }
+                return Response.status(200).entity(wordPositions).build();
 
-        WordPositionR wordPositionR2 = new WordPositionR();
-        wordPositionR2.setCategory("cat 2");
-        wordPositionR2.setTime(2011);
-        wordPositionR2.setWords(words);
+            } else if (category != null && year == null) {
+                WordPositionR[] wordPositions = new WordPositionR[category.length];
+                CorpusDBClient client = new OracleClient();
+                for (int i = 0; i < category.length; i++) {
+                    if (pos > 0) {
+                        wordPositions[i] = client.getFrequentWordsInPosition(pos, category[i], amount);
+                    } else {
+                        wordPositions[i] = client.getFrequentWordsInPositionReverse(-pos, category[i], amount);
+                    }
+                }
+                return Response.status(200).entity(wordPositions).build();
+            } else if (category == null && year == null) {
 
-        WordPositionR[] arr = {wordPositionR1, wordPositionR2};
-        //OracleClient.getDBConnection();
-        System.out.println("Got db Connection");
-        return Response.status(200).entity(arr).build();
+                CorpusDBClient client = new OracleClient();
+                if (pos > 0) {
+                    WordPositionR[] wordPositions = {client.getFrequentWordsInPosition(pos, amount)};
+                    return Response.status(200).entity(wordPositions).build();
+                } else {
+                    WordPositionR[] wordPositions = {client.getFrequentWordsInPositionReverse(-pos, amount)};
+                    return Response.status(200).entity(wordPositions).build();
+                }
+
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
     }
 
+
+    @POST
+    @Path("/frequentWordsAfterWordTimeRange")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response frequentWordsAfterWordTimeRange(FrequentWordsAfterWord freqWord) {
+        int time[] = freqWord.getTime();
+        String category[] = freqWord.getCategory();
+        int amount = freqWord.getAmount();
+        String word = freqWord.getValue();
+
+        try {
+            if (time != null && time.length == 2 && category != null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAfterWordR[] resp = new FrequentWordsAfterWordR[category.length];
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getFrequentWordsAfterWordTimeRange(word, category[i], time[0], time[1], amount);
+                }
+                return Response.status(200).entity(resp).build();
+            } else if (time != null && time.length == 2 && category == null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterWordTimeRange(word, time[0], time[1], amount)};
+                return Response.status(200).entity(resp).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+
+    }
+
+    @POST
+    @Path("/frequentWordsAfterBigramTimeRange")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response frequentWordsAfterBigramTimeRange(FrequentWordsAfterBigram freqWord) {
+        int time[] = freqWord.getTime();
+        String category[] = freqWord.getCategory();
+        int amount = freqWord.getAmount();
+        String word1 = freqWord.getValue1();
+        String word2 = freqWord.getValue2();
+
+        try {
+            if (time != null && time.length == 2 && category != null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAfterWordR[] resp = new FrequentWordsAfterWordR[category.length];
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getFrequentWordsAfterBigramTimeRange(word1, word2, category[i], time[0], time[1], amount);
+                }
+                return Response.status(200).entity(resp).build();
+            } else if (time != null && time.length == 2 && category == null) {
+                CorpusDBClient client = new OracleClient();
+                FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterBigramTimeRange(word1, word2, time[0], time[1], amount)};
+                return Response.status(200).entity(resp).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+
+    }
+
+    @POST
+    @Path("/wordCount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response wordCount(WordCount wordCount) {
+        String category[] = wordCount.getCategory();
+        int year[] = wordCount.getTime();
+
+        try {
+            if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length * year.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        resp[i * year.length + j] = client.getWordCount(category[i], year[j]);
+                    }
+                }
+                return Response.status(200).entity(resp).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[year.length];
+                for (int j = 0; j < year.length; j++) {
+                    resp[j] = client.getWordCount(year[j]);
+                }
+
+                return Response.status(200).entity(resp).build();
+
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getWordCount(category[i]);
+                }
+                return Response.status(200).entity(resp).build();
+
+            } else if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = {client.getWordCount()};
+                return Response.status(200).entity(resp).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+    }
+
+
+    @POST
+    @Path("/bigramCount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response bigramCount(WordCount wordCount) {
+        String category[] = wordCount.getCategory();
+        int year[] = wordCount.getTime();
+
+        try {
+            if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length * year.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        resp[i * year.length + j] = client.getBigramCount(category[i], year[j]);
+                    }
+                }
+                return Response.status(200).entity(resp).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[year.length];
+                for (int j = 0; j < year.length; j++) {
+                    resp[j] = client.getBigramCount(year[j]);
+                }
+
+                return Response.status(200).entity(resp).build();
+
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getBigramCount(category[i]);
+                }
+                return Response.status(200).entity(resp).build();
+
+            } else if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = {client.getBigramCount()};
+                return Response.status(200).entity(resp).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+    }
+
+    @POST
+    @Path("/trigramCount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response trigramCount(WordCount wordCount) {
+        String category[] = wordCount.getCategory();
+        int year[] = wordCount.getTime();
+
+        try {
+            if (category != null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length * year.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    for (int j = 0; j < year.length; j++) {
+                        resp[i * year.length + j] = client.getTrigramCount(category[i], year[j]);
+                    }
+                }
+                return Response.status(200).entity(resp).build();
+            } else if (category == null && year != null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[year.length];
+                for (int j = 0; j < year.length; j++) {
+                    resp[j] = client.getTrigramCount(year[j]);
+                }
+
+                return Response.status(200).entity(resp).build();
+
+            } else if (category != null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = new WordCountR[category.length];
+
+                for (int i = 0; i < category.length; i++) {
+                    resp[i] = client.getTrigramCount(category[i]);
+                }
+                return Response.status(200).entity(resp).build();
+
+            } else if (category == null && year == null) {
+                CorpusDBClient client = new OracleClient();
+                WordCountR resp[] = {client.getTrigramCount()};
+                return Response.status(200).entity(resp).build();
+            } else {
+                return Response.status(500).entity("Invalid input parameters").build();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(500).entity(ex.getMessage()).build();
+        }
+    }
 
 }
 
