@@ -26,6 +26,12 @@ public class CassandraClient {
 	
 
 	
+	
+	public CassandraClient(String node) {
+		 this.connect(node);
+		}
+
+
 	public void connect(String node) {
 	      cluster = Cluster.builder()
 	            .addContactPoint(node).build();
