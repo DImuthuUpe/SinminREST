@@ -2,6 +2,7 @@ package com.sinmin.rest;
 
 import com.sinmin.rest.beans.request.*;
 import com.sinmin.rest.beans.response.*;
+import com.sinmin.rest.cassandra.CassandraClient;
 import com.sinmin.rest.oracle.OracleClient;
 import oracle.jdbc.OracleCallableStatement;
 
@@ -333,10 +334,10 @@ public class API {
         int time[] = wordF.getTime();
         String category[] = wordF.getCategory();
         try {
-
+            CorpusDBClient client = new CassandraClient("192.248.15.239");
             if (time == null && category == null && value != null) {
 
-                CorpusDBClient client = new OracleClient();
+
                 WordFrequencyR resp = client.getWordFrequency(value);
                 WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -344,7 +345,6 @@ public class API {
             } else if (time == null && category != null && value != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     WordFrequencyR resp = client.getWordFrequency(value, category[i]);
                     freqArr[i] = resp;
@@ -354,7 +354,6 @@ public class API {
             } else if (category == null && time != null && value != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getWordFrequency(value, time[i]);
                     freqArr[i] = resp;
@@ -363,7 +362,6 @@ public class API {
 
             } else if (category != null && time != null && value != null) {
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < time.length; j++) {
                         WordFrequencyR resp = client.getWordFrequency(value, time[j], category[i]);
