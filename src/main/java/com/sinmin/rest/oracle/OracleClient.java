@@ -1771,6 +1771,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory(category);
         resp.setYear(year);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1787,6 +1789,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory(category);
         resp.setYear(0);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1803,6 +1807,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory("all");
         resp.setYear(year);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1819,6 +1825,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory("all");
         resp.setYear(0);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1838,6 +1846,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory(category);
         resp.setYear(year);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1854,6 +1864,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory(category);
         resp.setYear(0);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1870,6 +1882,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory("all");
         resp.setYear(year);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1886,6 +1900,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory("all");
         resp.setYear(0);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1904,6 +1920,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory(category);
         resp.setYear(year);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1920,6 +1938,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory(category);
         resp.setYear(0);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1936,6 +1956,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory("all");
         resp.setYear(year);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
@@ -1952,6 +1974,8 @@ public class OracleClient implements CorpusDBClient{
         }
         resp.setCategory("all");
         resp.setYear(0);
+        rst.close();
+        stmt.close();
         return resp;
     }
 
