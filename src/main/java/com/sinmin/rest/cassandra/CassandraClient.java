@@ -26,7 +26,7 @@ public class CassandraClient implements CorpusDBClient{
 	
 	public CassandraClient(String node) {
 		 this.connect(node);
-		}
+	}
 
 
 	public void connect(String node) {
