@@ -46,7 +46,7 @@ public class CassandraClient implements CorpusDBClient{
 	public WordFrequencyR getWordFrequency(String word,int year, String category){
 		PreparedStatement query = session.prepare(
 				"select frequency from corpus.word_time_category_frequency WHERE word=? AND year=? AND category=?");
-		ResultSet results = session.execute(query.bind(word,year,category));
+		ResultSet results = session.execute(query.bind(word,year,category.charAt(0)));
 		WordFrequencyR endObject = new  WordFrequencyR();
 		endObject.setCategory(category);
 		endObject.setDate(year);
@@ -80,7 +80,7 @@ public class CassandraClient implements CorpusDBClient{
 	public WordFrequencyR getWordFrequency(String word, String category){
 		PreparedStatement query = session.prepare(
 				"select frequency from corpus.word_category_frequency WHERE word=? AND category=?");
-		ResultSet results = session.execute(query.bind(word,category));
+		ResultSet results = session.execute(query.bind(word,category.charAt(0)));
 		WordFrequencyR endObject = new  WordFrequencyR();
 		endObject.setCategory(category);
 		endObject.setDate(0);
@@ -114,7 +114,7 @@ public class CassandraClient implements CorpusDBClient{
 		System.out.println("getBigramFrequency(String word1, String word2,int year, String category)");
 		PreparedStatement query = session.prepare(
 				"select frequency from corpus.bigram_time_category_frequency WHERE word1=? AND word2=? AND year=? AND category=?");
-		ResultSet results = session.execute(query.bind(word1,word2,year,category));
+		ResultSet results = session.execute(query.bind(word1,word2,year,category.charAt(0)));
 		
 		WordFrequencyR endObject = new  WordFrequencyR();
 		endObject.setCategory(category);
@@ -150,7 +150,7 @@ public class CassandraClient implements CorpusDBClient{
 		System.out.println("getBigramFrequency(String word1, String word2,String category)");
 		PreparedStatement query = session.prepare(
 				"select frequency from corpus.bigram_category_frequency WHERE word1=? AND word2=? AND category=?");
-		ResultSet results = session.execute(query.bind(word1,word2,category));
+		ResultSet results = session.execute(query.bind(word1,word2,category.charAt(0)));
 		
 		WordFrequencyR endObject = new  WordFrequencyR();
 		endObject.setCategory(category);
@@ -188,7 +188,7 @@ public class CassandraClient implements CorpusDBClient{
 		System.out.println("getTrigramFrequency(String word1, String word2,String word3,int year, String category)");
 		PreparedStatement query = session.prepare(
 				"select frequency from corpus.trigram_time_category_frequency WHERE word1=? AND word2=? AND word3=? AND year=? AND category=?");
-		ResultSet results = session.execute(query.bind(word1,word2,word3,year,category));
+		ResultSet results = session.execute(query.bind(word1,word2,word3,year,category.charAt(0)));
 		
 		WordFrequencyR endObject = new  WordFrequencyR();
 		endObject.setCategory(category);
@@ -224,7 +224,7 @@ public class CassandraClient implements CorpusDBClient{
 		System.out.println("getTrigramFrequency(String word1, String word2,String word3,String category)");
 		PreparedStatement query = session.prepare(
 				"select frequency from corpus.trigram_category_frequency WHERE word1=? AND word2=? AND word3=? AND category=?");
-		ResultSet results = session.execute(query.bind(word1,word2,word3,category));
+		ResultSet results = session.execute(query.bind(word1,word2,word3,category.charAt(0)));
 		
 		WordFrequencyR endObject = new  WordFrequencyR();
 		endObject.setCategory(category);
@@ -261,7 +261,7 @@ public class CassandraClient implements CorpusDBClient{
 	public FrequentWordR getFrequentWords(int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_time_category_ordered_frequency WHERE year=? and category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(year,category,amount));
+		ResultSet results = session.execute(query.bind(year,category.charAt(0),amount));
 		
 		WordR[] val1 = new WordR[amount];
         FrequentWordR resp = new FrequentWordR();
@@ -315,7 +315,7 @@ public class CassandraClient implements CorpusDBClient{
 	public FrequentWordR getFrequentWords(String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_category_ordered_frequency WHERE category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(category,amount));
+		ResultSet results = session.execute(query.bind(category.charAt(0),amount));
 
         WordR[] val1 = new WordR[amount];
         FrequentWordR resp = new FrequentWordR();
@@ -371,7 +371,7 @@ public class CassandraClient implements CorpusDBClient{
 	public FrequentWordR getFrequentBigrams(int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_time_category_ordered_frequency WHERE year=? and category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(year,category,amount));
+		ResultSet results = session.execute(query.bind(year,category.charAt(0),amount));
 
         WordR[] val1 = new WordR[amount];
         WordR[] val2 = new WordR[amount];
@@ -431,7 +431,7 @@ public class CassandraClient implements CorpusDBClient{
 	public FrequentWordR getFrequentBigrams(String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_category_ordered_frequency WHERE category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(category,amount));
+		ResultSet results = session.execute(query.bind(category.charAt(0),amount));
 
         WordR[] val1 = new WordR[amount];
         WordR[] val2 = new WordR[amount];
@@ -493,7 +493,7 @@ public class CassandraClient implements CorpusDBClient{
 	public FrequentWordR getFrequentTrigrams(int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_time_category_ordered_frequency WHERE year=? and category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(year,category,amount));
+		ResultSet results = session.execute(query.bind(year,category.charAt(0),amount));
 
         WordR[] val1 = new WordR[amount];
         WordR[] val2 = new WordR[amount];
@@ -563,7 +563,7 @@ public class CassandraClient implements CorpusDBClient{
 	public FrequentWordR getFrequentTrigrams(String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_category_ordered_frequency WHERE category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(category,amount));
+		ResultSet results = session.execute(query.bind(category.charAt(0),amount));
 
         WordR[] val1 = new WordR[amount];
         WordR[] val2 = new WordR[amount];
@@ -636,7 +636,7 @@ public class CassandraClient implements CorpusDBClient{
 	public ArticlesForWordR getLatestArticlesForWord(String word,int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_year_category_usage WHERE word=? AND year=? AND category =? order by date DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(word,year,category,amount));
+		ResultSet results = session.execute(query.bind(word,year,category.charAt(0),amount));
 		
 		ArticleR[] array = new ArticleR[amount];
 		int i=0;
@@ -706,7 +706,7 @@ public class CassandraClient implements CorpusDBClient{
 	public ArticlesForWordR getLatestArticlesForWord(String word,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_category_usage WHERE word=? AND category =? order by date DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(word,category,amount));
+		ResultSet results = session.execute(query.bind(word,category.charAt(0),amount));
 		
 		ArticleR[] array = new ArticleR[amount];
 		int i=0;
@@ -780,7 +780,7 @@ public class CassandraClient implements CorpusDBClient{
 	public ArticlesForWordR getLatestArticlesForBigram(String word1, String word2,int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_year_category_usage WHERE word1=? AND word2=? AND year=? AND category =? order by date DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(word1,word2,year,category,amount));
+		ResultSet results = session.execute(query.bind(word1,word2,year,category.charAt(0),amount));
 		
 		ArticleR[] array = new ArticleR[amount];
 		int i=0;
@@ -852,7 +852,7 @@ public class CassandraClient implements CorpusDBClient{
 	public ArticlesForWordR getLatestArticlesForBigram(String word1,String word2,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.bigram_category_usage WHERE word1=? AND word2=? AND category =? order by date DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(word1,word2,category,amount));
+		ResultSet results = session.execute(query.bind(word1,word2,category.charAt(0),amount));
 		
 		ArticleR[] array = new ArticleR[amount];
 		int i=0;
@@ -926,7 +926,7 @@ public class CassandraClient implements CorpusDBClient{
 	public ArticlesForWordR getLatestArticlesForTrigram(String word1, String word2,String word3, int year, String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_year_category_usage WHERE word1=? AND word2=? AND word3=? AND year=? AND category =? order by date DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(word1,word2,word3,year,category,amount));
+		ResultSet results = session.execute(query.bind(word1,word2,word3,year,category.charAt(0),amount));
 		
 		ArticleR[] array = new ArticleR[amount];
 		int i=0;
@@ -998,7 +998,7 @@ public class CassandraClient implements CorpusDBClient{
 	public ArticlesForWordR getLatestArticlesForTrigram(String word1,String word2,String word3,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.trigram_category_usage WHERE word1=? AND word2=? AND word3=? AND category =? order by date DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(word1,word2,word3,category,amount));
+		ResultSet results = session.execute(query.bind(word1,word2,word3,category.charAt(0),amount));
 		
 		ArticleR[] array = new ArticleR[amount];
 		int i=0;
@@ -1072,7 +1072,7 @@ public class CassandraClient implements CorpusDBClient{
 	public WordPositionR getFrequentWordsInPosition(int position,int year,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_pos_year_category_frequency WHERE position=? AND year=? AND category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(position,year, category,amount));
+		ResultSet results = session.execute(query.bind(position,year, category.charAt(0),amount));
 		WordPositionR out = new WordPositionR();
 		out.setCategory(category);
 		out.setTime(year);
@@ -1094,7 +1094,7 @@ public class CassandraClient implements CorpusDBClient{
 	public WordPositionR getFrequentWordsInPositionReverse(int position,int year,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_inv_pos_year_category_frequency WHERE inv_position=? AND year=? AND category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(position,year, category,amount));
+		ResultSet results = session.execute(query.bind(position,year, category.charAt(0),amount));
 		
 		WordPositionR out = new WordPositionR();
 		out.setCategory(category);
@@ -1165,7 +1165,7 @@ public class CassandraClient implements CorpusDBClient{
 	public WordPositionR getFrequentWordsInPosition(int position,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_pos_category_frequency WHERE position=? AND category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(position, category,amount));
+		ResultSet results = session.execute(query.bind(position, category.charAt(0),amount));
 		
 		WordPositionR out = new WordPositionR();
 		out.setCategory(category);
@@ -1188,7 +1188,7 @@ public class CassandraClient implements CorpusDBClient{
 	public WordPositionR getFrequentWordsInPositionReverse(int position,String category,int amount){
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_inv_pos_category_frequency WHERE inv_position=? AND category=? order by frequency DESC LIMIT ?");
-		ResultSet results = session.execute(query.bind(position,category,amount));
+		ResultSet results = session.execute(query.bind(position,category.charAt(0),amount));
 		
 		WordPositionR out = new WordPositionR();
 		out.setCategory(category);
