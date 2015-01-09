@@ -5,10 +5,7 @@ import com.sinmin.rest.beans.request.WordPosition;
 import com.sinmin.rest.beans.response.*;
 import oracle.jdbc.OracleCallableStatement;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,10 +39,14 @@ public class OracleClient implements CorpusDBClient{
         return dbConnection;
     }
 
+    public static void setDbConnection(Connection dbConnection) {
+        OracleClient.dbConnection = dbConnection;
+    }
+
     public WordFrequencyR getWordFrequency(String word_value) throws SQLException, ClassNotFoundException {
         getDBConnection();
         String sql = "select count(sw.sentence_id) from word w, sentence_word sw where w.VAL='" + word_value + "' and sw.word_id=w.id";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt =  dbConnection.prepareCall(sql);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
         while (rst.next()) {
@@ -63,7 +64,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getWordFrequency(String word_value, int time) throws SQLException, ClassNotFoundException {
         getDBConnection();
         String sql = "select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='" + word_value + "' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.year=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, time);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
@@ -82,7 +83,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getWordFrequency(String word_value, String category) throws SQLException, ClassNotFoundException {
         getDBConnection();
         String sql = "select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='" + word_value + "' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1, category);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
@@ -102,7 +103,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getWordFrequency(String word_value, int time, String category) throws SQLException, ClassNotFoundException {
         getDBConnection();
         String sql = "select count(sw.sentence_id) from word w, sentence_word sw, sentence s, article a where w.VAL='" + word_value + "' and sw.word_id=w.id and s.id=sw.SENTENCE_ID and a.id = s.ARTICLE_ID and a.category=? and a.year=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1, category);
         stmt.setInt(2, time);
         ResultSet rst = stmt.executeQuery();
@@ -123,7 +124,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getBigramFrequency(String word1, String word2,int year, String category) throws SQLException, ClassNotFoundException{
         getDBConnection();
         String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.year=? and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2, category);
         ResultSet rst = stmt.executeQuery();
@@ -143,7 +144,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getBigramFrequency(String word1, String word2,int year) throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.year=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
@@ -162,7 +163,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getBigramFrequency(String word1, String word2,String category) throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1, category);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
@@ -181,7 +182,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getBigramFrequency(String word1, String word2) throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb where w1.val='"+word1+"' and w2.val='"+word2+"' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
         while (rst.next()) {
@@ -199,7 +200,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getTrigramFrequency(String word1, String word2,String word3,int year, String category)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id = s.article_id and a.year=? and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2, category);
         ResultSet rst = stmt.executeQuery();
@@ -219,7 +220,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getTrigramFrequency(String word1, String word2,String word3,int year)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id = s.article_id and a.year=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
@@ -238,7 +239,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getTrigramFrequency(String word1, String word2,String word3,String category)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st,sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id = s.article_id and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1, category);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
@@ -257,7 +258,7 @@ public class OracleClient implements CorpusDBClient{
     public WordFrequencyR getTrigramFrequency(String word1, String word2,String word3)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select count(st.sentence_id) from word w1,word w2,word w3, trigram t,sentence_trigram st where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and t.word1=w1.id and t.word2=w2.id and t.word3=w3.id and st.trigram_id=t.id";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         ResultSet rst = stmt.executeQuery();
         WordFrequencyR resp = new WordFrequencyR();
         while (rst.next()) {
@@ -276,7 +277,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w2.val,tot from(select sw.word_id,count(*) as tot from sentence_word sw, sentence s, article a where s.id=sw.sentence_id and a.id = s.article_id and a.year=? and a.category=? group by sw.word_id order by count(*) desc) res, word w2 where w2.id = res.word_id and rownum <=?";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2, category);
         stmt.setInt(3,amount);
@@ -307,7 +308,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w2.val,tot from(select sw.word_id,count(*) as tot from sentence_word sw, sentence s, article a where s.id=sw.sentence_id and a.id = s.article_id and a.year=? group by sw.word_id order by count(*) desc) res, word w2 where w2.id = res.word_id and rownum <=?";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         stmt.setInt(2,amount);
 
@@ -337,7 +338,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w2.val,tot from(select sw.word_id,count(*) as tot from sentence_word sw, sentence s, article a where s.id=sw.sentence_id and a.id = s.article_id and a.category=? group by sw.word_id order by count(*) desc) res, word w2 where w2.id = res.word_id and rownum <=?";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1, category);
         stmt.setInt(2,amount);
 
@@ -367,7 +368,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w2.val,tot from(select sw.word_id,count(*) as tot from sentence_word sw group by sw.word_id order by count(*) desc) res, word w2 where w2.id = res.word_id and rownum <=?";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt =  dbConnection.prepareCall(sql);
         stmt.setInt(1,amount);
 
         ResultSet rst = stmt.executeQuery();
@@ -398,7 +399,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w1.val,w2.val,res.tot from(select sb.bigram_id,count(*) as tot from sentence_bigram sb, sentence s, article a where s.id=sb.sentence_id and a.id = s.article_id and a.year=? and a.category=? group by sb.bigram_id order by count(*) desc) res, bigram b, word w1, word w2 where b.id=res.bigram_id and w1.id=b.word1 and w2.id=b.word2 and rownum <=?";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2, category);
         stmt.setInt(3,amount);
@@ -436,7 +437,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w1.val,w2.val,res.tot from(select sb.bigram_id,count(*) as tot from sentence_bigram sb, sentence s, article a where s.id=sb.sentence_id and a.id = s.article_id and a.year=? group by sb.bigram_id order by count(*) desc) res, bigram b, word w1, word w2 where b.id=res.bigram_id and w1.id=b.word1 and w2.id=b.word2 and rownum <=?";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         stmt.setInt(2,amount);
 
@@ -473,7 +474,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w1.val,w2.val,res.tot from(select sb.bigram_id,count(*) as tot from sentence_bigram sb, sentence s, article a where s.id=sb.sentence_id and a.id = s.article_id and a.category=? group by sb.bigram_id order by count(*) desc) res, bigram b, word w1, word w2 where b.id=res.bigram_id and w1.id=b.word1 and w2.id=b.word2 and rownum <=?";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1, category);
         stmt.setInt(2,amount);
 
@@ -510,7 +511,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w1.val,w2.val,res.tot from(select sb.bigram_id,count(*) as tot from sentence_bigram sb  group by sb.bigram_id order by count(*) desc) res, bigram b, word w1, word w2 where b.id=res.bigram_id and w1.id=b.word1 and w2.id=b.word2 and rownum <=?";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,amount);
 
         ResultSet rst = stmt.executeQuery();
@@ -548,7 +549,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w1.val,w2.val,w3.val,res.tot from(select st.trigram_id,count(*) as tot from sentence_trigram st, sentence s, article a where s.id=st.sentence_id and a.id = s.article_id and a.year=? and a.category=? group by st.trigram_id order by count(*) desc) res, trigram t, word w1, word w2, word w3 where t.id=res.trigram_id and w1.id=t.word1 and w2.id=t.word2 and w3.id=t.word3 and rownum <=?  ";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2, category);
         stmt.setInt(3,amount);
@@ -592,7 +593,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w1.val,w2.val,w3.val,res.tot from(select st.trigram_id,count(*) as tot from sentence_trigram st, sentence s, article a where s.id=st.sentence_id and a.id = s.article_id and a.year=? group by st.trigram_id order by count(*) desc) res, trigram t, word w1, word w2, word w3 where t.id=res.trigram_id and w1.id=t.word1 and w2.id=t.word2 and w3.id=t.word3 and rownum <=?  ";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setInt(2,amount);
 
@@ -635,7 +636,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w1.val,w2.val,w3.val,res.tot from(select st.trigram_id,count(*) as tot from sentence_trigram st, sentence s, article a where s.id=st.sentence_id and a.id = s.article_id and a.category=? group by st.trigram_id order by count(*) desc) res, trigram t, word w1, word w2, word w3 where t.id=res.trigram_id and w1.id=t.word1 and w2.id=t.word2 and w3.id=t.word3 and rownum <=?  ";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1, category);
         stmt.setInt(2,amount);
 
@@ -678,7 +679,7 @@ public class OracleClient implements CorpusDBClient{
         getDBConnection();
         String sql ="select w1.val,w2.val,w3.val,res.tot from(select st.trigram_id,count(*) as tot from sentence_trigram st group by st.trigram_id order by count(*) desc) res, trigram t, word w1, word w2, word w3 where t.id=res.trigram_id and w1.id=t.word1 and w2.id=t.word2 and w3.id=t.word3 and rownum <=?  ";
 
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,amount);
 
         ResultSet rst = stmt.executeQuery();
@@ -720,8 +721,8 @@ public class OracleClient implements CorpusDBClient{
 
     public ArticlesForWordR getLatestArticlesForWord(String word,int year, String category,int amount) throws SQLException,ClassNotFoundException{
         getDBConnection();
-        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.year=? and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        String sql = "select a.id as article_id, s.id as sentence_id,w.id as word_id,sw.position, w.val,a.category, a.topic, a.author, a.year,a.month,a.day from (select distinct s.id from (select resp.id as article_id from(select distinct * from (select a.id  from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.year=? and a.category=? order by a.year desc,a.month desc,a.day desc)) resp where rownum<=?) res, article a, sentence s, sentence_word sw, word w where a.id =res.article_id and s.article_id = a.id and sw.sentence_id = s.id and sw.word_id = w.id and w.val='"+word+"') res, sentence s, sentence_word sw, article a, word w where s.id = res.id and sw.sentence_id = s.id and a.id = s.article_id and w.id = sw.word_id order by a.year desc,a.month desc, a.day desc, sw.sentence_id, sw.position";
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2,category);
         stmt.setInt(3,amount);
@@ -767,8 +768,8 @@ public class OracleClient implements CorpusDBClient{
     public ArticlesForWordR getLatestArticlesForWord(String word,int year,int amount) throws SQLException,ClassNotFoundException{
 
         getDBConnection();
-        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.year=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        String sql = "select a.id as article_id, s.id as sentence_id,w.id as word_id,sw.position, w.val,a.category, a.topic, a.author, a.year,a.month,a.day from (select distinct s.id from (select resp.id as article_id from(select distinct * from (select a.id  from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.year=? order by a.year desc,a.month desc,a.day desc)) resp where rownum<=?) res, article a, sentence s, sentence_word sw, word w where a.id =res.article_id and s.article_id = a.id and sw.sentence_id = s.id and sw.word_id = w.id and w.val='"+word+"') res, sentence s, sentence_word sw, article a, word w where s.id = res.id and sw.sentence_id = s.id and a.id = s.article_id and w.id = sw.word_id order by a.year desc,a.month desc, a.day desc, sw.sentence_id, sw.position";
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
@@ -813,8 +814,8 @@ public class OracleClient implements CorpusDBClient{
     public ArticlesForWordR getLatestArticlesForWord(String word,String category,int amount)throws SQLException,ClassNotFoundException{
 
         getDBConnection();
-        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        String sql = "select a.id as article_id, s.id as sentence_id,w.id as word_id,sw.position, w.val,a.category, a.topic, a.author, a.year,a.month,a.day from (select distinct s.id from (select resp.id as article_id from(select distinct * from (select a.id  from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id and a.category=? order by a.year desc,a.month desc,a.day desc)) resp where rownum<=?) res, article a, sentence s, sentence_word sw, word w where a.id =res.article_id and s.article_id = a.id and sw.sentence_id = s.id and sw.word_id = w.id and w.val='"+word+"') res, sentence s, sentence_word sw, article a, word w where s.id = res.id and sw.sentence_id = s.id and a.id = s.article_id and w.id = sw.word_id order by a.year desc,a.month desc, a.day desc, sw.sentence_id, sw.position";
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1,category);
         stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
@@ -858,8 +859,8 @@ public class OracleClient implements CorpusDBClient{
 
     public ArticlesForWordR getLatestArticlesForWord(String word,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
-        String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        String sql = "select a.id as article_id, s.id as sentence_id,w.id as word_id,sw.position, w.val,a.category, a.topic, a.author, a.year,a.month,a.day from (select distinct s.id from (select resp.id as article_id from(select distinct * from (select a.id  from word w, sentence_word sw, sentence s, article a where w.val='"+word+"' and sw.word_id=w.id and s.id=sw.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc)) resp where rownum<=?) res, article a, sentence s, sentence_word sw, word w where a.id =res.article_id and s.article_id = a.id and sw.sentence_id = s.id and sw.word_id = w.id and w.val='"+word+"') res, sentence s, sentence_word sw, article a, word w where s.id = res.id and sw.sentence_id = s.id and a.id = s.article_id and w.id = sw.word_id order by a.year desc,a.month desc, a.day desc, sw.sentence_id, sw.position";
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,amount);
         ResultSet rst = stmt.executeQuery();
         int sentenceId = 0;
@@ -907,7 +908,7 @@ public class OracleClient implements CorpusDBClient{
 
         getDBConnection();
         String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id and a.year=? and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2,category);
         stmt.setInt(3,amount);
@@ -954,7 +955,7 @@ public class OracleClient implements CorpusDBClient{
 
         getDBConnection();
         String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id and a.year=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
@@ -1000,7 +1001,7 @@ public class OracleClient implements CorpusDBClient{
 
         getDBConnection();
         String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
 
         stmt.setString(1,category);
         stmt.setInt(2,amount);
@@ -1047,7 +1048,7 @@ public class OracleClient implements CorpusDBClient{
 
         getDBConnection();
         String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
 
         stmt.setInt(1,amount);
         ResultSet rst = stmt.executeQuery();
@@ -1096,7 +1097,7 @@ public class OracleClient implements CorpusDBClient{
 
         getDBConnection();
         String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id and a.year=? and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2,category);
         stmt.setInt(3,amount);
@@ -1143,7 +1144,7 @@ public class OracleClient implements CorpusDBClient{
 
         getDBConnection();
         String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id and a.year=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
@@ -1189,7 +1190,7 @@ public class OracleClient implements CorpusDBClient{
 
         getDBConnection();
         String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id and a.category=? order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1,category);
         stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
@@ -1235,7 +1236,7 @@ public class OracleClient implements CorpusDBClient{
 
         getDBConnection();
         String sql = "select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id ,a.year,a.month,a.day from word w1, word w2,word w3, sentence_word sw1, sentence_word sw2,sentence_word sw3, sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and w3.val='"+word3+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and sw3.word_id=w3.id and sw1.sentence_id=sw2.sentence_id and sw1.sentence_id=sw3.sentence_id and sw2.position=sw1.position+1 and sw3.position=sw1.position+2  and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=?) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,amount);
         ResultSet rst = stmt.executeQuery();
         int sentenceId = 0;
@@ -1286,7 +1287,7 @@ public class OracleClient implements CorpusDBClient{
         }else{
             sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position>=sw1.position-? and sw2.position<sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
         }
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,Math.abs(range));
         stmt.setInt(2,year);
         stmt.setString(3, category);
@@ -1320,7 +1321,7 @@ public class OracleClient implements CorpusDBClient{
         }else{
             sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position>=sw1.position-? and sw2.position<sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.year=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
         }
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,Math.abs(range));
         stmt.setInt(2,year);
         stmt.setInt(3,amount);
@@ -1353,7 +1354,7 @@ public class OracleClient implements CorpusDBClient{
         }else{
             sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2, sentence s, article a where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position>=sw1.position-? and sw2.position<sw1.position and s.id = sw1.sentence_id and a.id= s.article_id and a.category=? group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
         }
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,Math.abs(range));
         stmt.setString(2, category);
         stmt.setInt(3,amount);
@@ -1386,7 +1387,7 @@ public class OracleClient implements CorpusDBClient{
         }else{
             sql = "select w.val, resp.frequency from (select w2.id, count(*) as frequency from word w1, word w2, sentence_word sw1,sentence_word sw2 where w1.val='"+word+"' and sw1.word_id=w1.id and sw2.word_id=w2.id and w1.id<>w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position>=sw1.position-? and sw2.position<sw1.position group by w2.id order by count(*) desc) resp, word w where w.id= resp.id and rownum<=?";
         }
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,Math.abs(range));
         stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
@@ -1414,7 +1415,7 @@ public class OracleClient implements CorpusDBClient{
     public WordPositionR getFrequentWordsInPosition(int position,int year,String category,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ? and s.id = sw.sentence_id and a.id = s.article_id and a.year =? and a.category=? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,position);
         stmt.setInt(2,year);
         stmt.setString(3, category);
@@ -1442,7 +1443,7 @@ public class OracleClient implements CorpusDBClient{
     public WordPositionR getFrequentWordsInPosition(int position,int year,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ? and s.id = sw.sentence_id and a.id = s.article_id and a.year =? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,position);
         stmt.setInt(2, year);
         stmt.setInt(3,amount);
@@ -1470,7 +1471,7 @@ public class OracleClient implements CorpusDBClient{
     public WordPositionR getFrequentWordsInPosition(int position,String category,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ? and s.id = sw.sentence_id and a.id = s.article_id and a.category=? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,position);
         stmt.setString(2, category);
         stmt.setInt(3,amount);
@@ -1497,7 +1498,7 @@ public class OracleClient implements CorpusDBClient{
     public WordPositionR getFrequentWordsInPosition(int position,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw where sw.position = ? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, position);
         stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
@@ -1526,7 +1527,7 @@ public class OracleClient implements CorpusDBClient{
     public WordPositionR getFrequentWordsInPositionReverse(int position,int year,String category,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ((s.words+1) - ?) and s.id = sw.sentence_id and a.id = s.article_id and a.year =? and a.category=? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,position);
         stmt.setInt(2,year);
         stmt.setString(3, category);
@@ -1554,7 +1555,7 @@ public class OracleClient implements CorpusDBClient{
     public WordPositionR getFrequentWordsInPositionReverse(int position,String category,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ((s.words+1) - ?) and s.id = sw.sentence_id and a.id = s.article_id and a.category=? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,position);
         stmt.setString(2, category);
         stmt.setInt(3,amount);
@@ -1581,7 +1582,7 @@ public class OracleClient implements CorpusDBClient{
     public WordPositionR getFrequentWordsInPositionReverse(int position,int year,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s, article a where sw.position = ((s.words+1) - ?) and s.id = sw.sentence_id and a.id = s.article_id and a.year =? group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,position);
         stmt.setInt(2, year);
         stmt.setInt(3,amount);
@@ -1608,7 +1609,7 @@ public class OracleClient implements CorpusDBClient{
     public WordPositionR getFrequentWordsInPositionReverse(int position,int amount)throws SQLException,ClassNotFoundException{
         getDBConnection();
         String sql ="select w.val, resp.frequency  from (select sw.word_id, count(*) as frequency from sentence_word sw, sentence s where s.id = sw.sentence_id and sw.position = ((s.words+1) - ?) group by sw.word_id order by count(*) desc) resp, word w where w.id= resp.word_id and rownum<=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, position);
         stmt.setInt(2,amount);
         ResultSet rst = stmt.executeQuery();
@@ -1635,7 +1636,7 @@ public class OracleClient implements CorpusDBClient{
     public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word, String category, int year1, int year2, int amount) throws Exception {
         getDBConnection();
         String sql = "select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select b.id, count(*) as frequency from word w, bigram b, sentence_bigram sb , sentence s, article a where w.val='"+word+"' and b.word1 = w.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id= s.article_id and a.category=? and a.year>=? and a.year<=? group by b.id order by count(*) desc ) resp where rownum<=?) resp2, sentence_bigram sb, sentence s, article a where sb.bigram_id=resp2.id and s.id = sb.sentence_id and a.id = s.article_id and a.year>=? and a.year<=? group by resp2.id , a.year order by resp2.id , a.year) resp3, bigram b, word w where b.id = resp3.id and w.id=b.word2";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1,category);
         stmt.setInt(2,year1);
         stmt.setInt(3,year2);
@@ -1667,7 +1668,7 @@ public class OracleClient implements CorpusDBClient{
     public FrequentWordsAfterWordR getFrequentWordsAfterWordTimeRange(String word, int year1, int year2, int amount) throws Exception {
         getDBConnection();
         String sql = "select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select b.id, count(*) as frequency from word w, bigram b, sentence_bigram sb , sentence s, article a where w.val='"+word+"' and b.word1 = w.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id= s.article_id and a.year>=? and a.year<=? group by b.id order by count(*) desc ) resp where rownum<=?) resp2, sentence_bigram sb, sentence s, article a where sb.bigram_id=resp2.id and s.id = sb.sentence_id and a.id = s.article_id and a.year>=? and a.year<=? group by resp2.id , a.year order by resp2.id , a.year) resp3, bigram b, word w where b.id = resp3.id and w.id=b.word2";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year1);
         stmt.setInt(2,year2);
         stmt.setInt(3,amount);
@@ -1698,7 +1699,7 @@ public class OracleClient implements CorpusDBClient{
     public FrequentWordsAfterWordR getFrequentWordsAfterBigramTimeRange(String word1, String word2, String category, int year1, int year2, int amount) throws Exception {
         getDBConnection();
         String sql = "select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select t.id, count(*) as frequency from word w1, word w2, trigram t, sentence_trigram st , sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and t.word1 = w1.id and t.word2 = w2.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id= s.article_id and a.category=? and a.year>=? and a.year<=? group by t.id order by count(*) desc ) resp where rownum<=?) resp2, sentence_trigram st, sentence s, article a where st.trigram_id=resp2.id and s.id = st.sentence_id and a.id = s.article_id and a.year>=? and a.year<=? group by resp2.id , a.year order by resp2.id , a.year) resp3, trigram t, word w where t.id = resp3.id and w.id=t.word3";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1,category);
         stmt.setInt(2,year1);
         stmt.setInt(3,year2);
@@ -1730,7 +1731,7 @@ public class OracleClient implements CorpusDBClient{
     public FrequentWordsAfterWordR getFrequentWordsAfterBigramTimeRange(String word1, String word2, int year1, int year2, int amount) throws Exception {
         getDBConnection();
         String sql = "select w.val,resp3.year,resp3.frequency2 from (select resp2.id , a.year, count(*) as frequency2 from(select * from ( select t.id, count(*) as frequency from word w1, word w2, trigram t, sentence_trigram st , sentence s, article a where w1.val='"+word1+"' and w2.val='"+word2+"' and t.word1 = w1.id and t.word2 = w2.id and st.trigram_id=t.id and s.id = st.sentence_id and a.id= s.article_id and a.year>=? and a.year<=? group by t.id order by count(*) desc ) resp where rownum<=?) resp2, sentence_trigram st, sentence s, article a where st.trigram_id=resp2.id and s.id = st.sentence_id and a.id = s.article_id and a.year>=? and a.year<=? group by resp2.id , a.year order by resp2.id , a.year) resp3, trigram t, word w where t.id = resp3.id and w.id=t.word3";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year1);
         stmt.setInt(2,year2);
         stmt.setInt(3,amount);
@@ -1761,7 +1762,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getWordCount(String category, int year) throws  Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_word sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.year=? and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2,category);
         ResultSet rst = stmt.executeQuery();
@@ -1780,7 +1781,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getWordCount(String category) throws Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_word sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1,category);
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();
@@ -1798,7 +1799,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getWordCount(int year) throws Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_word sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.year=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();
@@ -1816,7 +1817,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getWordCount() throws Exception {
         getDBConnection();
         String sql = "select count(*) from sentence_word sw";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
 
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();
@@ -1836,7 +1837,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getBigramCount(String category, int year) throws  Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_bigram sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.year=? and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2,category);
         ResultSet rst = stmt.executeQuery();
@@ -1855,7 +1856,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getBigramCount(String category) throws Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_bigram sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1,category);
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();
@@ -1873,7 +1874,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getBigramCount(int year) throws Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_bigram sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.year=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();
@@ -1891,7 +1892,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getBigramCount() throws Exception {
         getDBConnection();
         String sql = "select count(*) from sentence_bigram sw";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
 
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();
@@ -1910,7 +1911,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getTrigramCount(String category, int year) throws  Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_trigram sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.year=? and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1,year);
         stmt.setString(2,category);
         ResultSet rst = stmt.executeQuery();
@@ -1929,7 +1930,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getTrigramCount(String category) throws Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_trigram sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.category=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setString(1,category);
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();
@@ -1947,7 +1948,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getTrigramCount(int year) throws Exception{
         getDBConnection();
         String sql = "select count(*) from sentence_trigram sw, sentence s, article a where s.id= sw.sentence_id and a.id= s.article_id and a.year=?";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
         stmt.setInt(1, year);
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();
@@ -1965,7 +1966,7 @@ public class OracleClient implements CorpusDBClient{
     public WordCountR getTrigramCount() throws Exception {
         getDBConnection();
         String sql = "select count(*) from sentence_trigram sw";
-        OracleCallableStatement stmt = (OracleCallableStatement) dbConnection.prepareCall(sql);
+        CallableStatement stmt = dbConnection.prepareCall(sql);
 
         ResultSet rst = stmt.executeQuery();
         WordCountR resp = new WordCountR();

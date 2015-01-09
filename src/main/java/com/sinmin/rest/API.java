@@ -35,7 +35,7 @@ Method : wildCardSearch
             value: "විසින්"
             }
         ]
-        
+
 Method : wordFrequency
         Req
         {
