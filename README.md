@@ -1,6 +1,7 @@
 clone and build https://github.com/lasandun/corpus.sinhala.wildcard.search
 
 Method : wildCardSearch
+        
         Req :
         {
             "value" : "විසි*"
