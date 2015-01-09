@@ -4,6 +4,7 @@ import com.sinmin.rest.beans.request.*;
 import com.sinmin.rest.beans.response.*;
 import com.sinmin.rest.cassandra.CassandraClient;
 import com.sinmin.rest.oracle.OracleClient;
+import com.sinmin.rest.solr.SolrClient;
 import oracle.jdbc.OracleCallableStatement;
 
 import javax.ws.rs.*;
@@ -1246,6 +1247,23 @@ public class API {
             ex.printStackTrace();
             return Response.status(500).entity(ex.getMessage()).build();
         }
+    }
+
+    @POST
+    @Path("/wildCardSearch")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response wildCardSearch(WildCard wildCard) {
+        String value = wildCard.getValue();
+        System.out.println(value);
+
+        if (value != null) {
+            SolrClient solrClient = new SolrClient();
+            WildCardR[] resp = solrClient.getWildCardWords(value);
+            return Response.status(200).entity(resp).build();
+        } else {
+            return Response.status(500).entity("Invalid input parameters").build();
+        }
+
     }
 
 }

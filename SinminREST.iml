@@ -68,6 +68,18 @@
     <orderEntry type="library" scope="TEST" name="Maven: commons-pool:commons-pool:1.5.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.github.stephenc.eaio-uuid:uuid:3.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.ecyrd.speed4j:speed4j:0.9" level="project" />
+    <orderEntry type="library" name="Maven: corpus.sinhala:wildcard-search:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ws.commons.axiom:axiom-api:1.2.14" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-activation_1.1_spec:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-javamail_1.4_spec:1.7.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: jaxen:jaxen:1.1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.james:apache-mime4j-core:0.7.2" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.woodstox:wstx-lgpl:3.2.3" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ws.commons.axiom:axiom-impl:1.2.14" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.woodstox:stax2-api:3.1.1" level="project" />
   </component>
 </module>
 
