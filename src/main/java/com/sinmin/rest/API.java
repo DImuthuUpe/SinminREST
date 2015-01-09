@@ -23,6 +23,19 @@ import java.sql.SQLException;
  */
 
 /*
+Method : wildCardSearch
+        Req :
+        {
+            "value" : "විසි*"
+        }
+
+        Resp :
+        [
+            {
+            value: "විසින්"
+            }
+        ]
+        
 Method : wordFrequency
         Req
         {
