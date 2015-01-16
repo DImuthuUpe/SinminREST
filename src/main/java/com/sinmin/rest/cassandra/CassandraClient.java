@@ -1278,22 +1278,70 @@ public class CassandraClient implements CorpusDBClient{
 
     @Override
     public WordCountR getWordCount(String category, int year) {
-        return null;
+    	PreparedStatement query = session.prepare(
+				"select * from corpus.word_sizes WHERE year=? AND category=?");
+		ResultSet results = session.execute(query.bind(year+"",category.charAt(0)));
+		WordCountR obj = new WordCountR();
+		obj.setCategory(category);
+		obj.setYear(year);
+		obj.setCount(0);
+		for(Row row : results){
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
     public WordCountR getWordCount(String category) {
-        return null;
+    	PreparedStatement query = session.prepare(
+				"select * from corpus.word_sizes WHERE year=? AND category=?");
+		ResultSet results = session.execute(query.bind("ALL",category.charAt(0)));
+		WordCountR obj = new WordCountR();
+		obj.setCategory(category);
+		obj.setYear(0);
+		obj.setCount(0);
+		for(Row row : results){
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
     public WordCountR getWordCount(int year) {
-        return null;
+    	PreparedStatement query = session.prepare(
+				"select * from corpus.word_sizes WHERE year=? AND category=?");
+		ResultSet results = session.execute(query.bind(year+"","ALL"));
+		WordCountR obj = new WordCountR();
+		obj.setCategory("ALL");
+		obj.setYear(year);
+		obj.setCount(0);
+		for(Row row : results){
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
     public WordCountR getWordCount() throws Exception {
-        return null;
+    	PreparedStatement query = session.prepare(
+				"select * from corpus.word_sizes WHERE year=? AND category=?");
+		ResultSet results = session.execute(query.bind("ALL","ALL"));
+		WordCountR obj = new WordCountR();
+		obj.setCategory("ALL");
+		obj.setYear(0);
+		obj.setCount(0);
+		for(Row row : results){
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
