@@ -1280,7 +1280,7 @@ public class CassandraClient implements CorpusDBClient{
     public WordCountR getWordCount(String category, int year) {
     	PreparedStatement query = session.prepare(
 				"select * from corpus.word_sizes WHERE year=? AND category=?");
-		ResultSet results = session.execute(query.bind(year+"",category.charAt(0)));
+		ResultSet results = session.execute(query.bind(year+"",category.charAt(0)+""));
 		WordCountR obj = new WordCountR();
 		obj.setCategory(category);
 		obj.setYear(year);
@@ -1297,7 +1297,7 @@ public class CassandraClient implements CorpusDBClient{
     public WordCountR getWordCount(String category) {
     	PreparedStatement query = session.prepare(
 				"select * from corpus.word_sizes WHERE year=? AND category=?");
-		ResultSet results = session.execute(query.bind("ALL",category.charAt(0)));
+		ResultSet results = session.execute(query.bind("ALL",category.charAt(0)+""));
 		WordCountR obj = new WordCountR();
 		obj.setCategory(category);
 		obj.setYear(0);

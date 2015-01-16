@@ -1101,8 +1101,9 @@ public class API {
         int year[] = wordCount.getTime();
 
         try {
+            CorpusDBClient client = new CassandraClient("192.248.15.239");
             if (category != null && year != null) {
-                CorpusDBClient client = new OracleClient();
+
                 WordCountR resp[] = new WordCountR[category.length * year.length];
 
                 for (int i = 0; i < category.length; i++) {
@@ -1112,7 +1113,6 @@ public class API {
                 }
                 return Response.status(200).entity(resp).build();
             } else if (category == null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = new WordCountR[year.length];
                 for (int j = 0; j < year.length; j++) {
                     resp[j] = client.getWordCount(year[j]);
@@ -1121,7 +1121,6 @@ public class API {
                 return Response.status(200).entity(resp).build();
 
             } else if (category != null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = new WordCountR[category.length];
 
                 for (int i = 0; i < category.length; i++) {
@@ -1130,7 +1129,6 @@ public class API {
                 return Response.status(200).entity(resp).build();
 
             } else if (category == null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = {client.getWordCount()};
                 return Response.status(200).entity(resp).build();
             } else {
