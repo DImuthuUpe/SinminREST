@@ -1316,7 +1316,7 @@ public class CassandraClient implements CorpusDBClient{
 				"select * from corpus.word_sizes WHERE year=? AND category=?");
 		ResultSet results = session.execute(query.bind(year+"","ALL"));
 		WordCountR obj = new WordCountR();
-		obj.setCategory("ALL");
+		obj.setCategory("all");
 		obj.setYear(year);
 		obj.setCount(0);
 		for(Row row : results){
@@ -1333,7 +1333,7 @@ public class CassandraClient implements CorpusDBClient{
 				"select * from corpus.word_sizes WHERE year=? AND category=?");
 		ResultSet results = session.execute(query.bind("ALL","ALL"));
 		WordCountR obj = new WordCountR();
-		obj.setCategory("ALL");
+		obj.setCategory("all");
 		obj.setYear(0);
 		obj.setCount(0);
 		for(Row row : results){
