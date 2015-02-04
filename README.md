@@ -1,4 +1,19 @@
-clone and build https://github.com/lasandun/corpus.sinhala.wildcard.search
+<H5>Installation </H5>
+
+* clone and build https://github.com/lasandun/corpus.sinhala.wildcard.search
+
+* Install Oracle jar to local maven repository
+
+	mvn install:install-file -Dfile=ojdbc7.jar -DgroupId=ojdbc -DartifactId=ojdbc -Dversion=7 -Dpackaging=jar
+
+	ojdbc7.jar can be found from lib folder
+
+* Build project using mvn clean install
+
+
+<H5> API Functions </H5>
+
+
 
 Method : wildCardSearch
         
