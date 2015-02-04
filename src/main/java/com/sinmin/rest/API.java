@@ -546,13 +546,13 @@ public class API {
         int amount = frqWord.getAmount();
 
         try {
+            CorpusDBClient client = new OracleClient();
             if (category == null && year == null) {
-                CorpusDBClient client = new OracleClient();
+
                 FrequentWordR resp = client.getFrequentWords(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
             } else if (category == null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
                 for (int i = 0; i < year.length; i++) {
                     freqArr[i] = client.getFrequentWords(year[i], amount);
@@ -560,7 +560,6 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
                 for (int i = 0; i < category.length; i++) {
                     freqArr[i] = client.getFrequentWords(category[i], amount);
@@ -568,7 +567,6 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
