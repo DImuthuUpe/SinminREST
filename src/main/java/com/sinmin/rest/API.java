@@ -546,7 +546,7 @@ public class API {
         int amount = frqWord.getAmount();
 
         try {
-            CorpusDBClient client = new OracleClient();
+            CorpusDBClient client = new CassandraClient("192.248.15.239");
             if (category == null && year == null) {
 
                 FrequentWordR resp = client.getFrequentWords(amount);
