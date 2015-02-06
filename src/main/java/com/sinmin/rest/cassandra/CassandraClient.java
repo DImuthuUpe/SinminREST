@@ -18,18 +18,21 @@ import com.sinmin.rest.beans.response.*;
 
 public class CassandraClient implements CorpusDBClient{
 
-	private Cluster cluster;
-	private Session session;
-	
+	private static Cluster cluster;
+	private static Session session;
+
+    static{
+        connect("192.248.15.239");
+    }
 
 	
 	
-	public CassandraClient(String node) {
-		 this.connect(node);
+	public CassandraClient() {
+
 	}
 
 
-	public void connect(String node) {
+	public static void connect(String node) {
 	      cluster = Cluster.builder()
 	            .addContactPoint(node).build();
 	      Metadata metadata = cluster.getMetadata();

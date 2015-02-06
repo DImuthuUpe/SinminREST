@@ -27,6 +27,13 @@ public class OracleClient implements CorpusDBClient{
 
     private static Connection dbConnection = null;
 
+    static {
+        try{
+            dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+    }
 
     public static Connection getDBConnection() throws SQLException, ClassNotFoundException {
 

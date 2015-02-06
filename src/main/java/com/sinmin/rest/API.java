@@ -348,7 +348,7 @@ public class API {
         int time[] = wordF.getTime();
         String category[] = wordF.getCategory();
         try {
-            CorpusDBClient client = new CassandraClient("192.248.15.239");
+            CorpusDBClient client = new CassandraClient();
             if (time == null && category == null && value != null) {
 
 
@@ -546,7 +546,7 @@ public class API {
         int amount = frqWord.getAmount();
 
         try {
-            CorpusDBClient client = new CassandraClient("192.248.15.239");
+            CorpusDBClient client = new CassandraClient();
             if (category == null && year == null) {
 
                 FrequentWordR resp = client.getFrequentWords(amount);
@@ -600,15 +600,15 @@ public class API {
         String[] category = frqWord.getCategory();
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
-
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category == null && year == null) {
-                CorpusDBClient client = new OracleClient();
+
                 FrequentWordR resp = client.getFrequentBigrams(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
             } else if (category == null && year != null) {
-                CorpusDBClient client = new OracleClient();
+
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
                 for (int i = 0; i < year.length; i++) {
                     freqArr[i] = client.getFrequentBigrams(year[i], amount);
@@ -616,7 +616,7 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year == null) {
-                CorpusDBClient client = new OracleClient();
+
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
                 for (int i = 0; i < category.length; i++) {
                     freqArr[i] = client.getFrequentBigrams(category[i], amount);
@@ -624,7 +624,7 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year != null) {
-                CorpusDBClient client = new OracleClient();
+
                 FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
@@ -656,15 +656,13 @@ public class API {
         String[] category = frqWord.getCategory();
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
-
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category == null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 FrequentWordR resp = client.getFrequentTrigrams(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
             } else if (category == null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[year.length];
                 for (int i = 0; i < year.length; i++) {
                     freqArr[i] = client.getFrequentTrigrams(year[i], amount);
@@ -672,7 +670,6 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length];
                 for (int i = 0; i < category.length; i++) {
                     freqArr[i] = client.getFrequentTrigrams(category[i], amount);
@@ -680,7 +677,6 @@ public class API {
                 return Response.status(200).entity(freqArr).build();
 
             } else if (category != null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 FrequentWordR[] freqArr = new FrequentWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
@@ -715,10 +711,10 @@ public class API {
         String category[] = articlesForWord.getCategory();
         int year[] = articlesForWord.getTime();
         String value = articlesForWord.getValue();
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category != null && year != null && value != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
                         articlesForWordRs[i * year.length + j] = client.getLatestArticlesForWord(value, year[j], category[i], amount);
@@ -727,21 +723,18 @@ public class API {
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year != null && value != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < year.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForWord(value, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category != null && year == null && value != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForWord(value, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year == null && value != null) {
 
-                CorpusDBClient client = new OracleClient();
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForWord(value, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
@@ -770,10 +763,10 @@ public class API {
         int year[] = articlesForBigram.getTime();
         String value1 = articlesForBigram.getValue1();
         String value2 = articlesForBigram.getValue2();
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category != null && year != null && value1 != null && value2 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
                         articlesForWordRs[i * year.length + j] = client.getLatestArticlesForBigram(value1, value2, year[j], category[i], amount);
@@ -782,21 +775,18 @@ public class API {
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year != null && value1 != null && value2 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < year.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForBigram(value1, value2, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category != null && year == null && value1 != null && value2 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForBigram(value1, value2, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year == null && value1 != null && value2 != null) {
 
-                CorpusDBClient client = new OracleClient();
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForBigram(value1, value2, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
@@ -826,10 +816,10 @@ public class API {
         String value1 = articlesForTrigram.getValue1();
         String value2 = articlesForTrigram.getValue2();
         String value3 = articlesForTrigram.getValue3();
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category != null && year != null && value1 != null && value2 != null && value3 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
                         articlesForWordRs[i * year.length + j] = client.getLatestArticlesForTrigram(value1, value2, value3, year[j], category[i], amount);
@@ -838,21 +828,18 @@ public class API {
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year != null && value1 != null && value2 != null && value3 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[year.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < year.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1, value2, value3, year[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category != null && year == null && value1 != null && value2 != null && value3 != null) {
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     articlesForWordRs[i] = client.getLatestArticlesForTrigram(value1, value2, value3, category[i], amount);
                 }
                 return Response.status(200).entity(articlesForWordRs).build();
             } else if (category == null && year == null && value1 != null && value2 != null && value3 != null) {
 
-                CorpusDBClient client = new OracleClient();
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForTrigram(value1, value2, value3, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
@@ -883,7 +870,6 @@ public class API {
         String[] category = frqWords.getCategory();
         int amount = frqWords.getAmount();
         int range = frqWords.getRange();
-
         try {
             if (category != null && year != null && value != null) {
                 FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[category.length * year.length];
@@ -945,11 +931,10 @@ public class API {
         int amount = position.getAmount();
         int pos = position.getPosition();
 
-
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category != null && year != null) {
                 WordPositionR[] wordPositions = new WordPositionR[category.length * year.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
                         if (pos > 0) {
@@ -962,7 +947,6 @@ public class API {
                 return Response.status(200).entity(wordPositions).build();
             } else if (category == null && year != null) {
                 WordPositionR[] wordPositions = new WordPositionR[year.length];
-                CorpusDBClient client = new OracleClient();
                 for (int j = 0; j < year.length; j++) {
                     if (pos > 0) {
                         wordPositions[j] = client.getFrequentWordsInPosition(pos, year[j], amount);
@@ -974,7 +958,6 @@ public class API {
 
             } else if (category != null && year == null) {
                 WordPositionR[] wordPositions = new WordPositionR[category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     if (pos > 0) {
                         wordPositions[i] = client.getFrequentWordsInPosition(pos, category[i], amount);
@@ -985,7 +968,6 @@ public class API {
                 return Response.status(200).entity(wordPositions).build();
             } else if (category == null && year == null) {
 
-                CorpusDBClient client = new OracleClient();
                 if (pos > 0) {
                     WordPositionR[] wordPositions = {client.getFrequentWordsInPosition(pos, amount)};
                     return Response.status(200).entity(wordPositions).build();
@@ -1099,7 +1081,7 @@ public class API {
         int year[] = wordCount.getTime();
 
         try {
-            CorpusDBClient client = new CassandraClient("192.248.15.239");
+            CorpusDBClient client = new CassandraClient();
             if (category != null && year != null) {
 
                 WordCountR resp[] = new WordCountR[category.length * year.length];
@@ -1152,10 +1134,9 @@ public class API {
     public Response bigramCount(WordCount wordCount) {
         String category[] = wordCount.getCategory();
         int year[] = wordCount.getTime();
-
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category != null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = new WordCountR[category.length * year.length];
 
                 for (int i = 0; i < category.length; i++) {
@@ -1165,7 +1146,6 @@ public class API {
                 }
                 return Response.status(200).entity(resp).build();
             } else if (category == null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = new WordCountR[year.length];
                 for (int j = 0; j < year.length; j++) {
                     resp[j] = client.getBigramCount(year[j]);
@@ -1174,7 +1154,6 @@ public class API {
                 return Response.status(200).entity(resp).build();
 
             } else if (category != null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = new WordCountR[category.length];
 
                 for (int i = 0; i < category.length; i++) {
@@ -1183,7 +1162,6 @@ public class API {
                 return Response.status(200).entity(resp).build();
 
             } else if (category == null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = {client.getBigramCount()};
                 return Response.status(200).entity(resp).build();
             } else {
@@ -1208,10 +1186,9 @@ public class API {
     public Response trigramCount(WordCount wordCount) {
         String category[] = wordCount.getCategory();
         int year[] = wordCount.getTime();
-
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category != null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = new WordCountR[category.length * year.length];
 
                 for (int i = 0; i < category.length; i++) {
@@ -1221,7 +1198,6 @@ public class API {
                 }
                 return Response.status(200).entity(resp).build();
             } else if (category == null && year != null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = new WordCountR[year.length];
                 for (int j = 0; j < year.length; j++) {
                     resp[j] = client.getTrigramCount(year[j]);
@@ -1230,7 +1206,6 @@ public class API {
                 return Response.status(200).entity(resp).build();
 
             } else if (category != null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = new WordCountR[category.length];
 
                 for (int i = 0; i < category.length; i++) {
@@ -1239,7 +1214,6 @@ public class API {
                 return Response.status(200).entity(resp).build();
 
             } else if (category == null && year == null) {
-                CorpusDBClient client = new OracleClient();
                 WordCountR resp[] = {client.getTrigramCount()};
                 return Response.status(200).entity(resp).build();
             } else {
