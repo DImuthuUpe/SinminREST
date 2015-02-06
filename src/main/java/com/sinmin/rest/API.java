@@ -416,7 +416,7 @@ public class API {
 
             if (time == null && category == null && value1 != null && value2 != null) {
 
-                CorpusDBClient client = new OracleClient();
+                CorpusDBClient client = new CassandraClient();
                 WordFrequencyR resp = client.getBigramFrequency(value1, value2);
                 WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -484,7 +484,7 @@ public class API {
 
             if (time == null && category == null && value1 != null && value2 != null && value3 != null) {
 
-                CorpusDBClient client = new OracleClient();
+                CorpusDBClient client = new CassandraClient();
                 WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3);
                 WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -546,7 +546,7 @@ public class API {
         int amount = frqWord.getAmount();
 
         try {
-            CorpusDBClient client = new CassandraClient();
+            CorpusDBClient client = new OracleClient();
             if (category == null && year == null) {
 
                 FrequentWordR resp = client.getFrequentWords(amount);
@@ -600,7 +600,7 @@ public class API {
         String[] category = frqWord.getCategory();
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
-        CorpusDBClient client = new CassandraClient();
+        CorpusDBClient client = new OracleClient();
         try {
             if (category == null && year == null) {
 
@@ -656,7 +656,7 @@ public class API {
         String[] category = frqWord.getCategory();
         int year[] = frqWord.getTime();
         int amount = frqWord.getAmount();
-        CorpusDBClient client = new CassandraClient();
+        CorpusDBClient client = new OracleClient();
         try {
             if (category == null && year == null) {
                 FrequentWordR resp = client.getFrequentTrigrams(amount);
@@ -1134,7 +1134,7 @@ public class API {
     public Response bigramCount(WordCount wordCount) {
         String category[] = wordCount.getCategory();
         int year[] = wordCount.getTime();
-        CorpusDBClient client = new CassandraClient();
+        CorpusDBClient client = new OracleClient();
         try {
             if (category != null && year != null) {
                 WordCountR resp[] = new WordCountR[category.length * year.length];
@@ -1186,7 +1186,7 @@ public class API {
     public Response trigramCount(WordCount wordCount) {
         String category[] = wordCount.getCategory();
         int year[] = wordCount.getTime();
-        CorpusDBClient client = new CassandraClient();
+        CorpusDBClient client = new OracleClient();
         try {
             if (category != null && year != null) {
                 WordCountR resp[] = new WordCountR[category.length * year.length];
