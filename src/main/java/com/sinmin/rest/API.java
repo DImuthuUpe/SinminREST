@@ -411,12 +411,11 @@ public class API {
         int time[] = bigF.getTime();
 
         //String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.year=2008";
-
+        CorpusDBClient client = new CassandraClient();
         try {
 
             if (time == null && category == null && value1 != null && value2 != null) {
 
-                CorpusDBClient client = new CassandraClient();
                 WordFrequencyR resp = client.getBigramFrequency(value1, value2);
                 WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -424,7 +423,6 @@ public class API {
             } else if (time == null && category != null && value1 != null && value2 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     WordFrequencyR resp = client.getBigramFrequency(value1, value2, category[i]);
                     freqArr[i] = resp;
@@ -434,7 +432,6 @@ public class API {
             } else if (category == null && time != null && value1 != null && value2 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[i]);
                     freqArr[i] = resp;
@@ -443,7 +440,6 @@ public class API {
 
             } else if (category != null && time != null && value1 != null && value2 != null) {
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < time.length; j++) {
                         WordFrequencyR resp = client.getBigramFrequency(value1, value2, time[j], category[i]);
@@ -479,12 +475,11 @@ public class API {
         String category[] = triF.getCategory();
         int time[] = triF.getTime();
 
-
+        CorpusDBClient client = new CassandraClient();
         try {
 
             if (time == null && category == null && value1 != null && value2 != null && value3 != null) {
 
-                CorpusDBClient client = new CassandraClient();
                 WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3);
                 WordFrequencyR freqArr[] = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -492,7 +487,6 @@ public class API {
             } else if (time == null && category != null && value1 != null && value2 != null && value3 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, category[i]);
                     freqArr[i] = resp;
@@ -502,7 +496,6 @@ public class API {
             } else if (category == null && time != null && value1 != null && value2 != null && value3 != null) {
 
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < time.length; i++) {
                     WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, time[i]);
                     freqArr[i] = resp;
@@ -511,7 +504,6 @@ public class API {
 
             } else if (category != null && time != null && value1 != null && value2 != null && value3 != null) {
                 WordFrequencyR freqArr[] = new WordFrequencyR[time.length * category.length];
-                CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < time.length; j++) {
                         WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3, time[j], category[i]);
