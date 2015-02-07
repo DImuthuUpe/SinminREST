@@ -1446,11 +1446,11 @@ public class CassandraClient implements CorpusDBClient{
 		if(category.equals("CREATIVE")){
 			query= session.prepare(
 					"select * from corpus.word_sizes WHERE year=? AND  category IN (?,?)");
-			results = session.execute(query.bind(year,"C","B"));
+			results = session.execute(query.bind(year+"","C","B"));
 		}else{
 			query= session.prepare(
 					"select * from corpus.word_sizes WHERE year=? AND category=?");
-			results = session.execute(query.bind(year,category.charAt(0)+""));
+			results = session.execute(query.bind(year+"",category.charAt(0)+""));
 		}
     	
 		WordCountR obj = new WordCountR();
@@ -1458,6 +1458,7 @@ public class CassandraClient implements CorpusDBClient{
 		obj.setYear(year);
 		obj.setCount(0);
 		for(Row row : results){
+			System.out.println(row.getInt("size"));
 			obj.setCount(row.getInt("size"));
 			break;
 		}
@@ -1503,6 +1504,7 @@ public class CassandraClient implements CorpusDBClient{
 		obj.setYear(year);
 		obj.setCount(0);
 		for(Row row : results){
+			System.out.println(row.getInt("size"));
 			obj.setCount(row.getInt("size"));
 			break;
 		}
@@ -1511,7 +1513,7 @@ public class CassandraClient implements CorpusDBClient{
     }
 
     @Override
-    public WordCountR getWordCount() throws Exception {
+    public WordCountR getWordCount(){
     	PreparedStatement query = session.prepare(
 				"select * from corpus.word_sizes WHERE year=? AND category=?");
 		ResultSet results = session.execute(query.bind("ALL","ALL"));
@@ -1520,6 +1522,7 @@ public class CassandraClient implements CorpusDBClient{
 		obj.setYear(0);
 		obj.setCount(0);
 		for(Row row : results){
+			System.out.println(row.getInt("size"));
 			obj.setCount(row.getInt("size"));
 			break;
 		}
@@ -1528,43 +1531,183 @@ public class CassandraClient implements CorpusDBClient{
     }
 
     @Override
-    public WordCountR getBigramCount(String category, int year) throws Exception {
-        return null;
+    public WordCountR getBigramCount(String category, int year)  {
+    	PreparedStatement query;
+		ResultSet results;
+		if(category.equals("CREATIVE")){
+			query= session.prepare(
+					"select * from corpus.bigram_sizes WHERE year=? AND  category IN (?,?)");
+			results = session.execute(query.bind(year+"","C","B"));
+		}else{
+			query= session.prepare(
+					"select * from corpus.bigram_sizes WHERE year=? AND category=?");
+			results = session.execute(query.bind(year+"",category.charAt(0)+""));
+		}
+    	
+		WordCountR obj = new WordCountR();
+		obj.setCategory(category);
+		obj.setYear(year);
+		obj.setCount(0);
+		for(Row row : results){
+			System.out.println(row.getInt("size"));
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
-    public WordCountR getBigramCount(String category) throws Exception {
-        return null;
+    public WordCountR getBigramCount(String category) {
+    	PreparedStatement query;
+		ResultSet results;
+		if(category.equals("CREATIVE")){
+			query= session.prepare(
+					"select * from corpus.bigram_sizes WHERE year=? AND  category IN (?,?)");
+			results = session.execute(query.bind("ALL","C","B"));
+		}else{
+			query= session.prepare(
+					"select * from corpus.bigram_sizes WHERE year=? AND category=?");
+			results = session.execute(query.bind("ALL",category.charAt(0)+""));
+		}
+    	
+    	WordCountR obj = new WordCountR();
+		obj.setCategory(category);
+		obj.setYear(0);
+		obj.setCount(0);
+		for(Row row : results){
+			System.out.println(row.getInt("size"));
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
-    public WordCountR getBigramCount(int year) throws Exception {
-        return null;
+    public WordCountR getBigramCount(int year) {
+    	PreparedStatement query = session.prepare(
+				"select * from corpus.bigram_sizes WHERE year=? AND category=?");
+		ResultSet results = session.execute(query.bind(year+"","ALL"));
+		WordCountR obj = new WordCountR();
+		obj.setCategory("all");
+		obj.setYear(year);
+		obj.setCount(0);
+		for(Row row : results){
+			System.out.println(row.getInt("size"));
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
-    public WordCountR getBigramCount() throws Exception {
-        return null;
+    public WordCountR getBigramCount() {
+    	PreparedStatement query = session.prepare(
+				"select * from corpus.bigram_sizes WHERE year=? AND category=?");
+		ResultSet results = session.execute(query.bind("ALL","ALL"));
+		WordCountR obj = new WordCountR();
+		obj.setCategory("all");
+		obj.setYear(0);
+		obj.setCount(0);
+		for(Row row : results){
+			System.out.println(row.getInt("size"));
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
-    public WordCountR getTrigramCount(String category, int year) throws Exception {
-        return null;
+    public WordCountR getTrigramCount(String category, int year) {
+    	PreparedStatement query;
+		ResultSet results;
+		if(category.equals("CREATIVE")){
+			query= session.prepare(
+					"select * from corpus.trigram_sizes WHERE year=? AND  category IN (?,?)");
+			results = session.execute(query.bind(year+"","C","B"));
+		}else{
+			query= session.prepare(
+					"select * from corpus.trigram_sizes WHERE year=? AND category=?");
+			results = session.execute(query.bind(year+"",category.charAt(0)+""));
+		}
+    	
+		WordCountR obj = new WordCountR();
+		obj.setCategory(category);
+		obj.setYear(year);
+		obj.setCount(0);
+		for(Row row : results){
+			System.out.println(row.getInt("size"));
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
-    public WordCountR getTrigramCount(String category) throws Exception {
-        return null;
+    public WordCountR getTrigramCount(String category) {
+    	PreparedStatement query;
+		ResultSet results;
+		if(category.equals("CREATIVE")){
+			query= session.prepare(
+					"select * from corpus.trigram_sizes WHERE year=? AND  category IN (?,?)");
+			results = session.execute(query.bind("ALL","C","B"));
+		}else{
+			query= session.prepare(
+					"select * from corpus.trigram_sizes WHERE year=? AND category=?");
+			results = session.execute(query.bind("ALL",category.charAt(0)+""));
+		}
+    	
+    	WordCountR obj = new WordCountR();
+		obj.setCategory(category);
+		obj.setYear(0);
+		obj.setCount(0);
+		for(Row row : results){
+			System.out.println(row.getInt("size"));
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
-    public WordCountR getTrigramCount(int year) throws Exception {
-        return null;
+    public WordCountR getTrigramCount(int year) {
+    	PreparedStatement query = session.prepare(
+				"select * from corpus.trigram_sizes WHERE year=? AND category=?");
+		ResultSet results = session.execute(query.bind(year+"","ALL"));
+		WordCountR obj = new WordCountR();
+		obj.setCategory("all");
+		obj.setYear(year);
+		obj.setCount(0);
+		for(Row row : results){
+			System.out.println(row.getInt("size"));
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
-    public WordCountR getTrigramCount() throws Exception {
-        return null;
+    public WordCountR getTrigramCount() {
+    	PreparedStatement query = session.prepare(
+				"select * from corpus.trigram_sizes WHERE year=? AND category=?");
+		ResultSet results = session.execute(query.bind("ALL","ALL"));
+		WordCountR obj = new WordCountR();
+		obj.setCategory("all");
+		obj.setYear(0);
+		obj.setCount(0);
+		for(Row row : results){
+			System.out.println(row.getInt("size"));
+			obj.setCount(row.getInt("size"));
+			break;
+		}
+		
+        return obj;
     }
 
     @Override
@@ -1589,7 +1732,7 @@ public class CassandraClient implements CorpusDBClient{
     
     public static void main(String[] args){
     	CassandraClient cl = new CassandraClient();
-    	cl.getWordCount("NEWS");		
+    	cl.getTrigramCount("CREATIVE",2012);		
     }
 	
 }
