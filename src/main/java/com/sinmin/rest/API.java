@@ -1126,7 +1126,7 @@ public class API {
     public Response bigramCount(WordCount wordCount) {
         String category[] = wordCount.getCategory();
         int year[] = wordCount.getTime();
-        CorpusDBClient client = new OracleClient();
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category != null && year != null) {
                 WordCountR resp[] = new WordCountR[category.length * year.length];
@@ -1178,7 +1178,7 @@ public class API {
     public Response trigramCount(WordCount wordCount) {
         String category[] = wordCount.getCategory();
         int year[] = wordCount.getTime();
-        CorpusDBClient client = new OracleClient();
+        CorpusDBClient client = new CassandraClient();
         try {
             if (category != null && year != null) {
                 WordCountR resp[] = new WordCountR[category.length * year.length];
