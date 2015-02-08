@@ -5,7 +5,7 @@ echo "Cloning corpus.sinhala.wildcard.search"
 git clone https://github.com/lasandun/corpus.sinhala.wildcard.search
 cd corpus.sinhala.wildcard.search
 echo "Building corpus wildcard search"
-mvn clean install
+mvn clean install -DskipTests
 echo "Adding Oracle Dependencies"
 cd ..
 cp ../lib/ojdbc7.jar .
