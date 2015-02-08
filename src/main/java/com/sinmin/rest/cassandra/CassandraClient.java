@@ -1711,6 +1711,46 @@ public class CassandraClient implements CorpusDBClient{
     }
 
     @Override
+    public WordCountR getWordCountInPosition(String category, int year) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPosition(int year) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPosition(String category) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPosition() {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPositionReverse(String category, int year) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPositionReverse(int year) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPositionReverse(String category) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPositionReverse() {
+        return null;
+    }
+
+    @Override
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int year, int range, int amount) throws Exception {
         return null;
     }

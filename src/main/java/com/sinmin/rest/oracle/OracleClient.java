@@ -1987,6 +1987,46 @@ public class OracleClient implements CorpusDBClient{
         return resp;
     }
 
+    @Override
+    public WordCountR getWordCountInPosition(String category, int year) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPosition(int year) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPosition(String category) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPosition() {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPositionReverse(String category, int year) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPositionReverse(int year) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPositionReverse(String category) {
+        return null;
+    }
+
+    @Override
+    public WordCountR getWordCountInPositionReverse() {
+        return null;
+    }
+
     /////////////////////////
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w.val,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position
 //select res.article_id, sw.sentence_id, sw. word_id, sw.position,w.val, res.category, res.topic, res.author, res.year,res.month,res.day from (select * from (select a.id as article_id,a.topic, a.author, a.category, s.id as sentence_id,sw.position, w1.val,w2.val,a.year,a.month,a.day from word w1, word w2, sentence_word sw1, sentence_word sw2, sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ'  and sw1.word_id=w1.id and sw2.word_id=w2.id and sw1.sentence_id=sw2.sentence_id and sw2.position=sw1.position+1 and s.id=sw1.sentence_id and a.id = s.article_id order by a.year desc,a.month desc,a.day desc) where rownum<=10) res, sentence_word sw, word w where sw.sentence_id=res.sentence_id and w.id=sw.word_id order by res.year desc,res.month desc, res.day desc, sw.sentence_id, sw.position

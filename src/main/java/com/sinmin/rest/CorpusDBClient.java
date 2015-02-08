@@ -156,4 +156,19 @@ public interface CorpusDBClient {
 
     public WordCountR getTrigramCount() throws Exception;
 
+    public WordCountR getWordCountInPosition(String category, int year);
+
+    public WordCountR getWordCountInPosition(int year);
+
+    public WordCountR getWordCountInPosition(String category);
+
+    public WordCountR getWordCountInPosition();
+
+    public WordCountR getWordCountInPositionReverse(String category, int year);
+
+    public WordCountR getWordCountInPositionReverse(int year);
+
+    public WordCountR getWordCountInPositionReverse(String category);
+
+    public WordCountR getWordCountInPositionReverse();
 }
