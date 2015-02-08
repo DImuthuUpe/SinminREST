@@ -25,12 +25,6 @@ public class CassandraClient implements CorpusDBClient{
         connect("192.248.15.239");
     }
 
-	
-	
-	public CassandraClient() {
-
-	}
-
 
 	public static void connect(String node) {
 	      cluster = Cluster.builder()
@@ -43,7 +37,7 @@ public class CassandraClient implements CorpusDBClient{
 	               host.getDatacenter(), host.getAddress(), host.getRack());
 	      }
 	      session = cluster.connect();
-	   }
+    }
 	
 	
 	public WordFrequencyR getWordFrequency(String word,int year, String category){
