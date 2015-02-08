@@ -1711,43 +1711,247 @@ public class CassandraClient implements CorpusDBClient{
     }
 
     @Override
-    public WordCountR getWordCountInPosition(String category, int year, int position, String word) {
-        return null;
+    public WordFrequencyR getWordCountInPosition(String category, int year, int position, String word) {
+    	PreparedStatement query;
+		ResultSet results;
+		int frequency=0;
+		if(category.equals("CREATIVE")){
+			query= session.prepare(
+					"select frequency from corpus.word_pos_year_category_id WHERE position=? AND word=? AND year=? AND category =?");
+			results = session.execute(query.bind(position, word,year,"C"));
+			for (Row row : results) {				
+				frequency+=row.getInt("frequency");
+				break;
+			}
+			query= session.prepare(
+					"select frequency from corpus.word_pos_year_category_id WHERE position=? AND word=? AND year=? AND category =?");
+			results = session.execute(query.bind(position, word,year,"B"));
+			for (Row row : results) {				
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		}else{
+			query= session.prepare(
+					"select frequency from corpus.word_pos_year_category_id WHERE position=? AND word=? AND year=? AND category=?");
+			results = session.execute(query.bind(position, word,year,category.charAt(0)+""));
+			for (Row row : results) {	
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		}
+		System.out.println(frequency);
+		WordFrequencyR endObject = new  WordFrequencyR();
+		endObject.setCategory(category);
+		endObject.setDate(year);
+		endObject.setFrequency(frequency);
+				
+		return endObject;
     }
 
     @Override
-    public WordCountR getWordCountInPosition(int year, int position, String word) {
-        return null;
+    public WordFrequencyR getWordCountInPosition(int year, int position, String word) {
+    	PreparedStatement query;
+		ResultSet results;
+		int frequency=0;
+		
+			query= session.prepare(
+					"select frequency from corpus.word_pos_year_id WHERE position=? AND word=? AND year=?");
+			results = session.execute(query.bind(position, word,year));
+			for (Row row : results) {	
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		
+		System.out.println(frequency);
+		WordFrequencyR endObject = new  WordFrequencyR();
+		endObject.setCategory("all");
+		endObject.setDate(year);
+		endObject.setFrequency(frequency);
+				
+		return endObject;
     }
 
     @Override
-    public WordCountR getWordCountInPosition(String category, int position, String word) {
-        return null;
+    public WordFrequencyR getWordCountInPosition(String category, int position, String word) {
+    	PreparedStatement query;
+		ResultSet results;
+		int frequency=0;
+		if(category.equals("CREATIVE")){
+			query= session.prepare(
+					"select frequency from corpus.word_pos_category_id WHERE position=? AND word=? AND category =?");
+			results = session.execute(query.bind(position, word,"C"));
+			for (Row row : results) {				
+				frequency+=row.getInt("frequency");
+				break;
+			}
+			query= session.prepare(
+					"select frequency from corpus.word_pos_category_id WHERE position=? AND word=? AND category =?");
+			results = session.execute(query.bind(position, word,"B"));
+			for (Row row : results) {				
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		}else{
+			query= session.prepare(
+					"select frequency from corpus.word_pos_category_id WHERE position=? AND word=? AND category=?");
+			results = session.execute(query.bind(position, word,category.charAt(0)+""));
+			for (Row row : results) {	
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		}
+		System.out.println(frequency);
+		WordFrequencyR endObject = new  WordFrequencyR();
+		endObject.setCategory(category);
+		endObject.setDate(0);
+		endObject.setFrequency(frequency);
+				
+		return endObject;
     }
 
     @Override
-    public WordCountR getWordCountInPosition(int position, String word) {
-        return null;
+    public WordFrequencyR getWordCountInPosition(int position, String word) {
+    	PreparedStatement query;
+		ResultSet results;
+		int frequency=0;
+		
+			query= session.prepare(
+					"select frequency from corpus.word_pos_id WHERE position=? AND word=?");
+			results = session.execute(query.bind(position, word));
+			for (Row row : results) {	
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		
+		System.out.println(frequency);
+		WordFrequencyR endObject = new  WordFrequencyR();
+		endObject.setCategory("all");
+		endObject.setDate(0);
+		endObject.setFrequency(frequency);
+				
+		return endObject;
     }
 
     @Override
-    public WordCountR getWordCountInPositionReverse(String category, int year, int position, String word) {
-        return null;
+    public WordFrequencyR getWordCountInPositionReverse(String category, int year, int position, String word) {
+    	PreparedStatement query;
+		ResultSet results;
+		int frequency=0;
+		if(category.equals("CREATIVE")){
+			query= session.prepare(
+					"select frequency from corpus.word_inv_pos_year_category_id WHERE inv_position=? AND word=? AND year=? AND category =?");
+			results = session.execute(query.bind(position, word,year,"C"));
+			for (Row row : results) {				
+				frequency+=row.getInt("frequency");
+				break;
+			}
+			query= session.prepare(
+					"select frequency from corpus.word_inv_pos_year_category_id WHERE inv_position=? AND word=? AND year=? AND category =?");
+			results = session.execute(query.bind(position, word,year,"B"));
+			for (Row row : results) {				
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		}else{
+			query= session.prepare(
+					"select frequency from corpus.word_inv_pos_year_category_id WHERE inv_position=? AND word=? AND year=? AND category=?");
+			results = session.execute(query.bind(position, word,year,category.charAt(0)+""));
+			for (Row row : results) {	
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		}
+		System.out.println(frequency);
+		WordFrequencyR endObject = new  WordFrequencyR();
+		endObject.setCategory(category);
+		endObject.setDate(year);
+		endObject.setFrequency(frequency);
+				
+		return endObject;
     }
 
     @Override
-    public WordCountR getWordCountInPositionReverse(int year, int position, String word) {
-        return null;
+    public WordFrequencyR getWordCountInPositionReverse(int year, int position, String word) {
+    	PreparedStatement query;
+		ResultSet results;
+		int frequency=0;
+		
+			query= session.prepare(
+					"select frequency from corpus.word_inv_pos_year_id WHERE inv_position=? AND word=? AND year=?");
+			results = session.execute(query.bind(position, word,year));
+			for (Row row : results) {	
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		
+		System.out.println(frequency);
+		WordFrequencyR endObject = new  WordFrequencyR();
+		endObject.setCategory("all");
+		endObject.setDate(year);
+		endObject.setFrequency(frequency);
+				
+		return endObject;
     }
 
     @Override
-    public WordCountR getWordCountInPositionReverse(String category, int position, String word) {
-        return null;
+    public WordFrequencyR getWordCountInPositionReverse(String category, int position, String word) {
+    	PreparedStatement query;
+		ResultSet results;
+		int frequency=0;
+		if(category.equals("CREATIVE")){
+			query= session.prepare(
+					"select frequency from corpus.word_inv_pos_category_id WHERE inv_position=? AND word=? AND category =?");
+			results = session.execute(query.bind(position, word,"C"));
+			for (Row row : results) {				
+				frequency+=row.getInt("frequency");
+				break;
+			}
+			query= session.prepare(
+					"select frequency from corpus.word_inv_pos_category_id WHERE inv_position=? AND word=? AND category =?");
+			results = session.execute(query.bind(position, word,"B"));
+			for (Row row : results) {				
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		}else{
+			query= session.prepare(
+					"select frequency from corpus.word_inv_pos_category_id WHERE inv_position=? AND word=? AND category=?");
+			results = session.execute(query.bind(position, word,category.charAt(0)+""));
+			for (Row row : results) {	
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		}
+		System.out.println(frequency);
+		WordFrequencyR endObject = new  WordFrequencyR();
+		endObject.setCategory(category);
+		endObject.setDate(0);
+		endObject.setFrequency(frequency);
+				
+		return endObject;
     }
 
     @Override
-    public WordCountR getWordCountInPositionReverse(int position, String word) {
-        return null;
+    public WordFrequencyR getWordCountInPositionReverse(int position, String word) {
+    	PreparedStatement query;
+		ResultSet results;
+		int frequency=0;
+		
+			query= session.prepare(
+					"select frequency from corpus.word_inv_pos_id WHERE inv_position=? AND word=?");
+			results = session.execute(query.bind(position, word));
+			for (Row row : results) {	
+				frequency+=row.getInt("frequency");
+				break;
+			}
+		
+		System.out.println(frequency);
+		WordFrequencyR endObject = new  WordFrequencyR();
+		endObject.setCategory("all");
+		endObject.setDate(0);
+		endObject.setFrequency(frequency);
+				
+		return endObject;
     }
 
 
@@ -1774,7 +1978,7 @@ public class CassandraClient implements CorpusDBClient{
 
     public static void main(String[] args){
     	CassandraClient cl = new CassandraClient();
-    	cl.getTrigramCount("CREATIVE",2012);		
+    	cl.getWordCountInPositionReverse(2012,0,"අපි");		
     }
 	
 }

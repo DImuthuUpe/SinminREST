@@ -156,19 +156,19 @@ public interface CorpusDBClient {
 
     public WordCountR getTrigramCount() throws Exception;
 
-    public WordCountR getWordCountInPosition(String category, int year,int position,String word);
+    public WordFrequencyR getWordCountInPosition(String category, int year,int position,String word);
 
-    public WordCountR getWordCountInPosition(int year,int position,String word);
+    public WordFrequencyR getWordCountInPosition(int year,int position,String word);
 
-    public WordCountR getWordCountInPosition(String category,int position,String word);
+    public WordFrequencyR getWordCountInPosition(String category,int position,String word);
 
-    public WordCountR getWordCountInPosition(int position,String word);
+    public WordFrequencyR getWordCountInPosition(int position,String word);
 
-    public WordCountR getWordCountInPositionReverse(String category, int year,int position,String word);
+    public WordFrequencyR getWordCountInPositionReverse(String category, int year,int position,String word);
 
-    public WordCountR getWordCountInPositionReverse(int year,int position,String word);
+    public WordFrequencyR getWordCountInPositionReverse(int year,int position,String word);
 
-    public WordCountR getWordCountInPositionReverse(String category,int position,String word);
+    public WordFrequencyR getWordCountInPositionReverse(String category,int position,String word);
 
-    public WordCountR getWordCountInPositionReverse(int position,String word);
+    public WordFrequencyR getWordCountInPositionReverse(int position,String word);
 }
