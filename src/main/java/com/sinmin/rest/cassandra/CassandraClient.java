@@ -1711,44 +1711,45 @@ public class CassandraClient implements CorpusDBClient{
     }
 
     @Override
-    public WordCountR getWordCountInPosition(String category, int year) {
+    public WordCountR getWordCountInPosition(String category, int year, int position, String word) {
         return null;
     }
 
     @Override
-    public WordCountR getWordCountInPosition(int year) {
+    public WordCountR getWordCountInPosition(int year, int position, String word) {
         return null;
     }
 
     @Override
-    public WordCountR getWordCountInPosition(String category) {
+    public WordCountR getWordCountInPosition(String category, int position, String word) {
         return null;
     }
 
     @Override
-    public WordCountR getWordCountInPosition() {
+    public WordCountR getWordCountInPosition(int position, String word) {
         return null;
     }
 
     @Override
-    public WordCountR getWordCountInPositionReverse(String category, int year) {
+    public WordCountR getWordCountInPositionReverse(String category, int year, int position, String word) {
         return null;
     }
 
     @Override
-    public WordCountR getWordCountInPositionReverse(int year) {
+    public WordCountR getWordCountInPositionReverse(int year, int position, String word) {
         return null;
     }
 
     @Override
-    public WordCountR getWordCountInPositionReverse(String category) {
+    public WordCountR getWordCountInPositionReverse(String category, int position, String word) {
         return null;
     }
 
     @Override
-    public WordCountR getWordCountInPositionReverse() {
+    public WordCountR getWordCountInPositionReverse(int position, String word) {
         return null;
     }
+
 
     @Override
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, String category, int year, int range, int amount) throws Exception {
@@ -1769,7 +1770,8 @@ public class CassandraClient implements CorpusDBClient{
     public FrequentWordsAroundWordR getFrequentWordsAroundWord(String word, int range, int amount) throws Exception {
         return null;
     }
-    
+
+
     public static void main(String[] args){
     	CassandraClient cl = new CassandraClient();
     	cl.getTrigramCount("CREATIVE",2012);		
