@@ -42,7 +42,7 @@ public class CassandraClient implements CorpusDBClient{
 
 
 	public static void connect(String node) {
-	      cluster = Cluster.builder().addContactPoint(node).build();
+	      cluster = Cluster.builder().addContactPoint(node).withCredentials("cassandra", "sinmin123").build();
 	      Metadata metadata = cluster.getMetadata();
 	      System.out.printf("Connected to cluster: %s\n",metadata.getClusterName());
 	      for ( Host host : metadata.getAllHosts() ) {

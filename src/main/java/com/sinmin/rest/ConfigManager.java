@@ -34,6 +34,8 @@ public class ConfigManager {
     public static final String LDAP_CONTEXT_FACTORY="LDAP_CONTEXT_FACTORY";
     public static final String LDAP_PROVIDER_URL="LDAP_PROVIDER_URL";
     public static final String LDAP_SECURITY_PRINCIPAL="LDAP_SECURITY_PRINCIPAL";
+    public static final String CASSANDRA_DB_USER="CASSANDRA_DB_USER";
+    public static final String CASSANDRA_DB_PASSWORD="CASSANDRA_DB_PASSWORD";
 
     final static Logger logger = Logger.getLogger(ConfigManager.class);
 
