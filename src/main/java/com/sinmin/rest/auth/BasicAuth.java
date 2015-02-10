@@ -2,9 +2,7 @@ package com.sinmin.rest.auth;
 
 import javax.xml.bind.DatatypeConverter;
 
-/**
- * Created by dimuthuupeksha on 2/4/15.
- */
+
 public class BasicAuth {
     public static String[] decode(String auth) {
         //Replacing "Basic THE_BASE_64" to "THE_BASE_64" directly

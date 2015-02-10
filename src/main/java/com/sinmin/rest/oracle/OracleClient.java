@@ -1,5 +1,6 @@
 package com.sinmin.rest.oracle;
 
+import com.sinmin.rest.ConfigManager;
 import com.sinmin.rest.CorpusDBClient;
 import com.sinmin.rest.beans.request.WordPosition;
 import com.sinmin.rest.beans.response.*;
@@ -16,21 +17,17 @@ import java.util.Map;
  */
 public class OracleClient implements CorpusDBClient{
 
-    private static final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
-    //private static final String DB_CONNECTION = "jdbc:oracle:thin:@//localhost:1521/PDB1";
-    //private static final String DB_USER = "sinmin";
-    //private static final String DB_PASSWORD = "sinmin";
-
-    private static final String DB_CONNECTION = "jdbc:oracle:thin:@//192.248.15.239:1522/corpus.sinmin.com";
-    private static final String DB_USER = "sinmin";
-    private static final String DB_PASSWORD = "Sinmin1234";
-
     private static Connection dbConnection = null;
 
     static {
         try{
-            dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
-        }catch (SQLException ex){
+            String dbConn = ConfigManager.getProperty(ConfigManager.ORACLE_DB_CONNECTION);
+            String dbUser = ConfigManager.getProperty(ConfigManager.ORACLE_DB_USER);
+            String dbPass = ConfigManager.getProperty(ConfigManager.ORACLE_DB_PASSWORD);
+            String dbDriver = ConfigManager.getProperty(ConfigManager.ORACLE_DB_DRIVER);
+            Class.forName(dbDriver);
+            dbConnection = DriverManager.getConnection(dbConn, dbUser, dbPass);
+        }catch (Exception ex){
             ex.printStackTrace();
         }
     }
@@ -38,8 +35,12 @@ public class OracleClient implements CorpusDBClient{
     public static Connection getDBConnection() throws SQLException, ClassNotFoundException {
 
         if (dbConnection == null || dbConnection.isClosed()) {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
+            String dbConn = ConfigManager.getProperty(ConfigManager.ORACLE_DB_CONNECTION);
+            String dbUser = ConfigManager.getProperty(ConfigManager.ORACLE_DB_USER);
+            String dbPass = ConfigManager.getProperty(ConfigManager.ORACLE_DB_PASSWORD);
+            String dbDriver = ConfigManager.getProperty(ConfigManager.ORACLE_DB_DRIVER);
+            Class.forName(dbDriver);
+            dbConnection = DriverManager.getConnection(dbConn, dbUser, dbPass);
             return dbConnection;
         }
 

@@ -28,7 +28,6 @@ public class ResponseCorsFilter implements ContainerResponseFilter {
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
 
-        System.out.println(lap[0]+" : "+lap[1]);
         LDAPAuthenticator authenticator = new LDAPAuthenticator();
 
         boolean authenticated = authenticator.authenticate(lap[0],lap[1]);

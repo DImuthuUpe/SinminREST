@@ -12,6 +12,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.sinmin.rest.ConfigManager;
 import com.sinmin.rest.CorpusDBClient;
 import com.sinmin.rest.beans.request.FrequentWord;
 import com.sinmin.rest.beans.response.*;
@@ -22,7 +23,7 @@ public class CassandraClient implements CorpusDBClient{
 	private static Session session;
 
     static{
-        connect("192.248.15.239");
+        connect(ConfigManager.getProperty(ConfigManager.CASSANDRA_SERVER_IP));
     }
 
 

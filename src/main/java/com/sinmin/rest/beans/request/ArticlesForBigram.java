@@ -1,8 +1,5 @@
 package com.sinmin.rest.beans.request;
 
-/**
- * Created by dimuthuupeksha on 12/11/14.
- */
 public class ArticlesForBigram {
     private String value1;
     private String value2;
