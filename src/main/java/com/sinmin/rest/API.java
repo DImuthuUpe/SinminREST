@@ -1,3 +1,21 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
 package com.sinmin.rest;
 
 import com.sinmin.rest.beans.request.*;
@@ -5,22 +23,10 @@ import com.sinmin.rest.beans.response.*;
 import com.sinmin.rest.cassandra.CassandraClient;
 import com.sinmin.rest.oracle.OracleClient;
 import com.sinmin.rest.solr.SolrClient;
-import oracle.jdbc.OracleCallableStatement;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.nio.charset.Charset;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-
-/**
- * Created by dimuthuupeksha on 12/9/14.
- */
 
 /*
 Method : wildCardSearch
@@ -330,16 +336,6 @@ Method : trigramCount
 @Path("/api")
 public class API {
 
-    @GET
-    @Path("/sample/{param}")
-    public Response getMsg(@PathParam("param") String msg) {
-
-        String output = "Jersey say : " + msg;
-
-        return Response.status(200).entity(output).build();
-
-    }
-
     @POST
     @Path("/wordFrequency")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -349,7 +345,7 @@ public class API {
         String category[] = wordF.getCategory();
         try {
             CorpusDBClient client = new CassandraClient();
-            if (time == null && category == null && value != null) {
+            if (time == null && category == null && value != null) { //separate requests according to parameter combination
 
 
                 WordFrequencyR resp = client.getWordFrequency(value);
@@ -410,11 +406,10 @@ public class API {
         String category[] = bigF.getCategory();
         int time[] = bigF.getTime();
 
-        //String sql ="select count(sb.sentence_id) from word w1,word w2,bigram b,sentence_bigram sb,sentence s, article a where w1.val='මහින්ද' and w2.val='රාජපක්ෂ' and b.word1=w1.id and b.word2=w2.id and sb.bigram_id=b.id and s.id = sb.sentence_id and a.id = s.article_id and a.year=2008";
         CorpusDBClient client = new CassandraClient();
         try {
 
-            if (time == null && category == null && value1 != null && value2 != null) {
+            if (time == null && category == null && value1 != null && value2 != null) { //separate requests according to parameter combination
 
                 WordFrequencyR resp = client.getBigramFrequency(value1, value2);
                 WordFrequencyR freqArr[] = {resp};
@@ -478,7 +473,7 @@ public class API {
         CorpusDBClient client = new CassandraClient();
         try {
 
-            if (time == null && category == null && value1 != null && value2 != null && value3 != null) {
+            if (time == null && category == null && value1 != null && value2 != null && value3 != null) { //separate requests according to parameter combination
 
                 WordFrequencyR resp = client.getTrigramFrequency(value1, value2, value3);
                 WordFrequencyR freqArr[] = {resp};
@@ -539,7 +534,7 @@ public class API {
 
         try {
             CorpusDBClient client = new OracleClient();
-            if (category == null && year == null) {
+            if (category == null && year == null) { //separate requests according to parameter combination
 
                 FrequentWordR resp = client.getFrequentWords(amount);
                 FrequentWordR[] freqArr = {resp};
@@ -594,7 +589,7 @@ public class API {
         int amount = frqWord.getAmount();
         CorpusDBClient client = new OracleClient();
         try {
-            if (category == null && year == null) {
+            if (category == null && year == null) { //separate requests according to parameter combination
 
                 FrequentWordR resp = client.getFrequentBigrams(amount);
                 FrequentWordR[] freqArr = {resp};
@@ -650,7 +645,7 @@ public class API {
         int amount = frqWord.getAmount();
         CorpusDBClient client = new OracleClient();
         try {
-            if (category == null && year == null) {
+            if (category == null && year == null) { //separate requests according to parameter combination
                 FrequentWordR resp = client.getFrequentTrigrams(amount);
                 FrequentWordR[] freqArr = {resp};
                 return Response.status(200).entity(freqArr).build();
@@ -705,7 +700,7 @@ public class API {
         String value = articlesForWord.getValue();
         CorpusDBClient client = new CassandraClient();
         try {
-            if (category != null && year != null && value != null) {
+            if (category != null && year != null && value != null) { //separate requests according to parameter combination
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
@@ -757,7 +752,7 @@ public class API {
         String value2 = articlesForBigram.getValue2();
         CorpusDBClient client = new CassandraClient();
         try {
-            if (category != null && year != null && value1 != null && value2 != null) {
+            if (category != null && year != null && value1 != null && value2 != null) { //separate requests according to parameter combination
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
@@ -810,7 +805,7 @@ public class API {
         String value3 = articlesForTrigram.getValue3();
         CorpusDBClient client = new CassandraClient();
         try {
-            if (category != null && year != null && value1 != null && value2 != null && value3 != null) {
+            if (category != null && year != null && value1 != null && value2 != null && value3 != null) { //separate requests according to parameter combination
                 ArticlesForWordR[] articlesForWordRs = new ArticlesForWordR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
@@ -863,7 +858,7 @@ public class API {
         int amount = frqWords.getAmount();
         int range = frqWords.getRange();
         try {
-            if (category != null && year != null && value != null) {
+            if (category != null && year != null && value != null) { //separate requests according to parameter combination
                 FrequentWordsAroundWordR[] frequentWordsAroundWords = new FrequentWordsAroundWordR[category.length * year.length];
                 CorpusDBClient client = new OracleClient();
                 for (int i = 0; i < category.length; i++) {
@@ -925,11 +920,11 @@ public class API {
 
         CorpusDBClient client = new CassandraClient();
         try {
-            if (category != null && year != null) {
+            if (category != null && year != null) { //separate requests according to parameter combination
                 WordPositionR[] wordPositions = new WordPositionR[category.length * year.length];
                 for (int i = 0; i < category.length; i++) {
                     for (int j = 0; j < year.length; j++) {
-                        if (pos > 0) {
+                        if (pos > 0) { //determine reverse of forward order
                             wordPositions[i * year.length + j] = client.getFrequentWordsInPosition(pos, year[j], category[i], amount);
                         } else {
                             wordPositions[i * year.length + j] = client.getFrequentWordsInPositionReverse(-pos, year[j], category[i], amount);
