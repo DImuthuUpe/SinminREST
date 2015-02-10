@@ -20,6 +20,8 @@
 package com.sinmin.rest.auth;
 
 import com.sinmin.rest.ConfigManager;
+import org.apache.log4j.Logger;
+
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
@@ -28,7 +30,9 @@ import java.util.Hashtable;
 
 
 public class LDAPAuthenticator {
+    Logger logger = Logger.getLogger(LDAPAuthenticator.class);
     public boolean authenticate(String userId, String password){
+
         Hashtable env = new Hashtable();
         env.put(Context.INITIAL_CONTEXT_FACTORY, ConfigManager.getProperty(ConfigManager.LDAP_CONTEXT_FACTORY));
         env.put(Context.PROVIDER_URL, ConfigManager.getProperty(ConfigManager.LDAP_PROVIDER_URL));
@@ -40,6 +44,7 @@ public class LDAPAuthenticator {
             ctx = new InitialDirContext(env); // create new LDAP directory context for given credentials
             return true;
         } catch (NamingException e) {
+            logger.error(e);
             return false;
         }
     }

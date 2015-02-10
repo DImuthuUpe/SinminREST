@@ -18,6 +18,8 @@
 */
 package com.sinmin.rest;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -33,6 +35,8 @@ public class ConfigManager {
     public static final String LDAP_PROVIDER_URL="LDAP_PROVIDER_URL";
     public static final String LDAP_SECURITY_PRINCIPAL="LDAP_SECURITY_PRINCIPAL";
 
+    final static Logger logger = Logger.getLogger(ConfigManager.class);
+
     public static String getProperty(String propertyName){ //reads properties from config file
 
         InputStream inputStream = ConfigManager.class.getClassLoader().getResourceAsStream("config.properties");
@@ -41,7 +45,7 @@ public class ConfigManager {
             properties.load(inputStream);
             return properties.getProperty(propertyName);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
             return null;
         }
     }

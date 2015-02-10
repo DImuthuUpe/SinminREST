@@ -23,14 +23,18 @@ import com.sinmin.rest.auth.LDAPAuthenticator;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 public class ResponseCorsFilter implements ContainerResponseFilter { //authentication and Access-Control-Allow-Origin response header managing
+    final static Logger logger = Logger.getLogger(ResponseCorsFilter.class);
+
     @Override
     public ContainerResponse filter(ContainerRequest req, ContainerResponse contResp) {
 
+        logger.info("Authorizing.....");
         String auth = req.getHeaderValue("authorization");
         if(auth==null){
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
@@ -40,6 +44,7 @@ public class ResponseCorsFilter implements ContainerResponseFilter { //authentic
 
         //If login or password fail
         if(lap == null || lap.length != 2){
+            logger.info("Authorizing failed : invalid input");
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
 
@@ -48,8 +53,11 @@ public class ResponseCorsFilter implements ContainerResponseFilter { //authentic
         boolean authenticated = authenticator.authenticate(lap[0],lap[1]);
 
         if(!authenticated){
+            logger.info("Authorizing failed : invalid credentials");
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
+
+        logger.info("Authorization Succeeded");
 
         Response.ResponseBuilder resp = Response.fromResponse(contResp.getResponse());
         resp.header("Access-Control-Allow-Origin", "*")

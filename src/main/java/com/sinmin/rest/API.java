@@ -23,6 +23,8 @@ import com.sinmin.rest.beans.response.*;
 import com.sinmin.rest.cassandra.CassandraClient;
 import com.sinmin.rest.oracle.OracleClient;
 import com.sinmin.rest.solr.SolrClient;
+import org.apache.log4j.Logger;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -335,6 +337,7 @@ Method : trigramCount
 
 @Path("/api")
 public class API {
+    final static Logger logger = Logger.getLogger(API.class);
 
     @POST
     @Path("/wordFrequency")
@@ -380,17 +383,18 @@ public class API {
                 }
                 return Response.status(200).entity(freqArr).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
 
@@ -443,17 +447,18 @@ public class API {
                 }
                 return Response.status(200).entity(freqArr).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
 
@@ -507,17 +512,18 @@ public class API {
                 }
                 return Response.status(200).entity(freqArr).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
 
@@ -562,18 +568,19 @@ public class API {
                 }
                 return Response.status(200).entity(freqArr).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
 
@@ -620,18 +627,19 @@ public class API {
                 }
                 return Response.status(200).entity(freqArr).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -672,18 +680,19 @@ public class API {
                 }
                 return Response.status(200).entity(freqArr).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -725,17 +734,18 @@ public class API {
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForWord(value, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -777,17 +787,18 @@ public class API {
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForBigram(value1, value2, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -830,17 +841,18 @@ public class API {
                 ArticlesForWordR[] articlesForWordRs = {client.getLatestArticlesForTrigram(value1, value2, value3, amount)};
                 return Response.status(200).entity(articlesForWordRs).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -889,18 +901,19 @@ public class API {
                 return Response.status(200).entity(frequentWordsAroundWords).build();
 
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
 
@@ -964,18 +977,19 @@ public class API {
                 }
 
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -1003,18 +1017,19 @@ public class API {
                 FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterWordTimeRange(word, time[0], time[1], amount)};
                 return Response.status(200).entity(resp).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
 
@@ -1043,18 +1058,19 @@ public class API {
                 FrequentWordsAfterWordR[] resp = {client.getFrequentWordsAfterBigramTimeRange(word1, word2, time[0], time[1], amount)};
                 return Response.status(200).entity(resp).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
 
@@ -1099,17 +1115,18 @@ public class API {
                 WordCountR resp[] = {client.getWordCount()};
                 return Response.status(200).entity(resp).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -1152,17 +1169,18 @@ public class API {
                 WordCountR resp[] = {client.getBigramCount()};
                 return Response.status(200).entity(resp).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -1204,17 +1222,18 @@ public class API {
                 WordCountR resp[] = {client.getTrigramCount()};
                 return Response.status(200).entity(resp).build();
             } else {
+                logger.info("Invalid input parameters");
                 return Response.status(500).entity("Invalid input parameters").build();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
 
         } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error(ex);
             return Response.status(500).entity(ex.getMessage()).build();
         }
     }
@@ -1224,13 +1243,13 @@ public class API {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response wildCardSearch(WildCard wildCard) {
         String value = wildCard.getValue();
-        System.out.println(value);
 
         if (value != null) {
             SolrClient solrClient = new SolrClient();
             WildCardR[] resp = solrClient.getWildCardWords(value);
             return Response.status(200).entity(resp).build();
         } else {
+            logger.info("Invalid input parameters");
             return Response.status(500).entity("Invalid input parameters").build();
         }
 
