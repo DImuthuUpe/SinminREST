@@ -1,3 +1,4 @@
 target/*
 .idea/*
 SinminREST.iml
+log4j-application.log
