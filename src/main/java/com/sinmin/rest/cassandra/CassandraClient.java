@@ -737,7 +737,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -748,10 +747,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(year);
         articlesForWord.setCategory(category);
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
 		return articlesForWord;
 	}
 	
@@ -759,6 +762,7 @@ public class CassandraClient implements CorpusDBClient{
 		PreparedStatement query = session.prepare(
 				"select * from corpus.word_year_usage WHERE word=? AND year=? order by date DESC LIMIT ?");
 		ResultSet results = session.execute(query.bind(word,year,amount));
+		
 		
 		ArticleR[] array = new ArticleR[amount];
 		int i=0;
@@ -772,7 +776,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -783,10 +786,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(year);
         articlesForWord.setCategory("all");
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -816,7 +823,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -827,11 +833,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(0);
         articlesForWord.setCategory(category);
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -852,7 +861,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -863,11 +871,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(0);
         articlesForWord.setCategory("all");
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -899,7 +910,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -910,11 +920,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(year);
         articlesForWord.setCategory(category);
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -935,7 +948,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -946,11 +958,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(year);
         articlesForWord.setCategory("all");
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -980,7 +995,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -991,11 +1005,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(0);
         articlesForWord.setCategory(category);
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -1016,7 +1033,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -1027,11 +1043,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(0);
         articlesForWord.setCategory("all");
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -1063,7 +1082,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -1074,11 +1092,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(year);
         articlesForWord.setCategory(category);
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -1099,7 +1120,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -1110,11 +1130,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(year);
         articlesForWord.setCategory("all");
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -1143,7 +1166,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -1154,11 +1176,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(0);
         articlesForWord.setCategory(category);
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 	
@@ -1179,7 +1204,6 @@ public class CassandraClient implements CorpusDBClient{
 			
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(datetime);
-			//System.out.println(cal);
 			array[i].setSentence(row.getString("sentence"));
 			array[i].setYear(cal.get(Calendar.YEAR));
 			array[i].setMonth(cal.get(Calendar.MONTH)+1);
@@ -1190,11 +1214,14 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-
+		ArticleR[] arrayToSend = new ArticleR[i];
+		for(int j=0;j<i;j++){
+			arrayToSend[j]=array[j];
+		}
         ArticlesForWordR articlesForWord = new ArticlesForWordR();
         articlesForWord.setTime(0);
         articlesForWord.setCategory("all");
-        articlesForWord.setArticles(array);
+        articlesForWord.setArticles(arrayToSend);
         return articlesForWord;
 	}
 
@@ -1228,7 +1255,11 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-		out.setWords(words);
+		WordR[] wordsToSend = new WordR[i];
+		for(int j=0;j<i;j++){
+			wordsToSend[j]=words[j];
+		}
+		out.setWords(wordsToSend);
 		return out;
 	}
 	
@@ -1260,7 +1291,11 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-		out.setWords(words);
+		WordR[] wordsToSend = new WordR[i];
+		for(int j=0;j<i;j++){
+			wordsToSend[j]=words[j];
+		}
+		out.setWords(wordsToSend);
 		return out;
 	}
 	
@@ -1285,7 +1320,11 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-		out.setWords(words);
+		WordR[] wordsToSend = new WordR[i];
+		for(int j=0;j<i;j++){
+			wordsToSend[j]=words[j];
+		}
+		out.setWords(wordsToSend);
 		return out;
 	}
 	
@@ -1308,7 +1347,11 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-		out.setWords(words);
+		WordR[] wordsToSend = new WordR[i];
+		for(int j=0;j<i;j++){
+			wordsToSend[j]=words[j];
+		}
+		out.setWords(wordsToSend);
 		return out;
 	}
 	
@@ -1340,7 +1383,11 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-		out.setWords(words);
+		WordR[] wordsToSend = new WordR[i];
+		for(int j=0;j<i;j++){
+			wordsToSend[j]=words[j];
+		}
+		out.setWords(wordsToSend);
 		return out;
 	}
 	
@@ -1372,7 +1419,11 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-		out.setWords(words);
+		WordR[] wordsToSend = new WordR[i];
+		for(int j=0;j<i;j++){
+			wordsToSend[j]=words[j];
+		}
+		out.setWords(wordsToSend);
 		return out;
 	}
 	
@@ -1397,7 +1448,11 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-		out.setWords(words);
+		WordR[] wordsToSend = new WordR[i];
+		for(int j=0;j<i;j++){
+			wordsToSend[j]=words[j];
+		}
+		out.setWords(wordsToSend);
 		return out;
 	}
 
@@ -1420,7 +1475,11 @@ public class CassandraClient implements CorpusDBClient{
 				break;
 			}
 		}
-		out.setWords(words);
+		WordR[] wordsToSend = new WordR[i];
+		for(int j=0;j<i;j++){
+			wordsToSend[j]=words[j];
+		}
+		out.setWords(wordsToSend);
 		return out;
 	}
 
@@ -1984,7 +2043,7 @@ public class CassandraClient implements CorpusDBClient{
 
     public static void main(String[] args){
     	CassandraClient cl = new CassandraClient();
-    	cl.getWordCountInPositionReverse(2012,0,"අපි");		
+    	cl.getWordCountInPositionReverse(0,"අපි");		
     }
 	
 }
