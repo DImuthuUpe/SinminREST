@@ -1361,11 +1361,11 @@ public class CassandraClient implements CorpusDBClient{
 		ResultSet results;
 		if(category.equals("CREATIVE")){
 			query= session.prepare(
-					"select * from corpus.word_pos_year_category_frequency WHERE position=? AND category IN (?,?) order by date DESC LIMIT ?");
+					"select * from corpus.word_pos_category_frequency WHERE position=? AND category IN (?,?) order by date DESC LIMIT ?");
 			results = session.execute(query.bind(position,"C","B",amount));
 		}else{
 			query= session.prepare(
-					"select * from corpus.word_pos_year_category_frequency WHERE position=? AND category=? order by frequency DESC LIMIT ?");
+					"select * from corpus.word_pos_category_frequency WHERE position=? AND category=? order by frequency DESC LIMIT ?");
 			results = session.execute(query.bind(position,category.charAt(0)+"",amount));
 		}
 		
@@ -1397,11 +1397,11 @@ public class CassandraClient implements CorpusDBClient{
 		ResultSet results;
 		if(category.equals("CREATIVE")){
 			query= session.prepare(
-					"select * from corpus.word_inv_pos_year_category_frequency WHERE position=? AND category IN (?,?) order by date DESC LIMIT ?");
+					"select * from corpus.word_inv_pos_category_frequency WHERE position=? AND category IN (?,?) order by date DESC LIMIT ?");
 			results = session.execute(query.bind(position,"C","B",amount));
 		}else{
 			query= session.prepare(
-					"select * from corpus.word_inv_pos_year_category_frequency WHERE position=? AND category=? order by frequency DESC LIMIT ?");
+					"select * from corpus.word_inv_pos_category_frequency WHERE position=? AND category=? order by frequency DESC LIMIT ?");
 			results = session.execute(query.bind(position,category.charAt(0)+"",amount));
 		}
 		
