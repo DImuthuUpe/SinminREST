@@ -37,9 +37,9 @@ public class CassandraClient implements CorpusDBClient {
     private static Cluster cluster;
     private static Session session;
 
-//    static {
-//        connect(ConfigManager.getProperty(ConfigManager.CASSANDRA_SERVER_IP));
-//    }
+    static {
+        connect(ConfigManager.getProperty(ConfigManager.CASSANDRA_SERVER_IP));
+    }
 
 
     public static void connect(String node) {
