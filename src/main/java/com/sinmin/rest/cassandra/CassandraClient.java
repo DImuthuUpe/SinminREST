@@ -37,12 +37,8 @@ public class CassandraClient implements CorpusDBClient {
     private static Cluster cluster;
     private static Session session;
 
-    static {
-        connect(ConfigManager.getProperty(ConfigManager.CASSANDRA_SERVER_IP));
-    }
 
-
-    public static void connect(String node) {
+    public void connect(String node) {
         String userName = ConfigManager.getProperty(ConfigManager.CASSANDRA_DB_USER);
         String password = ConfigManager.getProperty(ConfigManager.CASSANDRA_DB_PASSWORD);
         cluster = Cluster.builder().addContactPoint(node).withCredentials(userName, password).build();
@@ -52,6 +48,16 @@ public class CassandraClient implements CorpusDBClient {
             System.out.printf("Datatacenter: %s; Host: %s; Rack: %s\n", host.getDatacenter(), host.getAddress(), host.getRack());
         }
         session = cluster.connect();
+    }
+
+    private synchronized void init(){
+        if(session==null){
+            connect(ConfigManager.getProperty(ConfigManager.CASSANDRA_SERVER_IP));
+        }
+    }
+
+    public CassandraClient(){
+        init();
     }
 
 
